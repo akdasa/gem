@@ -23,5 +23,5 @@ def new():
 
     elif request.method == "POST":
         data = request.form
-        r.create(data["title"])
+        r.create(data["title"], content=data["content"])
         return redirect(url_for("proposals.index"))
