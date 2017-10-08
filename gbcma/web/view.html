@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form action="/proposals/{{proposal._id}}" method="post">
+        <p><input name="title" value="{{ proposal.title }}"></p>
+        <p><textarea name="content">{{ proposal.content }}</textarea></p>
+        <p><input type="submit"></p>
+  </form>
+</body>
+</html>

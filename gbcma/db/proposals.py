@@ -1,3 +1,5 @@
+from bson import ObjectId
+
 from .config import proposals
 
 
@@ -8,7 +10,7 @@ class ProposalsRepository:
         self.__collection = collection or proposals
 
     def get(self, key):
-        return self.__collection.find_one({"key": key})
+        return self.__collection.find_one(ObjectId(key))
 
     def find(self):
         return self.__collection.find()
@@ -18,3 +20,7 @@ class ProposalsRepository:
             "title": title,
             "content": content
         })
+
+    def save(self, proposal):
+        return self.__collection.replace_one(
+            {"_id": proposal["_id"]}, proposal)

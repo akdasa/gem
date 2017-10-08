@@ -18,7 +18,9 @@
     <tbody>
     {% for proposal in proposals %}
         <tr>
-            <td>{{ proposal.title }}</td>
+            <td>
+                <a href="/proposals/{{ proposal._id }}">{{ proposal.title }}</a>
+            </td>
         </tr>
     {% endfor %}
     </tbody>

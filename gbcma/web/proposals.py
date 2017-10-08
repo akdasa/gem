@@ -25,3 +25,20 @@ def new():
         data = request.form
         r.create(data["title"], content=data["content"])
         return redirect(url_for("proposals.index"))
+
+
+@proposals.route("/<string:key>", methods=["GET", "POST"])
+def update(key):
+    """Shows proposal."""
+    r = ProposalsRepository()
+    d = r.get(key)
+
+    if request.method == "GET":
+        return render_template("view.html", proposal=d)
+
+    elif request.method == "POST":
+        data = request.form
+        d["title"] = data["title"]
+        d["content"] = data["content"]
+        r.save(d)
+        return redirect(url_for("proposals.index"))
