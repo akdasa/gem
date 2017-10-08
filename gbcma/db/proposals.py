@@ -24,3 +24,8 @@ class ProposalsRepository:
     def save(self, proposal):
         return self.__collection.replace_one(
             {"_id": proposal["_id"]}, proposal)
+
+    def delete(self, key):
+        return self.__collection.find_one_and_delete({
+            "_id": ObjectId(key)
+        })

@@ -5,10 +5,14 @@
     <title>Title</title>
 </head>
 <body>
+    {% if proposal %}
     <form action="/proposals/{{proposal._id}}" method="post">
         <p><input name="title" value="{{ proposal.title }}"></p>
         <p><textarea name="content">{{ proposal.content }}</textarea></p>
         <p><input type="submit"></p>
-  </form>
+    </form>
+    {% else %}
+    <p>No proposal found</p>
+    {% endif %}
 </body>
 </html>
