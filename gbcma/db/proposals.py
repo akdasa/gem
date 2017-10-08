@@ -13,9 +13,8 @@ class ProposalsRepository:
     def find(self):
         return self.__collection.find()
 
-    def create(self, key, title, content=None):
+    def create(self, title, content=None):
         return self.__collection.insert_one({
-            "key": key,
             "title": title,
             "content": content
         })
