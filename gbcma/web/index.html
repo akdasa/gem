@@ -15,7 +15,11 @@
             <td>
                 <a href="/proposals/{{ proposal._id }}">{{ proposal.title }}</a>
             </td>
-            <td><a href="/proposals/{{ proposal._id }}" class="delete">X</a></td>
+            <td>
+                {% if current_user.has_role("proposal.update") %}
+                <a href="/proposals/{{ proposal._id }}" class="delete">X</a>
+                {% endif %}
+            </td>
         </tr>
     {% endfor %}
     </tbody>

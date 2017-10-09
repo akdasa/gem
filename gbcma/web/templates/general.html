@@ -20,7 +20,18 @@
             <ul class="nav navbar-nav">
                 <li class="active"><a href="/proposals">Proposals</a></li>
             </ul>
+
+            {% if current_user.is_authenticated %}
+            <p class="navbar-text navbar-right">
+                <a href="#" class="navbar-link">{{ current_user.name }}</a>
+            </p>
+            {% else %}
+            <p class="navbar-text navbar-right">
+                <a href="/login/" class="navbar-link">Login</a>
+            </p>
+            {% endif %}
         </div>
+
     </div>
 </nav>
 {% endblock %}
