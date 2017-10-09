@@ -1,18 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    {% if proposal %}
-    <form action="/proposals/{{proposal._id}}" method="post">
-        <p><input name="title" value="{{ proposal.title }}"></p>
-        <p><textarea name="content">{{ proposal.content }}</textarea></p>
-        <p><input type="submit"></p>
-    </form>
-    {% else %}
-    <p>No proposal found</p>
-    {% endif %}
-</body>
-</html>
+{% extends "general.html" %}
+
+{% block body %}
+    {% import "form.html" as form %}
+    {{ form.form(title=proposal.title, content=proposal.content, action="/proposals/"+proposal._id|e) }}
+{% endblock %}

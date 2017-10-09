@@ -1,0 +1,28 @@
+{% macro form(title='', content='', action='') -%}
+<form action="{{ action }}" method="post" class="form-horizontal">
+    <fieldset>
+    <!-- Proposal title field-->
+    <div class="form-group">
+        <input name="title"
+               class="form-control input-lg"
+               placeholder="Title"
+               value="{{ title }}"
+               autocomplete="off">
+    </div>
+
+    <div class="form-group">
+        <textarea name="content"
+                  class="form-control"
+                  rows="20"
+                  placeholder="Paste or write content here">
+            {{- content -}}
+        </textarea>
+    </div>
+
+    <div class="form-group">
+        <input type="submit"
+               class="form-control">
+    </div>
+    </fieldset>
+</form>
+{%- endmacro %}

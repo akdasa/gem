@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, url_for, jsonify
+from flask import Blueprint, render_template, request, url_for, jsonify, flash
 from werkzeug.utils import redirect
 
 from gbcma.db.proposals import ProposalsRepository
@@ -19,11 +19,12 @@ def new():
     r = ProposalsRepository()
 
     if request.method == "GET":
-        return render_template("new.html")
+        return render_template("new.html", proposal=None)
 
     elif request.method == "POST":
         data = request.form
         r.create(data["title"], content=data["content"])
+        flash("Proposal was successfully created", category="success")
         return redirect(url_for("proposals.index"))
 
 
@@ -42,6 +43,7 @@ def update(key):
         d["title"] = data["title"]
         d["content"] = data["content"]
         r.save(d)
+        flash("Proposal was successfully updated", category="success")
         return redirect(url_for("proposals.index"))
 
     elif request.method == "DELETE":

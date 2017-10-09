@@ -1,18 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "general.html" %}
 
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"
-            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-            crossorigin="anonymous"></script>
-
-<a href="/proposals/new">Add</a>
-
-<table>
+{% block body %}
+<table class="table">
     <thead>
         <tr>
             <th>Title</th>
@@ -32,9 +21,10 @@
     </tbody>
 </table>
 
+<a href="/proposals/new" class="btn btn-primary">Add</a>
+
 <script>
     $(document).ready(function() {
-
         $(".delete").on("click", function (e) {
             e.preventDefault();
             var url = $(this).attr("href");
@@ -44,9 +34,6 @@
                 success: function(result) {}
             });
         });
-
-
     });
 </script>
-</body>
-</html>
+{% endblock %}
