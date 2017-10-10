@@ -8,6 +8,11 @@ from gbcma.web.app.auth import User
 account = Blueprint("account", __name__, template_folder=".")
 
 
+@account.route("/")
+def index():
+    return render_template("account.html")
+
+
 @account.route("/login", methods=['GET', 'POST'])
 def login():
     if request.method == "GET":
@@ -30,9 +35,5 @@ def login():
 @account.route("/logout")
 def logout():
     logout_user()
+    flash("You have successfully logged out", category="success")
     return render_template("login.html")
-
-
-@account.route("/unauthorized")
-def unauthorized():
-    return render_template("unauthorized.html")

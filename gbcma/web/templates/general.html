@@ -19,13 +19,13 @@
         <div id="navbar" class="navbar-collapse collapse">
             {% if user_has_permission("proposals.read") %}
             <ul class="nav navbar-nav">
-                <li class="active"><a href="/proposals">Proposals</a></li>
+                <li><a href="/proposals">Proposals</a></li>
             </ul>
             {% endif %}
 
             {% if current_user.is_authenticated %}
             <p class="navbar-text navbar-right">
-                <a href="#" class="navbar-link">{{ current_user.name }}</a>
+                <a href="/account" class="navbar-link">{{ current_user.name }}</a>
             </p>
             {% else %}
             <p class="navbar-text navbar-right">
