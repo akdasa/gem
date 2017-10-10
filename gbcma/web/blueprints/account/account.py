@@ -1,16 +1,25 @@
 from flask import Blueprint, render_template, request, flash
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, current_user
 from werkzeug.utils import redirect
 
 from gbcma.db.users import UsersRepository
 from gbcma.web.app.auth import User
 
 account = Blueprint("account", __name__, template_folder=".")
+rep = UsersRepository()
 
-
-@account.route("/")
+@account.route("/", methods=["GET", "POST"])
 def index():
-    return render_template("account.html")
+    if request.method == "GET":
+        return render_template("account.html")
+
+    elif request.method == "POST":
+        data = request.form
+        name = data.get("name", "<Noname das>")
+        d = rep.get(current_user.get_id())
+        d["name"] = name
+        rep.save(d)
+        return redirect("/account")
 
 
 @account.route("/login", methods=['GET', 'POST'])
