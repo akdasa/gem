@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, jsonify, flash
+from flask_login import login_required
 from werkzeug.utils import redirect
 
 from gbcma.db.proposals import ProposalsRepository
@@ -9,6 +10,7 @@ rep = ProposalsRepository()
 
 
 @proposals.route("/")
+@login_required
 def index():
     """Shows list of proposals to process."""
     if has_permission("proposals.read"):
@@ -19,6 +21,7 @@ def index():
 
 
 @proposals.route("/new", methods=["GET", "POST"])
+@login_required
 def create():
     """Creates new proposal."""
     if not has_permission("proposals.create"):
@@ -37,6 +40,7 @@ def create():
 
 
 @proposals.route("/<string:key>", methods=["GET", "POST", "DELETE"])
+@login_required
 def update(key):
     """Shows proposal."""
     if request.method == "GET":

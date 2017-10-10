@@ -1,15 +1,15 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, flash
 from flask_login import login_user, logout_user
 from werkzeug.utils import redirect
 
 from gbcma.db.users import UsersRepository
 from gbcma.web.app.auth import User
 
-login = Blueprint("login", __name__, template_folder=".")
+account = Blueprint("account", __name__, template_folder=".")
 
 
-@login.route("/", methods=['GET', 'POST'])
-def index():
+@account.route("/login", methods=['GET', 'POST'])
+def login():
     if request.method == "GET":
         return render_template("login.html")
 
@@ -20,17 +20,19 @@ def index():
         if user:
             u = User(user)
             login_user(u)
+            flash("You have successfully logged in", category="success")
             return redirect("/proposals")
         else:
+            flash("User with specified login/password pair not found", category="danger")
             return render_template("login.html")
 
 
-@login.route("/logout")
+@account.route("/logout")
 def logout():
     logout_user()
     return render_template("login.html")
 
 
-@login.route("/unauthorized")
+@account.route("/unauthorized")
 def unauthorized():
     return render_template("unauthorized.html")

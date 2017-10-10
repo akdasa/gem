@@ -1,7 +1,24 @@
 {% extends "general.html" %}
 
 {% block body %}
-<form class="form-signin" action="/login/" method="post">
+<style>
+.form-signin {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+#login {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+#password {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+</style>
+<form class="form-signin" action="/account/login" method="post">
     <h2 class="form-signin-heading">Please sign in</h2>
     <label for="login" class="sr-only">Email address</label>
     <input id="login" name="login" class="form-control" placeholder="Login" required autofocus>
