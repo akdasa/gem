@@ -16,7 +16,7 @@
                 <a href="/proposals/{{ proposal._id }}">{{ proposal.title }}</a>
             </td>
             <td>
-                {% if current_user.has_role("proposal.update") %}
+                {% if user_has_role("proposal.update") %}
                 <a href="/proposals/{{ proposal._id }}" class="delete">X</a>
                 {% endif %}
             </td>
@@ -25,7 +25,9 @@
     </tbody>
 </table>
 
-<a href="/proposals/new" class="btn btn-primary">Add</a>
+{% if user_has_role("proposal.create") %}
+    <a href="/proposals/new" class="btn btn-primary">Add</a>
+{% endif %}
 
 <script>
     $(document).ready(function() {

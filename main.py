@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user
 
 from gbcma.db.users import UsersRepository
 from gbcma.web import login
@@ -18,6 +18,12 @@ login_manager.init_app(app)
 login_manager.login_view = "login.index"
 login_manager.login_message_category = "info"
 
+
+@app.add_template_global
+def user_has_role(role):
+    if not current_user:
+        return False
+    return current_user.has_role(role)
 
 @login_manager.user_loader
 def load_user(user_id):
