@@ -1,2 +1,2 @@
-from .proposals import proposals
+from .blueprints.proposals.proposals import proposals
 from .login import login
