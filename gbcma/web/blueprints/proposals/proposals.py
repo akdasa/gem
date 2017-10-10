@@ -3,14 +3,14 @@ from flask_login import login_required
 from werkzeug.utils import redirect
 
 from gbcma.db.proposals import ProposalsRepository
-from gbcma.web.app.auth import requires_roles
+from gbcma.web.app.auth import requires_permissions
 
 proposals = Blueprint("proposals", __name__, template_folder=".")
 
 
 @proposals.route("/")
 @login_required
-@requires_roles(["proposal.list"])
+@requires_permissions(["proposal.list"])
 def index():
     """Shows list of proposals to process."""
     r = ProposalsRepository()
@@ -19,7 +19,7 @@ def index():
 
 @proposals.route("/new", methods=["GET", "POST"])
 @login_required
-@requires_roles(["proposal.create"])
+@requires_permissions(["proposal.create"])
 def new():
     """Creates new proposal."""
     r = ProposalsRepository()
@@ -36,7 +36,7 @@ def new():
 
 @proposals.route("/<string:key>", methods=["GET", "POST", "DELETE"])
 @login_required
-@requires_roles(["proposal.update"])
+@requires_permissions(["proposal.update"])
 def update(key):
     """Shows proposal."""
     r = ProposalsRepository()

@@ -20,10 +20,11 @@ login_manager.login_message_category = "info"
 
 
 @app.add_template_global
-def user_has_role(role):
+def user_has_permission(permission):
     if not current_user:
         return False
-    return current_user.has_role(role)
+    return current_user.has_permission(permission)
+
 
 @login_manager.user_loader
 def load_user(user_id):
