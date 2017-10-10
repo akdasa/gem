@@ -4,7 +4,7 @@ from flask_login import LoginManager
 from gbcma.db.users import UsersRepository
 from gbcma.web import login
 from gbcma.web import proposals
-from gbcma.web.user import User
+from gbcma.web.app.auth import User
 
 app = Flask(__name__,
             template_folder="gbcma/web/templates",

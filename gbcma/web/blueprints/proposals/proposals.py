@@ -3,7 +3,7 @@ from flask_login import login_required
 from werkzeug.utils import redirect
 
 from gbcma.db.proposals import ProposalsRepository
-from gbcma.web.auth import requires_roles
+from gbcma.web.app.auth import requires_roles
 
 proposals = Blueprint("proposals", __name__, template_folder=".")
 

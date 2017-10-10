@@ -3,7 +3,7 @@ from flask_login import login_user
 from werkzeug.utils import redirect
 
 from gbcma.db.users import UsersRepository
-from gbcma.web.user import User
+from gbcma.web.app.auth import User
 
 login = Blueprint("login", __name__, template_folder=".")
 
