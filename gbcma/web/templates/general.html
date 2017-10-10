@@ -17,9 +17,11 @@
         </div>
 
         <div id="navbar" class="navbar-collapse collapse">
+            {% if user_has_permission("proposals.read") %}
             <ul class="nav navbar-nav">
                 <li class="active"><a href="/proposals">Proposals</a></li>
             </ul>
+            {% endif %}
 
             {% if current_user.is_authenticated %}
             <p class="navbar-text navbar-right">

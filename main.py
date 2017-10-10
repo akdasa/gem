@@ -1,10 +1,10 @@
 from flask import Flask
-from flask_login import LoginManager, current_user
+from flask_login import LoginManager
 
 from gbcma.db.users import UsersRepository
 from gbcma.web import login
 from gbcma.web import proposals
-from gbcma.web.app.auth import User
+from gbcma.web.app.auth import User, has_permission
 
 app = Flask(__name__,
             template_folder="gbcma/web/templates",
@@ -21,13 +21,13 @@ login_manager.login_message_category = "info"
 
 @app.add_template_global
 def user_has_permission(permission):
-    if not current_user:
-        return False
-    return current_user.has_permission(permission)
+    return has_permission(permission)
 
 
 @login_manager.user_loader
 def load_user(user_id):
     r = UsersRepository()
-    return User(r.get(user_id))
-
+    user = r.get(user_id)
+    if user:
+        return User(user)
+    return None

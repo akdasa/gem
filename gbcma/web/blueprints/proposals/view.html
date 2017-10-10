@@ -2,5 +2,9 @@
 
 {% block body %}
     {% import "form.html" as form %}
-    {{ form.form(title=proposal.title, content=proposal.content, action="/proposals/"+proposal._id|e) }}
+    {{ form.form(
+        allow_edit=user_has_permission("proposals.update"),
+        title=proposal.title,
+        content=proposal.content,
+        action="/proposals/"+proposal._id|e) }}
 {% endblock %}

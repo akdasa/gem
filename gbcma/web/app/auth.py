@@ -1,18 +1,29 @@
 from functools import wraps
 
-from flask_login import UserMixin
+from flask import render_template
+from flask_login import UserMixin, login_required
 from flask_login import current_user
 from werkzeug.utils import redirect
 
 
+def have_no_permissions():
+    return render_template("permission_denied.html")
+
+
+def has_permission(permission):
+    if permission in get_current_user_permissions():
+        return True
+
+
 def get_current_user_permissions():
-    if current_user:
+    if current_user and hasattr(current_user, "permissions"):
         return current_user.permissions
-    return None
+    return []
 
 
-def requires_permissions(*permissions):
+def permissions_required(*permissions):
     def wrapper(f):
+        @login_required
         @wraps(f)
         def wrapped(*args, **kwargs):
             if not set(get_current_user_permissions()) >= set(permissions[0]):
