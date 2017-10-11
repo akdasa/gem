@@ -23,6 +23,12 @@
             </ul>
             {% endif %}
 
+            {% if user_has_permission("users.read") %}
+            <ul class="nav navbar-nav">
+                <li><a href="/users">Users</a></li>
+            </ul>
+            {% endif %}
+
             {% if current_user.is_authenticated %}
             <p class="navbar-text navbar-right">
                 <a href="/account" class="navbar-link">{{ current_user.name }}</a>

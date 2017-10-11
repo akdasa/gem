@@ -1,0 +1,53 @@
+{% macro form(login='', password='', name='', permissions='', action='', allow_edit=true) -%}
+<form action="{{ action }}" method="post" class="form-horizontal">
+    <!-- User name field -->
+    <div class="form-group">
+        <input name="name"
+               class="form-control"
+               placeholder="Name"
+               value="{{ name }}"
+               autocomplete="off"
+               {%if not allow_edit%}readonly{%endif%}>
+    </div>
+
+    <!-- User login field -->
+    <div class="form-group">
+        <input name="login"
+               class="form-control"
+               placeholder="Login"
+               value="{{ login }}"
+               autocomplete="off"
+               {%if not allow_edit%}readonly{%endif%}>
+    </div>
+
+    <!-- User password field -->
+    <div class="form-group">
+        <input name="password"
+               class="form-control"
+               placeholder="Password"
+               value="{{ password }}"
+               autocomplete="off"
+               {%if not allow_edit%}readonly{%endif%}>
+    </div>
+
+    <!-- Proposal permissions field -->
+    <div class="form-group">
+        <textarea name="permissions"
+                  class="form-control"
+                  rows="2"
+                  placeholder="Permissions"
+                  {%if not allow_edit%}readonly{%endif%}>
+            {{- permissions|join("  ") -}}
+        </textarea>
+    </div>
+
+
+    <!-- Proposal submit button -->
+    {% if allow_edit %}
+    <div class="form-group">
+        <input type="submit"
+               class="form-control">
+    </div>
+    {% endif %}
+</form>
+{%- endmacro %}

@@ -1,0 +1,49 @@
+{% extends "general.html" %}
+
+{% block body %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            {% if user_has_permission("users.delete") %}
+            <th>Actions</th>
+            {% endif %}
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>
+                <a href="/users/{{ user._id }}">{{ user.name }}</a>
+            </td>
+            {% if user_has_permission("users.delete") %}
+            <td>
+                {% if user_has_permission("users.delete") %}
+                <a href="/users/{{ user._id }}" class="delete">X</a>
+                {% endif %}
+            </td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if user_has_permission("users.create") %}
+    <a href="/users/new" class="btn btn-primary">Add</a>
+{% endif %}
+
+<script>
+    $(document).ready(function() {
+        $(".delete").on("click", function (e) {
+            e.preventDefault();
+            var url = $(this).attr("href");
+            $.ajax({
+                url: url,
+                type: 'DELETE',
+                success: function(result) {}
+            });
+        });
+    });
+</script>
+{% endblock %}

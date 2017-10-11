@@ -9,16 +9,21 @@ class UsersRepository:
     def __init__(self, collection=None):
         self.__collection = collection or users
 
+    def all(self):
+        return self.__collection.find()
+
     def get(self, key):
         return self.__collection.find_one(ObjectId(key))
 
     def find(self, login, password):
         return self.__collection.find_one({"login": login, "password": password})
 
-    def create(self, title, content=None):
+    def create(self, name, login, password, permissions=None):
         return self.__collection.insert_one({
-            "title": title,
-            "content": content
+            "name": name,
+            "login": login,
+            "password": password,
+            "permissions": permissions
         })
 
     def save(self, proposal):

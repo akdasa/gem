@@ -1,0 +1,12 @@
+{% extends "general.html" %}
+
+{% block body %}
+    {% import "users_form.html" as form %}
+    {{ form.form(
+        allow_edit=user_has_permission("users.update"),
+        name=user.name,
+        login=user.login,
+        password=user.password,
+        permissions=user.permissions,
+        action="/users/"+user._id|e) }}
+{% endblock %}
