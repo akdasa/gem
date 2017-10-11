@@ -2,7 +2,7 @@
 Documentation     A test suite containing tests related to proposals.
 Resource          resource.robot
 Resource          snippets.robot
-Suite Setup       User Authenticated    akd    akd
+Suite Setup       Clean    test    test
 Suite Teardown    Close Browser
 Test Setup        Go To Proposals Page
 

@@ -1,4 +1,9 @@
 *** Keywords ***
+Clean
+    [Arguments]    ${login}    ${password}
+    prepare_database
+    User Authenticated  ${login}    ${password}
+
 User Authenticated
     [Arguments]    ${login}    ${password}
     Open Browser To Login Page

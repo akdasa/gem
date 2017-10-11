@@ -6,8 +6,8 @@ Resource          ../resource.robot
 Valid Login
     Open Browser To Login Page
     Login Page Should Be Open
-    Input Username    akd
-    Input Password    akd
+    Input Username    ${VALID USER}
+    Input Password    ${VALID PASSWORD}
     Submit Credentials
     Welcome Page Should Be Open
     [Teardown]    Close Browser
