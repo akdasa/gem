@@ -31,11 +31,11 @@
 
             {% if current_user.is_authenticated %}
             <p class="navbar-text navbar-right">
-                <a href="/account" class="navbar-link">{{ current_user.name }}</a>
+                <a id="account-profile-link" href="/account" class="navbar-link">{{ current_user.name }}</a>
             </p>
             {% else %}
             <p class="navbar-text navbar-right">
-                <a href="/account/login" class="navbar-link">Login</a>
+                <a id="account-login-link" href="/account/login" class="navbar-link">Login</a>
             </p>
             {% endif %}
         </div>
