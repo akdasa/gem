@@ -1,0 +1,9 @@
+{% extends "general.html" %}
+
+{% block body %}
+Welcome, {{ current_user.name }}
+
+<p>
+    <a href="/account/logout" class="btn btn-danger">Logout</a>
+</p>
+{% endblock %}

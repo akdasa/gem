@@ -11,8 +11,13 @@ rep = UsersRepository()
 
 @account.route("/", methods=["GET", "POST"])
 def index():
+    return render_template("account_dashboard.html")
+
+
+@account.route("/edit", methods=["GET", "POST"])
+def edit():
     if request.method == "GET":
-        return render_template("account.html")
+        return render_template("account_edit.html")
 
     elif request.method == "POST":
         data = request.form
@@ -38,7 +43,7 @@ def login():
             u = User(user)
             login_user(u)
             flash("You have successfully logged in", category="success")
-            return redirect("/proposals")
+            return redirect("/account")
         else:
             flash("User with specified login/password pair not found", category="danger")
             return render_template("login.html")

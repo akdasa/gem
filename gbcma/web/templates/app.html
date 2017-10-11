@@ -10,7 +10,7 @@
 
         <link rel="stylesheet" href="/static/main.css">
 
-        <title>GBC Meeting App</title>
+        <title>{% block title %}GBC Meeting App{% endblock %}</title>
     </head>
 
 
@@ -25,5 +25,4 @@
             {% block body %}{% endblock %}
         </div>
     </body>
-
 </html>
