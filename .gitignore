@@ -101,3 +101,7 @@ ENV/
 .mypy_cache/
 .idea
 .DS_Store
+
+log.html
+output.xml
+report.html
