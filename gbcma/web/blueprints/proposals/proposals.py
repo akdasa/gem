@@ -14,7 +14,7 @@ def index():
     """Shows list of proposals to process."""
     if has_permission("proposals.read"):
         plist = rep.all()  # get all proposals to show
-        return render_template("index.html", proposals=plist)
+        return render_template("proposals_index.html", proposals=plist)
     else:
         return have_no_permissions()
 
@@ -27,7 +27,7 @@ def create():
         return have_no_permissions()
 
     if request.method == "GET":
-        return render_template("new.html", proposal=None)
+        return render_template("proposals_new.html", proposal=None)
 
     elif request.method == "POST":
         doc = __form_to_dict(request.form, {})
@@ -42,7 +42,7 @@ def update(key):
     """Shows proposal."""
     if request.method == "GET":
         if has_permission("proposals.read"):
-            return render_template("view.html", proposal=rep.get(key))
+            return render_template("proposals_view.html", proposal=rep.get(key))
         else:
             return have_no_permissions()
 
