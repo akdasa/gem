@@ -1,6 +1,5 @@
-from flask import Blueprint, render_template, request, jsonify, flash
+from flask import Blueprint, render_template, request, jsonify, flash, redirect
 from flask_login import login_required
-from werkzeug.utils import redirect
 
 from gbcma.db.users import UsersRepository
 from gbcma.web.app.auth import has_permission, have_no_permissions
@@ -31,12 +30,9 @@ def create():
         return render_template("users_new.html", user=None)
 
     elif request.method == "POST":
-        data = request.form
-        name = data.get("name", None)
-        login = data.get("login", None)
-        password = data.get("password", "")
-        permissions = list(filter(None, str.split(data.get("permissions", ""), " ")))
-        rep.create(name, login, password, permissions=permissions)
+        doc = __form_to_dict(request.form, {})
+        rep.insert(doc)
+
         flash("User was successfully created", category="success")
         return redirect("/users")
 
@@ -54,12 +50,9 @@ def update(key):
     elif request.method == "POST":
         if has_permission("users.update"):
             d = rep.get(key)
-            data = request.form
-            d["name"] = data["name"]
-            d["login"] = data["login"]
-            d["password"] = data["password"]
-            d["permissions"] = list(filter(None, str.split(data.get("permissions", ""), " ")))
-            rep.save(d)
+            doc = __form_to_dict(request.form, d)
+            rep.save(doc)
+
             flash("User was successfully updated", category="success")
             return redirect("/users")
         else:
@@ -71,3 +64,13 @@ def update(key):
             return jsonify({"success": True})
         else:
             return jsonify({"success": False})
+
+
+def __form_to_dict(form, d):
+    d.update({
+        "name": form.get("name", None),
+        "login": form.get("login", None),
+        "password": form.get("password", ""),
+        "permissions": list(filter(None, str.split(form.get("permissions", ""), " ")))
+    })
+    return d

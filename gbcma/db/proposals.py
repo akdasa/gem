@@ -1,31 +1,15 @@
-from bson import ObjectId
-
+from gbcma.db.repository import Repository
 from .config import proposals
 
 
-class ProposalsRepository:
+class ProposalsRepository(Repository):
     """Provides interface for Proposals collection of database."""
 
-    def __init__(self, collection=None):
-        self.__collection = collection or proposals
-
-    def get(self, key):
-        return self.__collection.find_one(ObjectId(key))
-
-    def find(self):
-        return self.__collection.find()
+    def __init__(self):
+        super().__init__(proposals)
 
     def create(self, title, content=None):
         return self.__collection.insert_one({
             "title": title,
             "content": content
-        })
-
-    def save(self, proposal):
-        return self.__collection.replace_one(
-            {"_id": proposal["_id"]}, proposal)
-
-    def delete(self, key):
-        return self.__collection.find_one_and_delete({
-            "_id": ObjectId(key)
         })

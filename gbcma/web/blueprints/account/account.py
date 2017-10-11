@@ -8,6 +8,7 @@ from gbcma.web.app.auth import User
 account = Blueprint("account", __name__, template_folder=".")
 rep = UsersRepository()
 
+
 @account.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "GET":
@@ -28,9 +29,11 @@ def login():
         return render_template("login.html")
 
     elif request.method == "POST":
-        rep = UsersRepository()
         data = request.form
-        user = rep.find(data["login"], data["password"])
+        login = data.get("login", None)
+        password = data.get("password", None)
+        user = rep.find({"login": login, "password": password})
+
         if user:
             u = User(user)
             login_user(u)

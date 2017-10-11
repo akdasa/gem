@@ -1,6 +1,5 @@
-from flask import Blueprint, render_template, request, jsonify, flash
+from flask import Blueprint, render_template, request, jsonify, flash, redirect
 from flask_login import login_required
-from werkzeug.utils import redirect
 
 from gbcma.db.proposals import ProposalsRepository
 from gbcma.web.app.auth import has_permission, have_no_permissions
@@ -14,8 +13,8 @@ rep = ProposalsRepository()
 def index():
     """Shows list of proposals to process."""
     if has_permission("proposals.read"):
-        pl = rep.find()  # get all proposals to show
-        return render_template("index.html", proposals=pl)
+        plist = rep.all()  # get all proposals to show
+        return render_template("index.html", proposals=plist)
     else:
         return have_no_permissions()
 
@@ -31,10 +30,8 @@ def create():
         return render_template("new.html", proposal=None)
 
     elif request.method == "POST":
-        data = request.form
-        title = data.get("title", None) or "<No title>"
-        content = data.get("content", None) or "<No content>"
-        rep.create(title, content=content)
+        doc = __form_to_dict(request.form, {})
+        rep.insert(doc)
         flash("Proposal was successfully created", category="success")
         return redirect("/proposals")
 
@@ -51,11 +48,9 @@ def update(key):
 
     elif request.method == "POST":
         if has_permission("proposals.update"):
-            d = rep.get(key)
-            data = request.form
-            d["title"] = data["title"]
-            d["content"] = data["content"]
-            rep.save(d)
+            proposal = rep.get(key)
+            doc = __form_to_dict(request.form, proposal)
+            rep.save(doc)
             flash("Proposal was successfully updated", category="success")
             return redirect("/proposals")
         else:
@@ -67,3 +62,11 @@ def update(key):
             return jsonify({"success": True})
         else:
             return jsonify({"success": False})
+
+
+def __form_to_dict(form, d):
+    d.update({
+        "title": form.get("title", "<No title>"),
+        "content": form.get("content", "<No content>")
+    })
+    return d
