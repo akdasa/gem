@@ -29,15 +29,17 @@
                 {% endif %}
             </ul>
 
+            <ul class="nav navbar-nav navbar-right">
             {% if current_user.is_authenticated %}
-            <p class="navbar-text navbar-right">
-                <a id="account-profile-link" href="/account" class="navbar-link">{{ current_user.name }}</a>
-            </p>
+                <li class="{%if active_page=='profile'%}active{%endif%}">
+                    <a id="account-profile-link" href="/account" class="navbar-link">{{ current_user.name }}</a>
+                </li>
             {% else %}
-            <p class="navbar-text navbar-right">
-                <a id="account-login-link" href="/account/login" class="navbar-link">Login</a>
-            </p>
+                <li class="{%if active_page=='profile'%}active{%endif%}">
+                    <a id="account-login-link" href="/account/login" class="navbar-link">Login</a>
+                </li>
             {% endif %}
+            </ul>
         </div>
 
     </div>
