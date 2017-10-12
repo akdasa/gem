@@ -1,6 +1,7 @@
 *** Settings ***
 Documentation     A test suite with a single test for valid login.
-Resource          ../resource.robot
+Resource          ../auth.robot
+
 
 *** Test Cases ***
 Valid Login

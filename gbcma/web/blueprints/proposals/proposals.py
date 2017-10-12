@@ -14,7 +14,10 @@ def index():
     """Shows list of proposals to process."""
     if has_permission("proposals.read"):
         plist = rep.all()  # get all proposals to show
-        return render_template("proposals_index.html", proposals=plist)
+        return render_template("proposals_index.html",
+                               proposals=plist,
+                               show_actions=has_permission("proposals.delete"),
+                               show_delete=has_permission("proposals.delete"))
     else:
         return have_no_permissions()
 

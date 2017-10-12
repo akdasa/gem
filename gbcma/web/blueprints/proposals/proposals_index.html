@@ -5,7 +5,7 @@
     <thead>
         <tr>
             <th>Title</th>
-            {% if user_has_permission("proposals.delete") %}
+            {% if show_actions %}
             <th>Actions</th>
             {% endif %}
         </tr>
@@ -13,37 +13,45 @@
 
     <tbody>
         {% for proposal in proposals %}
-        <tr>
+        <tr data-key="{{ proposal._id }}">
             <td>
-                <a href="/proposals/{{ proposal._id }}">{{ proposal.title }}</a>
+                <a href="/proposals/{{ proposal._id }}" data-key="{{ proposal._id }}">{{ proposal.title }}</a>
             </td>
-            {% if user_has_permission("proposals.delete") %}
+
+            {% if show_actions %}
             <td>
-                {% if user_has_permission("proposals.delete") %}
-                <a href="/proposals/{{ proposal._id }}" class="delete">X</a>
+                {% if show_delete %}
+                <a class="delete btn btn-danger btn-xs" data-key="{{ proposal._id }}">
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                </a>
                 {% endif %}
             </td>
             {% endif %}
+
         </tr>
         {% endfor %}
     </tbody>
 </table>
 
 {% if user_has_permission("proposals.create") %}
-    <a href="/proposals/new" class="btn btn-primary">Add</a>
+    <a id="new-proposal" href="/proposals/new" class="btn btn-primary">Add</a>
 {% endif %}
 
 <script>
-    $(document).ready(function() {
-        $(".delete").on("click", function (e) {
-            e.preventDefault();
-            var url = $(this).attr("href");
-            $.ajax({
-                url: url,
-                type: 'DELETE',
-                success: function(result) {}
-            });
+$(document).ready(function() {
+    $(".delete").on("click", function (e) {
+        e.preventDefault();
+        var key = $(this).data("key");
+        $.ajax({
+            url: "/proposals/"+key,
+            type: 'DELETE',
+            success: function(result) {
+                if (result["success"] === true) {
+                    $("tr[data-key='" + key + "'").remove();
+                }
+            }
         });
     });
+});
 </script>
 {% endblock %}
