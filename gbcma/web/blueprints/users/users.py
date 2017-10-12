@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, jsonify, flash, redirect
 from flask_login import login_required
 
 from gbcma.db.users import UsersRepository
-from gbcma.web.app.auth import has_permission, have_no_permissions
+from gbcma.web.app.auth import has_permission, access_denied
 
 users = Blueprint("users", __name__, template_folder=".")
 rep = UsersRepository()
@@ -20,7 +20,7 @@ def index():
                                show_delete=has_permission("proposals.delete"),
                                show_create=has_permission("proposals.create"))
     else:
-        return have_no_permissions()
+        return access_denied()
 
 
 @users.route("/new", methods=["GET", "POST"])
@@ -28,7 +28,7 @@ def index():
 def create():
     """Creates new user."""
     if not has_permission("users.create"):
-        return have_no_permissions()
+        return access_denied()
 
     if request.method == "GET":
         return render_template("users_new.html", user=None)
@@ -49,7 +49,7 @@ def update(key):
         if has_permission("users.read"):
             return render_template("users_view.html", user=rep.get(key))
         else:
-            return have_no_permissions()
+            return access_denied()
 
     elif request.method == "POST":
         if has_permission("users.update"):
@@ -60,7 +60,7 @@ def update(key):
             flash("User was successfully updated", category="success")
             return redirect("/users")
         else:
-            return have_no_permissions()
+            return access_denied()
 
     if request.method == "DELETE":
         if has_permission("users.delete"):

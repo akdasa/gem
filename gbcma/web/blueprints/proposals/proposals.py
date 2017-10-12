@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, jsonify, flash, redirect
 from flask_login import login_required
 
 from gbcma.db.proposals import ProposalsRepository
-from gbcma.web.app.auth import has_permission, have_no_permissions
+from gbcma.web.app.auth import has_permission, access_denied
 
 proposals = Blueprint("proposals", __name__, template_folder=".")
 rep = ProposalsRepository()
@@ -20,7 +20,7 @@ def index():
                                show_delete=has_permission("proposals.delete"),
                                show_create=has_permission("proposals.create"))
     else:
-        return have_no_permissions()
+        return access_denied()
 
 
 @proposals.route("/new", methods=["GET", "POST"])
@@ -28,7 +28,7 @@ def index():
 def create():
     """Creates new proposal."""
     if not has_permission("proposals.create"):
-        return have_no_permissions()
+        return access_denied()
 
     if request.method == "GET":
         return render_template("proposals_new.html", proposal=None)
@@ -48,7 +48,7 @@ def update(key):
         if has_permission("proposals.read"):
             return render_template("proposals_view.html", proposal=rep.get(key))
         else:
-            return have_no_permissions()
+            return access_denied()
 
     elif request.method == "POST":
         if has_permission("proposals.update"):
@@ -58,7 +58,7 @@ def update(key):
             flash("Proposal was successfully updated", category="success")
             return redirect("/proposals")
         else:
-            return have_no_permissions()
+            return access_denied()
 
     if request.method == "DELETE":
         if has_permission("proposals.delete"):
