@@ -2,10 +2,11 @@ from flask import Flask
 from flask_login import LoginManager
 
 from gbcma.db.users import UsersRepository
+from gbcma.web.app.auth import User, has_permission
 from gbcma.web.blueprints.account import account
 from gbcma.web.blueprints.proposals import proposals
+from gbcma.web.blueprints.sessions import sessions
 from gbcma.web.blueprints.users import users
-from gbcma.web.app.auth import User, has_permission
 
 app = Flask(__name__,
             template_folder="gbcma/web/templates",
@@ -14,6 +15,7 @@ app.secret_key = 'some_secret'
 login_manager = LoginManager()
 app.register_blueprint(proposals, url_prefix="/proposals")
 app.register_blueprint(users, url_prefix="/users")
+app.register_blueprint(sessions, url_prefix="/sessions")
 app.register_blueprint(account, url_prefix="/account")
 
 login_manager.init_app(app)
