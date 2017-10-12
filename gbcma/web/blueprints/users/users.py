@@ -14,7 +14,11 @@ def index():
     """Shows list of users."""
     if has_permission("users.read"):
         ul = rep.all()  # get all users to show
-        return render_template("users_index.html", users=ul)
+        return render_template("users_index.html",
+                               users=ul,
+                               show_actions=has_permission("proposals.delete"),
+                               show_delete=has_permission("proposals.delete"),
+                               show_create=has_permission("proposals.create"))
     else:
         return have_no_permissions()
 

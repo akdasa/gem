@@ -17,7 +17,8 @@ def index():
         return render_template("proposals_index.html",
                                proposals=plist,
                                show_actions=has_permission("proposals.delete"),
-                               show_delete=has_permission("proposals.delete"))
+                               show_delete=has_permission("proposals.delete"),
+                               show_create=has_permission("proposals.create"))
     else:
         return have_no_permissions()
 

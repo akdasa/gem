@@ -33,7 +33,7 @@
     </tbody>
 </table>
 
-{% if user_has_permission("proposals.create") %}
+{% if show_create %}
     <a id="new-proposal" href="/proposals/new" class="btn btn-primary">Add</a>
 {% endif %}
 

@@ -1,5 +1,7 @@
 {% extends "general.html" %}
 
+{% block title %}New user{% endblock %}
+
 {% block body %}
     {% import "users_form.html" as form %}
     {{ form.form(action="/users/new") }}
