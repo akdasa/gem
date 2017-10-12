@@ -16,9 +16,9 @@ def index():
         ul = rep.all()  # get all users to show
         return render_template("users_index.html",
                                users=ul,
-                               show_actions=has_permission("proposals.delete"),
-                               show_delete=has_permission("proposals.delete"),
-                               show_create=has_permission("proposals.create"))
+                               show_actions=has_permission("users.delete"),
+                               show_delete=has_permission("users.delete"),
+                               show_create=has_permission("users.create"))
     else:
         return access_denied()
 
