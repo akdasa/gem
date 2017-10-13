@@ -19,6 +19,10 @@ Add User
     Input Text  permissions  ${permissions}
     Click Button  submit
 
+Open User
+    [Arguments]  ${name}
+    Click Link  jquery:#users-table a:contains('${name}')
+
 
 User Present In Table
     [Arguments]  ${name}

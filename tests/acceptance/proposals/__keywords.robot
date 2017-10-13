@@ -18,6 +18,11 @@ Add Proposal
     Click Button  submit
 
 
+Open Proposal
+    [Arguments]  ${title}
+    Click Link  jquery:#proposals-table a:contains('${title}')
+
+
 Proposal Present In Table
     [Arguments]  ${title}
     Table Should Contain  proposals-table  ${title}

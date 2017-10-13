@@ -79,7 +79,7 @@ class CrudController:
     def __options(self):
         return {
             "form": self._form,
-            "active_page": self._form,
+            "active_page": self._namespace,
             "url": self._url,
             "model_name": self._model_name,
             "namespace": self._namespace,
