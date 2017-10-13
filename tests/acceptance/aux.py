@@ -10,6 +10,7 @@ def prepare_database():
         "name": "Tester das",
         "permissions": [
             "proposals.create", "proposals.read", "proposals.update", "proposals.delete",
-            "users.create", "users.read", "users.update", "users.delete"
+            "users.create", "users.read", "users.update", "users.delete",
+            "sessions.create", "sessions.read", "sessions.update", "sessions.delete",
         ]
     })
