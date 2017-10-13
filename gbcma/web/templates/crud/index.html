@@ -1,0 +1,66 @@
+{% extends "general.html" %}
+
+{% block body %}
+<table class="table">
+    <thead>
+        <tr>
+            {% for field in fields %}
+            <th>{{ field|capitalize }}</th>
+            {% endfor %}
+
+            {% if show_actions %}
+            <th>Actions</th>
+            {% endif %}
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for model in models %}
+        <tr data-key="{{ model._id }}">
+            {% for field in fields %}
+                <td>
+                {% if loop.index == 1 %}
+                    <a href="/{{url}}/{{ model._id }}" data-key="{{ model._id }}">{{ model[field] }}</a>
+                {% else %}
+                    {{ model[field] }}
+                {% endif %}
+                </td>
+            {% endfor %}
+
+            {% if show_actions %}
+            <td>
+                {% if show_delete %}
+                <a class="delete btn btn-danger btn-xs" data-key="{{ model._id }}">
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                </a>
+                {% endif %}
+            </td>
+            {% endif %}
+
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if show_create %}
+    <a href="/{{url}}/new" class="btn btn-primary">Add</a>
+{% endif %}
+
+<script>
+$(document).ready(function() {
+    $(".delete").on("click", function (e) {
+        e.preventDefault();
+        var key = $(this).data("key");
+        $.ajax({
+            url: "/{{url}}/"+key,
+            type: 'DELETE',
+            success: function(result) {
+                 if (result["success"] === true) {
+                    $("tr[data-key='" + key + "'").remove();
+                }
+            }
+        });
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,6 @@
+{% extends "general.html" %}
+
+{% block body %}
+    {% import form as f %}
+    {{ f.form(model=model, action="/" + url + "/"+model._id|e) }}
+{% endblock %}

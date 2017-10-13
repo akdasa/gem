@@ -5,3 +5,4 @@ database = client["gbcma"]
 
 proposals = database["proposals"]
 users = database["users"]
+sessions = database["sessions"]

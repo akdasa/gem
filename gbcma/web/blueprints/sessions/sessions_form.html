@@ -1,0 +1,34 @@
+{% macro form(model, action='', allow_edit=true) -%}
+<form action="{{ action }}" method="post" class="form-horizontal">
+    <!-- Title -->
+    <div class="form-group">
+        <input name="title"
+               class="form-control input-lg"
+               placeholder="Title"
+               value="{{ model.title }}"
+               autocomplete="off"
+               {%if not allow_edit%}readonly{%endif%}>
+    </div>
+
+    <!-- Agenda -->
+    <div class="form-group">
+        <textarea name="agenda"
+                  class="form-control"
+                  rows="10"
+                  placeholder="Paste or write agenda here"
+                  {%if not allow_edit%}readonly{%endif%}>
+            {{- model.agenda -}}
+        </textarea>
+    </div>
+
+
+    <!-- Proposal submit button -->
+    {% if allow_edit %}
+    <div class="form-group">
+        <input id="submit"
+               type="submit"
+               class="form-control btn btn-primary">
+    </div>
+    {% endif %}
+</form>
+{%- endmacro %}
