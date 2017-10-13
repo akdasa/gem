@@ -1,7 +1,7 @@
 {% extends "general.html" %}
 
 {% block body %}
-<table class="table">
+<table id="{{namespace}}-table" class="table">
     <thead>
         <tr>
             {% for field in fields %}
@@ -43,7 +43,7 @@
 </table>
 
 {% if show_create %}
-    <a href="/{{url}}/new" class="btn btn-primary">Add</a>
+    <a id="{{namespace}}-new" href="/{{url}}/new" class="btn btn-primary">Add</a>
 {% endif %}
 
 <script>

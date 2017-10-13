@@ -11,7 +11,7 @@ Go To Proposals Page
 Add Proposal
     [Arguments]  ${title}  ${content}
     Go To Proposals Page
-    Click Link  new-proposal
+    Click Link  proposals-new
     Title Should Be  New proposal
     Input Text  title  ${title}
     Input Text  content  ${content}
@@ -20,7 +20,7 @@ Add Proposal
 
 Proposal Present In Table
     [Arguments]  ${title}
-    Table Should Contain  proposals-list  ${title}
+    Table Should Contain  proposals-table  ${title}
 
 
 Proposal Not Present In Table
@@ -32,4 +32,4 @@ Delete Proposal
     [Arguments]  ${title}
     ${key}=  Get Element Attribute  jquery:a:contains('${title}')  data-key
     Click Link  jquery:a.delete[data-key='${key}']
-    Wait Until Element Does Not Contain  proposals-list  ${title}
+    Wait Until Element Does Not Contain  proposals-table  ${title}

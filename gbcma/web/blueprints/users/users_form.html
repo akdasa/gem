@@ -1,11 +1,11 @@
-{% macro form(login='', password='', name='', permissions='', action='', allow_edit=true) -%}
+{% macro form(model, action='', allow_edit=true) -%}
 <form action="{{ action }}" method="post" class="form-horizontal">
     <!-- User name field -->
     <div class="form-group">
         <input name="name"
                class="form-control"
                placeholder="Name"
-               value="{{ name }}"
+               value="{{ model.name }}"
                autocomplete="off"
                {%if not allow_edit%}readonly{%endif%}>
     </div>
@@ -15,7 +15,7 @@
         <input name="login"
                class="form-control"
                placeholder="Login"
-               value="{{ login }}"
+               value="{{ model.login }}"
                autocomplete="off"
                {%if not allow_edit%}readonly{%endif%}>
     </div>
@@ -25,7 +25,7 @@
         <input name="password"
                class="form-control"
                placeholder="Password"
-               value="{{ password }}"
+               value="{{ model.password }}"
                autocomplete="off"
                {%if not allow_edit%}readonly{%endif%}>
     </div>
@@ -37,7 +37,7 @@
                   rows="2"
                   placeholder="Permissions"
                   {%if not allow_edit%}readonly{%endif%}>
-            {{- permissions|join("  ") -}}
+            {{- model.permissions|join("  ") -}}
         </textarea>
     </div>
 

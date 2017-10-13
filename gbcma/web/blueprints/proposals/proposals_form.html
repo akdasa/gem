@@ -1,11 +1,11 @@
-{% macro form(title='', content='', action='', allow_edit=true) -%}
+{% macro form(model, action='', allow_edit=true) -%}
 <form action="{{ action }}" method="post" class="form-horizontal">
     <!-- Proposal title field -->
     <div class="form-group">
         <input name="title"
                class="form-control input-lg"
                placeholder="Title"
-               value="{{ title }}"
+               value="{{ model.title }}"
                autocomplete="off"
                {%if not allow_edit%}readonly{%endif%}>
     </div>
@@ -17,7 +17,7 @@
                   rows="20"
                   placeholder="Paste or write content here"
                   {%if not allow_edit%}readonly{%endif%}>
-            {{- content -}}
+            {{- model.content -}}
         </textarea>
     </div>
 

@@ -1,4 +1,5 @@
 from flask import render_template, flash, redirect, jsonify
+from inflection import singularize
 
 from gbcma.web.app.auth import has_permission, access_denied
 
@@ -8,6 +9,7 @@ class CrudController:
         self._repository = repository
         self._columns = []
         self._namespace = namespace
+        self._model_name = singularize(self._namespace)
 
         if namespace:
             self._permission = namespace
@@ -79,7 +81,8 @@ class CrudController:
             "form": self._form,
             "active_page": self._form,
             "url": self._url,
-            "model_name": self._namespace,
+            "model_name": self._model_name,
+            "namespace": self._namespace,
             "show_actions": self._has_permission("delete"),
             "show_delete": self._has_permission("delete"),
             "show_create": self._has_permission("create")

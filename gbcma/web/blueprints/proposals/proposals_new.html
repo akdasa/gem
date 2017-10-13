@@ -1,9 +1,0 @@
-{% extends "general.html" %}
-{% set active_page = "proposals" %}
-
-{% block title %}New proposal{% endblock %}
-
-{% block body %}
-    {% import "proposals_form.html" as form %}
-    {{ form.form(action="/proposals/new") }}
-{% endblock %}

@@ -1,9 +1,0 @@
-{% extends "general.html" %}
-{% set active_page = "users" %}
-
-{% block title %}New user{% endblock %}
-
-{% block body %}
-    {% import "users_form.html" as form %}
-    {{ form.form(action="/users/new") }}
-{% endblock %}

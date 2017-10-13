@@ -11,7 +11,7 @@ Go To Users Page
 Add User
     [Arguments]  ${login}  ${password}  ${name}  ${permissions}
     Go To Users Page
-    Click Link  new-user
+    Click Link  users-new
     Title Should Be  New user
     Input Text  name  ${name}
     Input Text  login  ${login}
@@ -22,7 +22,7 @@ Add User
 
 User Present In Table
     [Arguments]  ${name}
-    Table Should Contain  users-list  ${name}
+    Table Should Contain  users-table  ${name}
 
 
 User Not Present In Table
@@ -34,4 +34,4 @@ Delete User
     [Arguments]  ${name}
     ${key}=  Get Element Attribute  jquery:a:contains('${name}')  data-key
     Click Link  jquery:a.delete[data-key='${key}']
-    Wait Until Element Does Not Contain  users-list  ${name}
+    Wait Until Element Does Not Contain  users-table  ${name}
