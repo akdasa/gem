@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, flash
-from flask_login import login_user, logout_user, current_user
+from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.utils import redirect
 
 from gbcma.db.users import UsersRepository
@@ -10,6 +10,7 @@ rep = UsersRepository()
 
 
 @account.route("/", methods=["GET", "POST"])
+@login_required
 def index():
     return render_template("account_dashboard.html")
 

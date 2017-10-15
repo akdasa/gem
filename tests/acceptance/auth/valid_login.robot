@@ -1,5 +1,7 @@
 *** Settings ***
 Documentation     A test suite with a single test for valid login.
+Suite Setup       Clean    test    test
+Suite Teardown    Close Browser
 Resource          ../auth.robot
 
 
