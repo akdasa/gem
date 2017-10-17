@@ -1,0 +1,9 @@
+{% extends "general.html" %}
+
+{% block js %}
+
+  {% for j in js %}
+    <script type="text/javascript" src="/static/{{j}}"></script>
+  {% endfor %}
+
+{% endblock %}

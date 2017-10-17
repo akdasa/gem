@@ -10,11 +10,19 @@ class CrudController:
         self._columns = []
         self._namespace = namespace
         self._model_name = singularize(self._namespace)
+        self._actions = []
+        self._js = []
 
         if namespace:
             self._permission = namespace
             self._form = "{}_form.html".format(namespace)
             self._url = namespace
+
+    def register_js(self, name):
+        self._js.append(name)
+
+    def register_action(self, css_class, icon):
+        self._actions.append({"css_class": css_class, "icon": icon})
 
     def index(self):
         """Shows list of models."""
@@ -83,6 +91,8 @@ class CrudController:
             "url": self._url,
             "model_name": self._model_name,
             "namespace": self._namespace,
+            "actions": self._actions,
+            "js": self._js,
             "show_actions": self._has_permission("delete"),
             "show_delete": self._has_permission("delete"),
             "show_create": self._has_permission("create")

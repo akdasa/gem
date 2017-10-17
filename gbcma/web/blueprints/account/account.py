@@ -2,17 +2,21 @@ from flask import Blueprint, render_template, request, flash
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.utils import redirect
 
+from gbcma.db.sessions import SessionsRepository
 from gbcma.db.users import UsersRepository
 from gbcma.web.app.auth import User
 
 account = Blueprint("account", __name__, template_folder=".")
 rep = UsersRepository()
+sessions = SessionsRepository()
 
 
 @account.route("/", methods=["GET", "POST"])
 @login_required
 def index():
-    return render_template("account_dashboard.html")
+    return render_template("account_dashboard.html",
+                           active=list(sessions.active()),
+                           upcoming=list(sessions.upcoming()))
 
 
 @account.route("/edit", methods=["GET", "POST"])

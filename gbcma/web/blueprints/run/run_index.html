@@ -2,6 +2,8 @@
 
 {% block body %}
 
+<div id="proposal"></div>
+
 <ul id="run-users-list">
 </ul>
 
@@ -11,11 +13,13 @@
 
 
 <script type="text/javascript" charset="utf-8">
+    var key = "{{key}}";
     var socket = io.connect('http://' + document.domain + ':' + location.port);
-    socket.on('connect', function() {
-        socket.emit('my event', {data: 'I\'m connected!'}, function (answer) {
+
+    socket.on('connection', function(socket) {
+        /*socket.emit('my event', {data: 'I\'m connected!'}, function (answer) {
             console.log(answer);
-        });
+        });*/
     });
 
     socket.on('users', function (data) {
@@ -33,6 +37,10 @@
     });
 
 
+    socket.on('proposal', function (data) {
+        $("#proposal").html(data["content"]);
+    });
+
     $('#chat-message').keypress(function (e) {
         if (e.which == 13) {
             say();
@@ -46,4 +54,14 @@
         $("#chat-message").val("");
     }
 </script>
+{% endblock %}
+
+
+{% block footer %}
+<footer class="footer">
+    <div class="container">
+        <a>Proposal</a>
+        <a>Proposal</a>
+    </div>
+</footer>
 {% endblock %}

@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, jsonify, session, request
 from flask_login import login_required, current_user
-from flask_socketio import emit
+from flask_socketio import emit, send
 
 from gbcma.channel.channel import get
 from gbcma.db.sessions import SessionsRepository
@@ -14,7 +14,8 @@ srep = SessionsRepository()
 @run.route("/<string:key>")
 @login_required
 def index(key):
-    return render_template("run_index.html")
+    session_entity = srep.get(key)
+    return render_template("run_index.html", session=session_entity, key=session_entity["_id"])
 
 
 @run.route("/<string:key>/manage")
@@ -25,7 +26,6 @@ def manage(key):
 
 @channel.on('connect')
 def test_connect():
-    print("CONNECTED", request.sid)
     if current_user.name not in clients:
         clients[current_user.name] = []
     clients[current_user.name].append(request.sid)
@@ -34,7 +34,6 @@ def test_connect():
 
 @channel.on('disconnect')
 def test_disconnect():
-    print("DIS---CONNECTED", request.sid)
     if current_user.name in clients:
         clients[current_user.name].remove(request.sid)
         if len(clients[current_user.name]) == 0:

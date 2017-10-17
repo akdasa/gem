@@ -1,4 +1,4 @@
-{% extends "general.html" %}
+{% extends "crud/crud.html" %}
 
 {% block body %}
 <table id="{{namespace}}-table" class="table">
@@ -34,6 +34,12 @@
                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                 </a>
                 {% endif %}
+
+                {% for action in actions %}
+                <a class="btn btn-primary btn-xs {{ action.css_class }}" data-key="{{ model._id }}">
+                    <span class="glyphicon glyphicon-{{ action.icon }}" aria-hidden="true"></span>
+                </a>
+                {% endfor %}
             </td>
             {% endif %}
 

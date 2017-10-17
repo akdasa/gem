@@ -21,6 +21,15 @@
         </textarea>
     </div>
 
+    <!-- Title -->
+    <div class="form-group">
+        <input name="date"
+               class="form-control"
+               placeholder="Date"
+               value="{{ model.date }}"
+               autocomplete="off"
+               {%if not allow_edit%}readonly{%endif%}>
+    </div>
 
     <!-- Proposal submit button -->
     {% if allow_edit %}

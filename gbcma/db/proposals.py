@@ -9,7 +9,7 @@ class ProposalsRepository(Repository):
         super().__init__(proposals)
 
     def create(self, title, content=None):
-        return self.__collection.insert_one({
+        return self._c.insert_one({
             "title": title,
             "content": content
         })

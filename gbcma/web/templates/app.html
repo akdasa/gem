@@ -18,6 +18,8 @@
         <script src="/static/vendor/jquery-3.2.1/js/jquery-3.2.1.min.js"></script>
         <script type="text/javascript" src="/static/vendor/bootstrap-3.3.7/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="/static/vendor/socket.io-2.0.3/socket.io.js"></script>
+        <script type="text/javascript" src="/static/ajax.js"></script>
+        {% block js %}{% endblock %}
 
         <div class="container">
             {% block navigation %}{% endblock %}
@@ -25,5 +27,7 @@
 
             {% block body %}{% endblock %}
         </div>
+
+        {% block footer %}{% endblock %}
     </body>
 </html>
