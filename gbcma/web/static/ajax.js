@@ -10,3 +10,16 @@ function ajax_put(url, data, callback) {
         }
     });
 }
+
+function ajax_get(url, data, callback) {
+    $.ajax({
+        url: url,
+        type: 'GET',
+        contentType: "application/json",
+        dataType: 'json',
+        data: data,
+        success: function(data) {
+            callback(data);
+        }
+    });
+}

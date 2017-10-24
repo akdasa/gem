@@ -14,6 +14,9 @@ class Repository:
     def find(self, criteria):
         return self._c.find_one(criteria)
 
+    def search(self, criteria):
+        return self._c.find(criteria)
+
     def insert(self, doc):
         return self._c.insert_one(doc)
 

@@ -26,3 +26,9 @@ def create():
 @login_required
 def update(key):
     return controller.update(request, key)
+
+
+@proposals.route("/search")
+@login_required
+def search():
+    return controller.search(request)

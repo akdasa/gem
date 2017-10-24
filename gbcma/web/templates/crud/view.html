@@ -1,6 +1,6 @@
 {% extends "crud/crud.html" %}
 
 {% block body %}
-    {% import form as f %}
+    {% import form as f with context %}
     {{ f.form(model=model, action="/" + url + "/"+model._id|e) }}
 {% endblock %}

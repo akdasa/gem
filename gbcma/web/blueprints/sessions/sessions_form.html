@@ -1,4 +1,5 @@
 {% macro form(model, action='', allow_edit=true) -%}
+
 <form action="{{ action }}" method="post" class="form-horizontal">
     <!-- Title -->
     <div class="form-group">
@@ -6,6 +7,16 @@
                class="form-control input-lg"
                placeholder="Title"
                value="{{ model.title }}"
+               autocomplete="off"
+               {%if not allow_edit%}readonly{%endif%}>
+    </div>
+
+    <!-- Date -->
+    <div class="form-group">
+        <input name="date"
+               class="form-control"
+               placeholder="Date"
+               value="{{ model.date }}"
                autocomplete="off"
                {%if not allow_edit%}readonly{%endif%}>
     </div>
@@ -21,14 +32,11 @@
         </textarea>
     </div>
 
-    <!-- Title -->
     <div class="form-group">
-        <input name="date"
-               class="form-control"
-               placeholder="Date"
-               value="{{ model.date }}"
-               autocomplete="off"
-               {%if not allow_edit%}readonly{%endif%}>
+        <div id="proposals" class="list-group"></div>
+
+        <a id="proposal-add" class="form-control btn btn-primary">Add proposal</a>
+        <input id="proposals-ids" name="proposals" type="hidden">
     </div>
 
     <!-- Proposal submit button -->
@@ -40,4 +48,47 @@
     </div>
     {% endif %}
 </form>
+
+<div id="proposal-add-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Add proposal to session</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <input id="proposal-search"
+                        class="form-control"
+                        placeholder="Search proposal by title"
+                        autocomplete="off">
+                </div>
+
+                <div class="form-group">
+                    <div id="proposal-search-result" class="list-group">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Add Proposal</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script id="entry-template" type="text/x-handlebars-template">
+    {% raw %}
+    {{#each proposals}}
+        <a href="" class="list-group-item" data-key="{{key}}">{{title}}</a>
+    {{else}}
+        <a href="" class="list-group-item list-group-item-danger">{{empty}}</a>
+    {{/each}}
+    {% endraw %}
+</script>
+
+<script id="proposals-models" type="application/json">
+    {{proposals_objects|tojson}}
+</script>
 {%- endmacro %}

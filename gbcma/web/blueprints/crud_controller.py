@@ -52,7 +52,7 @@ class CrudController:
         if request.method == "GET":
             if self._has_permission("read"):
                 entity = self._repository.get(key)
-                return render_template("crud/view.html", model=entity, **self.__options())
+                return render_template("crud/view.html", model=entity, **self.__options(), **self._extend(entity))
             else:
                 return access_denied()
 
@@ -95,5 +95,8 @@ class CrudController:
             "js": self._js,
             "show_actions": self._has_permission("delete"),
             "show_delete": self._has_permission("delete"),
-            "show_create": self._has_permission("create")
+            "show_create": self._has_permission("create"),
         }
+
+    def _extend(self, model):
+        return {}
