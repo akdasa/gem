@@ -89,6 +89,10 @@
 </script>
 
 <script id="proposals-models" type="application/json">
-    {{proposals_objects|tojson}}
+    {% if proposals_objects %}
+      {{proposals_objects|tojson}}
+    {%else%}
+      {}
+    {% endif %}
 </script>
 {%- endmacro %}

@@ -1,6 +1,9 @@
+import itertools
+
 from flask import Blueprint, render_template, request, flash, redirect
 from flask_login import login_user, logout_user, current_user, login_required
 
+from gbcma.db.proposals import ProposalsRepository
 from gbcma.db.sessions import SessionsRepository
 from gbcma.db.users import UsersRepository
 from gbcma.web.app.auth import User
@@ -8,14 +11,22 @@ from gbcma.web.app.auth import User
 account = Blueprint("account", __name__, template_folder=".")
 rep = UsersRepository()
 sessions = SessionsRepository()
+prop = ProposalsRepository()
 
 
 @account.route("/", methods=["GET", "POST"])
 @login_required
 def index():
+    # loads all proposals objects of sessions
+    sessions_list = list(sessions.upcoming())
+    proposal_ids = map(lambda x: x.get("proposals"), sessions_list)
+    proposal_ids = list(itertools.chain(*proposal_ids))
+    proposal_objects = prop.search({"_id": {"$in": proposal_ids}})
+    proposal_objects = {key["_id"]: key for key in proposal_objects}
+
     return render_template("account_dashboard.html",
-                           active=list(sessions.active()),
-                           upcoming=list(sessions.upcoming()))
+                           sessions=sessions_list,
+                           proposals=proposal_objects)
 
 
 @account.route("/edit", methods=["GET", "POST"])

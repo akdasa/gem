@@ -5,40 +5,35 @@
 
 {% block body %}
 
-{% if active|length > 0 %}
-    <h2>Active sessions</h2>
+    {% for session in sessions %}
+        {% set is_active = (session.status == 'run') %}
+        {% set header_class = 'panel-warning' if is_active else 'panel-default' %}
 
-    {% for session in active %}
-        <div class="panel panel-warning">
+        <div class="panel {{header_class}}">
             <div class="panel-heading">
                 <h3 class="panel-title">
                     {{ session.title }}
-                    <a href="/run/{{session._id}}" class="btn btn-xs btn-default pull-right">Join</a>
+                    {% if is_active %}
+                        <a href="/run/{{session._id}}" class="btn btn-xs btn-default pull-right">Join</a>
+                    {% endif %}
                 </h3>
             </div>
             <div class="panel-body">
                 {{ session.agenda }}
             </div>
+
+            <table class="table">
+            {% for proposal in session.proposals %}
+                <tr>
+                    <td>
+                        <a href="/proposals/{{proposals.get(proposal)._id}}">{{ proposals.get(proposal).title }}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </table>
         </div>
     {% endfor %}
-{% endif %}
 
-
-{% if upcoming|length > 0 %}
-    <h2>Upcoming sessions</h2>
-    {% for session in upcoming %}
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                    {{ session.date }}: {{ session.title }}
-                </h3>
-            </div>
-            <div class="panel-body">
-                {{ session.agenda }}
-            </div>
-        </div>
-    {% endfor %}
-{% endif %}
 
 <p>
     <a href="/account/logout" class="btn btn-danger">Logout</a>

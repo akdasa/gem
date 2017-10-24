@@ -7,10 +7,10 @@ function createSessionsController() {
     }
 
     me.onChangeSessionStatusClicked = function(sessionId, status) {
-        ajax_put("/sessions/" + sessionId, {"status": status}, onSessionStatusChangedResponse);
+        ajax_put("/sessions/" + sessionId, {"status": status}, me.onSessionStatusChangedResponse);
     }
 
-    me.onRunSessionResponse = function(data) {
+    me.onSessionStatusChangedResponse = function(data) {
         console.log(data);
     }
 
@@ -77,12 +77,12 @@ $(document).ready(function() {
 
     $(".run").on("click", function() {
         var sessionId = $(this).data("key");
-        onRunSessionClicked(sessionId, "run");
+        controller.onChangeSessionStatusClicked(sessionId, "run");
     })
 
     $(".stop").on("click", function() {
         var sessionId = $(this).data("key");
-        onStopSessionClicked(sessionId, "stop");
+        controller.onChangeSessionStatusClicked(sessionId, "stop");
     })
 
     $("#proposal-add").on("click", function() {
