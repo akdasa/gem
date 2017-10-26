@@ -1,58 +1,18 @@
 {% extends "general.html" %}
 
 {% block body %}
+<script src="/static/run_controller.js"></script>
 
 <div id="proposal"></div>
 
-<ul id="run-users-list">
-</ul>
+<ul id="run-users-list"></ul>
 
-<ul id="messages">
-</ul>
+<ul id="messages"></ul>
+
 <input id="chat-message" type="text">
 
-
-<script type="text/javascript" charset="utf-8">
-    var key = "{{key}}";
-    var socket = io.connect('http://' + document.domain + ':' + location.port);
-
-    socket.on('connection', function(socket) {
-        /*socket.emit('my event', {data: 'I\'m connected!'}, function (answer) {
-            console.log(answer);
-        });*/
-    });
-
-    socket.on('users', function (data) {
-        $("#run-users-list").empty();
-
-        for (user of data) {
-            $("#run-users-list").append("<li>" + user + "</li>");
-            //console.log("users: ", user);
-        }
-    });
-
-    socket.on('chat', function (data) {
-        console.log(data);
-        $("#messages").append("<li>" + data["who"] + ": " + data["msg"] + "</li>");
-    });
-
-
-    socket.on('proposal', function (data) {
-        $("#proposal").html(data["content"]);
-    });
-
-    $('#chat-message').keypress(function (e) {
-        if (e.which == 13) {
-            say();
-            return false;    //<---- Add this line
-        }
-     });
-
-    function say() {
-        var msg = $("#chat-message").val();
-        socket.emit("chat", { msg: msg });
-        $("#chat-message").val("");
-    }
+<script id="session-key" type="text">
+{{key}}
 </script>
 {% endblock %}
 

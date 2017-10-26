@@ -12,7 +12,7 @@
         <div class="panel {{header_class}}">
             <div class="panel-heading">
                 <h3 class="panel-title">
-                    {{ session.title }}
+                    {{ session.date }}: {{ session.title }}
                     {% if is_active %}
                         <a href="/run/{{session._id}}" class="btn btn-xs btn-default pull-right">Join</a>
                     {% endif %}
