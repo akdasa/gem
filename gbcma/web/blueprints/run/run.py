@@ -3,12 +3,14 @@ from flask_login import login_required, current_user
 from flask_socketio import emit
 
 from gbcma.channel.channel import get
+from gbcma.db.proposals import ProposalsRepository
 from gbcma.db.sessions import SessionsRepository
 from gbcma.web.blueprints.run.controller import Controller
 
 run = Blueprint("run", __name__, template_folder=".")
 channel = get()
 srep = SessionsRepository()
+prep = ProposalsRepository()
 
 controller = Controller()
 
@@ -18,6 +20,13 @@ controller = Controller()
 def index(key):
     session_entity = srep.get(key)
     return render_template("run_index.html", session=session_entity, key=session_entity["_id"])
+
+
+@run.route("/<string:key>/manage")
+@login_required
+def manage(key):
+    session_entity = srep.get(key)
+    return render_template("run_manage.html", session=session_entity, key=session_entity["_id"])
 
 
 @channel.on("join")
@@ -33,22 +42,36 @@ def on_chat_message(json):
         "who": current_user.name,
         "msg": json.get("msg", None)
     }, room=room)
-    pass
 
 
 @channel.on("disconnect")
-def test_disconnect():
-    #if current_user.name in clients:
-    #    clients[current_user.name].remove(request.sid)
-    #    if len(clients[current_user.name]) == 0:
-    #        del clients[current_user.name]
+def on_disconnect():
     controller.disconnect(request.sid)
 
 
+@channel.on("next")
+def on_next_message(json):
+    session_id = json.get("session")
+    step = json.get("step")
 
-@channel.on('next')
-def handle_my_custom_event(json):
-    s123 = srep.get(json["key"])
-    s123["_id"] = str(s123["_id"])
-    print(s123)
-    return s123
+    session = srep.get(session_id)
+    proposal_idx = session.get("proposal_idx", 0)
+    proposal_idx += step
+
+    if proposal_idx < 0:
+        proposal_idx = 0
+
+    if proposal_idx >= len(session["proposals"]):
+        emit("stage", {"closed": True}, room=session_id)
+        session["proposal_idx"] = proposal_idx
+        srep.save(session)
+    else:
+        proposal = prep.get(session["proposals"][proposal_idx])
+        session["proposal_idx"] = proposal_idx
+        srep.save(session)
+
+        emit("stage", {
+            "proposal": { "title": proposal["title"], "content": proposal["content"]}},
+            room=session_id)
+
+    return {"success": True}

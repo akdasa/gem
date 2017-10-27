@@ -2,6 +2,7 @@ function createRunController(sessionKey) {
     var me = {}
 
     me.sessionKey = sessionKey;
+    me.stageTemplate = Handlebars.compile($("#stage-template").html())
 
     me.onConnected = function(socket) {
         me.socket.emit("join", { room: me.sessionKey })
@@ -16,11 +17,17 @@ function createRunController(sessionKey) {
         me._appendChatMessage(data)
     }
 
+    me.onStageMessage = function(data) {
+        console.log(data)
+        me._renderStage(data)
+    }
+
     me.connect = function(uri) {
         me.socket = io.connect(uri)
         me.socket.on("connect", me.onConnected)
         me.socket.on("users", me.onUsersListMessage)
         me.socket.on("chat", me.onChatMessage)
+        me.socket.on("stage", me.onStageMessage)
         console.log(uri)
     }
 
@@ -39,6 +46,12 @@ function createRunController(sessionKey) {
 
     me._appendChatMessage = function(data) {
         $("#messages").append("<li>" + data["who"] + ": " + data["msg"] + "</li>");
+    }
+
+    me._renderStage = function(data) {
+        console.log(data)
+        var html = me.stageTemplate(data)
+        $("#stage").html(html)
     }
 
 
