@@ -1,30 +1,55 @@
-from flask_socketio import join_room, emit
+from flask import render_template
 
-from .models import Room
+from gbcma.db.proposals import ProposalsRepository
+from gbcma.db.sessions import SessionsRepository
+from .sessions import Sessions
 
 
-class Controller():
+class SessionController:
+    """Controller of the session blueprint"""
+
     def __init__(self):
-        self.__rooms = {}
+        """Initializes new instance of the SessionController class."""
+        self.__rooms = Sessions()
+        self.__sessions = SessionsRepository()
+        self.__proposals = ProposalsRepository()
 
-    def room_of(self, session_id):
-        for room_name in self.__rooms:
-            room = self.__rooms[room_name]
-            if room.is_session_connected(session_id):
-                return room_name
+    # Pages ------------------------------------------------------------------------------------------------------------
 
-    def connect(self, session_id, user_id, room):
-        if room not in self.__rooms:
-            self.__rooms[room] = Room()
-        self.__rooms[room].join(session_id, user_id)
-        join_room(room, session_id)
-        self.__notify_user_changes(room)
+    def index(self, session_id, manage=False):
+        """Renders index page of the session using specified ID
+        :param session_id: Session Id
+        :param manage: Is it a managing page?"""
+        session = self.__sessions.get(session_id)
+        template = "run_index.html" if not manage else "run_manage.html"
+        return render_template(template, session=session)
 
-    def disconnect(self, session_id):
-        for room in self.__rooms:
-            self.__rooms[room].leave(session_id)
-            self.__notify_user_changes(room)
+    # Messages ---------------------------------------------------------------------------------------------------------
 
-    def __notify_user_changes(self, room):
-        r = self.__rooms[room]
-        emit("users", r.users, room=room)
+    def join(self, socket_id, user, data):
+        """Joins user (using socket_id and user_id to identification) to specified room.
+        :param socket_id: SocketIO Id
+        :param user: User
+        :param data: Request data"""
+        room = data.get("room")
+        self.__rooms.connect(socket_id, user.get_id(), room)
+
+    def chat(self, socket_id, user, data):
+        """On chat message received.
+        :param socket_id: SocketIO Id
+        :param user: User
+        :param data: Request data"""
+        room = self.__rooms.room_of(socket_id)
+        room.notify_chat(user, data.get("msg", None))
+
+    def next(self, socket_id, data):
+        """On next stage command received.
+        :param socket_id: SocketIO Id
+        :param data: Data"""
+        room = self.__rooms.room_of(socket_id)
+        return room.next(data)
+
+    def disconnect(self, socket_id):
+        """On user disconnected.
+        :param socket_id:  SocketIO Id"""
+        self.__rooms.disconnect(socket_id)
