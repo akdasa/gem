@@ -12,13 +12,13 @@ channel = get()
 @run.route("/<string:session_id>")
 @login_required
 def index(session_id):
-    return controller.index(session_id, manage=False)
+    return controller.index(session_id, current_user, manage=False)
 
 
 @run.route("/<string:session_id>/manage")
 @login_required
 def manage(session_id):
-    return controller.index(session_id, manage=True)
+    return controller.index(session_id, current_user, manage=True)
 
 
 @channel.on("join")

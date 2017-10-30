@@ -2,6 +2,7 @@ from flask import render_template
 
 from gbcma.db.proposals import ProposalsRepository
 from gbcma.db.sessions import SessionsRepository
+from gbcma.web.app.auth import access_denied
 from .sessions import Sessions
 
 
@@ -16,12 +17,15 @@ class SessionController:
 
     # Pages ------------------------------------------------------------------------------------------------------------
 
-    def index(self, session_id, manage=False):
+    def index(self, session_id, user, manage=False):
         """Renders index page of the session using specified ID
         :param session_id: Session Id
+        :param user User
         :param manage: Is it a managing page?"""
         session = self.__sessions.get(session_id)
         template = "run_index.html" if not manage else "run_manage.html"
+        if manage and not user.has_permission("run.manage"):
+            return access_denied()
         return render_template(template, session=session)
 
     # Messages ---------------------------------------------------------------------------------------------------------
