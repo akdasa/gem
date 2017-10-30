@@ -6,7 +6,7 @@
         <h3 class="panel-title">Permission denied</h3>
     </div>
     <div class="panel-body">
-        You have no rights to do this
+        You have no rights to do this. {%if message%}{{message}}{%endif%}
     </div>
 </div>
 {% endblock %}

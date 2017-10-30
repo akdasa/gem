@@ -36,9 +36,11 @@
                 {% endif %}
 
                 {% for action in actions %}
-                <a class="btn btn-primary btn-xs {{ action.css_class }}" data-key="{{ model._id }}">
-                    <span class="glyphicon glyphicon-{{ action.icon }}" aria-hidden="true"></span>
-                </a>
+                    {% if user_has_permission(action.permission) or not action.permission %}
+                    <a class="btn btn-primary btn-xs {{ action.css_class }}" data-key="{{ model._id }}">
+                        <span class="glyphicon glyphicon-{{ action.icon }}" aria-hidden="true"></span>
+                    </a>
+                    {% endif %}
                 {% endfor %}
             </td>
             {% endif %}

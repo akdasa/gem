@@ -7,12 +7,14 @@
 
     {% for session in sessions %}
         {% set is_active = (session.status == 'run') %}
-        {% set header_class = 'panel-warning' if is_active else 'panel-default' %}
+        {% set is_closed = (session.status == 'closed') %}
+        {% set header_class = 'warning' if is_active else 'danger' if is_closed else 'default' %}
 
-        <div class="panel {{header_class}}">
+        <div class="panel panel-{{header_class}}">
             <div class="panel-heading">
                 <h3 class="panel-title">
                     {{ session.date }}: {{ session.title }}
+                    {% if is_closed %} (Closed) {% endif %}
                     {% if is_active and user_has_permission("session.join") %}
                         <a href="/session/{{session._id}}" class="btn btn-xs btn-default pull-right">Join</a>
                     {% endif %}

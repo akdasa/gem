@@ -6,8 +6,8 @@ from flask_login import current_user
 from werkzeug.utils import redirect
 
 
-def access_denied():
-    return render_template("permission_denied.html")
+def access_denied(message=None):
+    return render_template("permission_denied.html", message=message)
 
 
 def has_permission(permission):

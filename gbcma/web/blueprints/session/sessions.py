@@ -10,7 +10,7 @@ class Sessions:
     def room_of(self, session_id):
         for room_name in self.__rooms:
             room = self.__rooms[room_name]
-            if room.is_session_connected(session_id):
+            if room.is_socket_connected(session_id):
                 return self.__rooms[room_name]
 
     def connect(self, session_id, user_id, room):

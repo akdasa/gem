@@ -6,6 +6,10 @@ function createSessionsController() {
         return /sessions\/.+/.test(location.pathname)
     }
 
+    me.onManageSessionClicked = function(sessionId) {
+        window.location.href = "/session/" + sessionId + "/manage"
+    }
+
     me.onChangeSessionStatusClicked = function(sessionId, status) {
         ajax_put("/sessions/" + sessionId, {"status": status}, me.onSessionStatusChangedResponse);
     }
@@ -82,7 +86,12 @@ $(document).ready(function() {
 
     $(".stop").on("click", function() {
         var sessionId = $(this).data("key");
-        controller.onChangeSessionStatusClicked(sessionId, "stop");
+        controller.onChangeSessionStatusClicked(sessionId, "closed");
+    })
+
+    $(".manage").on("click", function() {
+        var sessionId = $(this).data("key");
+        controller.onManageSessionClicked(sessionId);
     })
 
     $("#proposal-add").on("click", function() {

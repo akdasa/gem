@@ -12,6 +12,7 @@ class SessionsController(CrudController):
 
         self.register_action("run", "play")
         self.register_action("stop", "pause")
+        self.register_action("manage", "hand-right", "session.manage")
         self.register_js("sessions_controller.js")
 
     def run(self, request, key):

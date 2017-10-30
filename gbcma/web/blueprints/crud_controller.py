@@ -21,8 +21,8 @@ class CrudController:
     def register_js(self, name):
         self._js.append(name)
 
-    def register_action(self, css_class, icon):
-        self._actions.append({"css_class": css_class, "icon": icon})
+    def register_action(self, css_class, icon, permission=None):
+        self._actions.append({"css_class": css_class, "icon": icon, "permission": permission})
 
     def index(self):
         """Shows list of models."""

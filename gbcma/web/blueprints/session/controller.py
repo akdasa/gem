@@ -28,6 +28,8 @@ class SessionController:
             return access_denied()
         if manage and not user.has_permission("session.manage"):
             return access_denied()
+        if session.get("status", None) != "run":
+            return access_denied("Session is not started yet")
         return render_template(template, session=session)
 
     # Messages ---------------------------------------------------------------------------------------------------------
@@ -38,7 +40,7 @@ class SessionController:
         :param user: User
         :param data: Request data"""
         room = data.get("room")
-        self.__rooms.connect(socket_id, user.get_id(), room)
+        self.__rooms.connect(socket_id, user, room)
 
     def chat(self, socket_id, user, data):
         """On chat message received.
