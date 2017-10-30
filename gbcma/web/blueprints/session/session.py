@@ -42,6 +42,10 @@ class Session:
         self.__entity["proposal_idx"] = value
 
     @property
+    def proposals_count(self):
+        return len(self.__entity["proposals"])
+
+    @property
     def state(self):
         return self.__entity["status"]
 
@@ -78,9 +82,9 @@ class Session:
         step = data.get("step", 1)
 
         self.proposal_idx += step
-        proposals_count = len(self.__entity["proposals"])
 
-        if self.proposal_idx >= proposals_count:
+
+        if self.proposal_idx >= self.proposals_count:
             self.close()
 
         self.__save()
@@ -104,7 +108,10 @@ class Session:
         else:
             proposal_key = self.__entity["proposals"][proposal_idx]
             proposal = self.__get_proposal(proposal_key)
-            return {"proposal": {"title": proposal["title"], "content": proposal["content"]}}
+            return {
+                "proposal": {"title": proposal["title"], "content": proposal["content"]},
+                "progress": {"current": self.proposal_idx+1, "total": self.proposals_count}
+            }
 
     @staticmethod
     def __get_proposal(key):

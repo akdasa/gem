@@ -4,15 +4,27 @@
 <script src="/static/session_controller.js"></script>
 <script src="/static/session_manage_controller.js"></script>
 
-<h1>Manage {{ session.title }}</h1>
+<div class="row">
+    <div class="col-md-8">
+        <div id="stage"></div>
+    </div>
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">Users</div>
+            <div class="panel-body">
+                <ul id="run-users-list"></ul>
+            </div>
+        </div>
 
-<div id="stage"></div>
-
-<ul id="run-users-list"></ul>
-
-<ul id="messages"></ul>
-
-<input id="chat-message" type="text">
+        <div class="panel panel-default">
+            <div class="panel-heading">Chat</div>
+            <div class="panel-body">
+                    <ul id="messages"></ul>
+                <input id="chat-message" class="form-control" type="text">
+            </div>
+        </div>
+    </div>
+</div>
 
 <script id="session-key" type="text">
 {{session._id}}
@@ -21,7 +33,16 @@
 <script id="stage-template" type="text/x-handlebars-template">
 {% raw %}
     {{# if proposal }}
-    <h2>Current proposal: {{ proposal.title }}</h2>
+        <div class="panel panel-default">
+            <div class="panel-heading">Current proposal ({{progress.current}}/{{progress.total}})</div>
+            <div class="panel-body">
+                <h1>
+                    {{ proposal.title }}
+                </h1>
+                <p>{{ trimString proposal.content 512 }}</p>
+            </div>
+
+        </div>
     {{/if}}
 
     {{# if closed }}
@@ -35,8 +56,9 @@
 {% block footer %}
 <footer class="footer">
     <div class="container">
+        <a href="#" class="btn btn-default run-next" data-step="-1">Previous</a>
         <a href="#" class="btn btn-primary run-next" data-step="1">Next</a>
-        <a href="#" class="btn btn-primary run-next" data-step="-1">Previous</a>
+        <a href="#" class="btn btn-danger run-close">Close</a>
     </div>
 </footer>
 {% endblock %}

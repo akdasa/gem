@@ -22,14 +22,16 @@ class SessionController:
         :param session_id: Session Id
         :param user User
         :param manage: Is it a managing page?"""
-        session = self.__sessions.get(session_id)
         template = "session_index.html" if not manage else "session_manage.html"
+        session = self.__sessions.get(session_id)
+        if not session:
+            return access_denied("No session found")
         if not manage and not user.has_permission("session.join"):
             return access_denied()
         if manage and not user.has_permission("session.manage"):
             return access_denied()
         if session.get("status", None) != "run":
-            return access_denied("Session is not started yet")
+            return access_denied("Session is not started yet or closed")
         return render_template(template, session=session)
 
     # Messages ---------------------------------------------------------------------------------------------------------
