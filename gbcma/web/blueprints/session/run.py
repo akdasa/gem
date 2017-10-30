@@ -4,18 +4,18 @@ from flask_login import login_required, current_user
 from gbcma.channel.channel import get
 from .controller import SessionController
 
-run = Blueprint("run", __name__, template_folder=".")
+session = Blueprint("session", __name__, template_folder=".")
 controller = SessionController()
 channel = get()
 
 
-@run.route("/<string:session_id>")
+@session.route("/<string:session_id>")
 @login_required
 def index(session_id):
     return controller.index(session_id, current_user, manage=False)
 
 
-@run.route("/<string:session_id>/manage")
+@session.route("/<string:session_id>/manage")
 @login_required
 def manage(session_id):
     return controller.index(session_id, current_user, manage=True)

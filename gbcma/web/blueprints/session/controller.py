@@ -23,8 +23,10 @@ class SessionController:
         :param user User
         :param manage: Is it a managing page?"""
         session = self.__sessions.get(session_id)
-        template = "run_index.html" if not manage else "run_manage.html"
-        if manage and not user.has_permission("run.manage"):
+        template = "session_index.html" if not manage else "session_manage.html"
+        if not manage and not user.has_permission("session.join"):
+            return access_denied()
+        if manage and not user.has_permission("session.manage"):
             return access_denied()
         return render_template(template, session=session)
 

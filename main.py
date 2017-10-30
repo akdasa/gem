@@ -17,20 +17,20 @@ app = Flask(__name__,
 app.secret_key = 'some_secret'
 channel = init(app)
 
-from gbcma.web.blueprints.run import run
+from gbcma.web.blueprints.session import session
 
 login_manager = LoginManager()
 app.register_blueprint(proposals, url_prefix="/proposals")
 app.register_blueprint(users, url_prefix="/users")
 app.register_blueprint(sessions, url_prefix="/sessions")
 app.register_blueprint(account, url_prefix="/account")
-app.register_blueprint(run, url_prefix="/run")
+app.register_blueprint(session, url_prefix="/session")
 
 login_manager.init_app(app)
 login_manager.login_view = "account.login"
 login_manager.login_message_category = "info"
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     channel.run(app)
 
 @app.add_template_global
