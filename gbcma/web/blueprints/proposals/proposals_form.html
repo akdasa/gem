@@ -1,33 +1,36 @@
 {% macro form(model, action='', allow_edit=true) -%}
-<form action="{{ action }}" method="post" class="form-horizontal">
-    <!-- Proposal title field -->
-    <div class="form-group">
-        <input name="title"
-               class="form-control input-lg"
-               placeholder="Title"
-               value="{{ model.title }}"
-               autocomplete="off"
-               {%if not allow_edit%}readonly{%endif%}>
-    </div>
-
-    <!-- Proposal content field -->
-    <div class="form-group">
-        <textarea name="content"
-                  class="form-control"
-                  rows="20"
-                  placeholder="Paste or write content here"
-                  {%if not allow_edit%}readonly{%endif%}>
-            {{- model.content -}}
-        </textarea>
-    </div>
-
-    <!-- Proposal submit button -->
     {% if allow_edit %}
-    <div class="form-group">
-        <input id="submit"
-               type="submit"
-               class="form-control btn btn-primary">
-    </div>
+        <form action="{{ action }}" method="post" class="form-horizontal">
+            <!-- Proposal title field -->
+            <div class="form-group">
+                <input name="title"
+                       class="form-control input-lg"
+                       placeholder="Title"
+                       value="{{ model.title }}"
+                       autocomplete="off">
+            </div>
+
+            <!-- Proposal content field -->
+            <div class="form-group">
+                <textarea name="content"
+                          class="form-control"
+                          rows="20"
+                          placeholder="Paste or write content here">
+                    {{- model.content -}}
+                </textarea>
+            </div>
+
+            <!-- Proposal submit button -->
+            {% if allow_edit %}
+            <div class="form-group">
+                <input id="submit"
+                       type="submit"
+                       class="form-control btn btn-primary">
+            </div>
+            {% endif %}
+        </form>
+    {% else %}
+        <h1>{{model.title}}</h1>
+        <p>{{model.content}}</p>
     {% endif %}
-</form>
 {%- endmacro %}

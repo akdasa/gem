@@ -2,5 +2,5 @@
 
 {% block body %}
     {% import form as f with context %}
-    {{ f.form(model=model, action="/" + url + "/"+model._id|e) }}
+    {{ f.form(model=model, action="/" + url + "/"+model._id|e, allow_edit=allow_edit) }}
 {% endblock %}

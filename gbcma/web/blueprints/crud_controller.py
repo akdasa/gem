@@ -96,6 +96,7 @@ class CrudController:
             "show_actions": self._has_permission("delete"),
             "show_delete": self._has_permission("delete"),
             "show_create": self._has_permission("create"),
+            "allow_edit": self._has_permission("update")
         }
 
     def _extend(self, model):

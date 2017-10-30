@@ -13,6 +13,7 @@ def access_denied(message=None):
 def has_permission(permission):
     if permission in get_current_user_permissions():
         return True
+    return False
 
 
 def get_current_user_permissions():
