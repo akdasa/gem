@@ -1,15 +1,11 @@
 {% extends "general.html" %}
 
 {% block body %}
+{% import "session_view.html" as v %}
+
 <script src="/static/session_controller.js"></script>
 
-<div id="stage"></div>
-
-<ul id="run-users-list"></ul>
-
-<ul id="messages"></ul>
-
-<input id="chat-message" type="text">
+{{ v.view() }}
 
 <script id="session-key" type="text">
 {{session._id}}
@@ -18,12 +14,25 @@
 <script id="stage-template" type="text/x-handlebars-template">
 {% raw %}
     {{# if proposal }}
-    <h1>{{ proposal.title }}</h1>
-    <div>{{ proposal.content }}</div>
+        <div class="panel panel-default">
+            <div class="panel-heading">Current proposal ({{progress.current}}/{{progress.total}})</div>
+            <div class="panel-body">
+                <h1>
+                    {{ proposal.title }}
+                </h1>
+                <p>{{ proposal.content }}</p>
+            </div>
+
+        </div>
     {{/if}}
 
     {{# if closed }}
-    <h1>Session is closed</h1>
+        <div class="panel panel-default">
+            <div class="panel-heading">Session is about to end</div>
+            <div class="panel-body">
+                <h1>All proposals have been reviewed.</h1>
+            </div>
+        </div>
     {{/if}}
 {% endraw %}
 </script>

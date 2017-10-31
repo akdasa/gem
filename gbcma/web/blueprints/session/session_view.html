@@ -1,0 +1,23 @@
+{% macro view() %}
+<div class="row">
+    <div class="col-md-8">
+        <div id="stage"></div>
+    </div>
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">Users</div>
+            <div class="panel-body">
+                <ul id="run-users-list"></ul>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">Chat</div>
+            <div class="panel-body">
+                <ul id="messages"></ul>
+                <input id="chat-message" class="form-control" type="text">
+            </div>
+        </div>
+    </div>
+</div>
+{% endmacro %}
