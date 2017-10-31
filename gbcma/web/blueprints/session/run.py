@@ -36,6 +36,11 @@ def on_next_message(data):
     return controller.next(request.sid, data)
 
 
+@channel.on("close")
+def on_close_message():
+    return controller.close(request.sid)
+
+
 @channel.on("disconnect")
 def on_disconnect():
     return controller.disconnect(request.sid)

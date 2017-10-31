@@ -37,8 +37,6 @@ class Session:
 
     @proposal_idx.setter
     def proposal_idx(self, value):
-        if self.proposal_idx + value < 0:
-            return
         self.__entity["proposal_idx"] = value
 
     @property
@@ -79,23 +77,19 @@ class Session:
         }, room=self.__name)
 
     def next(self, data):
-        step = data.get("step", 1)
-
-        self.proposal_idx += step
-
-
+        self.proposal_idx += data.get("step", 1)
+        if self.proposal_idx < 0:
+            self.proposal_idx = 0
         if self.proposal_idx >= self.proposals_count:
-            self.close()
+            self.proposal_idx = self.proposals_count
 
         self.__save()
-
         emit("stage", self.__state(), room=self.__name)
-
-        return {"success": True}
 
     def close(self):
         self.state = "closed"
         self.__save()
+        return {"state": self.state}
 
     def __state(self):
         """Return current state fo session.
@@ -103,15 +97,14 @@ class Session:
         proposal_idx = self.__entity.get("proposal_idx", 0)
         proposals_count = len(self.__entity["proposals"])
 
-        if proposal_idx >= proposals_count:
-            return {"closed": True}
-        else:
+        if proposal_idx < proposals_count:
             proposal_key = self.__entity["proposals"][proposal_idx]
             proposal = self.__get_proposal(proposal_key)
             return {
                 "proposal": {"title": proposal["title"], "content": proposal["content"]},
-                "progress": {"current": self.proposal_idx+1, "total": self.proposals_count}
-            }
+                "progress": {"current": self.proposal_idx+1, "total": self.proposals_count}}
+        else:
+            return {"closed": True}
 
     @staticmethod
     def __get_proposal(key):

@@ -59,6 +59,12 @@ class SessionController:
         room = self.__rooms.room_of(socket_id)
         return room.next(data)
 
+    def close(self, socket_id):
+        """On close stage command received.
+        :param socket_id: SocketIO Id"""
+        room = self.__rooms.room_of(socket_id)
+        return room.close()
+
     def disconnect(self, socket_id):
         """On user disconnected.
         :param socket_id:  SocketIO Id"""
