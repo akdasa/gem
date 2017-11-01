@@ -50,14 +50,21 @@ class SessionController:
         :param user: User
         :param data: Request data"""
         room = self.__rooms.room_of(socket_id)
-        room.notify_chat(user, data.get("msg", None))
+        room.chat.say(user, data.get("msg", None))
 
-    def next(self, socket_id, data):
+    def move(self, socket_id, data):
         """On next stage command received.
         :param socket_id: SocketIO Id
         :param data: Data"""
         room = self.__rooms.room_of(socket_id)
-        return room.next(data)
+        return room.stages.move(data.get("step", 0))
+
+    def vote(self, socket_id, user, data):
+        """On next stage command received.
+        :param socket_id: SocketIO Id
+        :param data: Data"""
+        room = self.__rooms.room_of(socket_id)
+        return room.stages.current.vote(user, data.get("value", None))
 
     def close(self, socket_id):
         """On close stage command received.

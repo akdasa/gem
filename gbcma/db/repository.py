@@ -21,6 +21,9 @@ class Repository:
         except InvalidId:
             return None
 
+    def search_list(self, ids):
+        return list(self.search({"_id": {"$in": ids}}))
+
     def search(self, criteria):
         return self._c.find(criteria)
 

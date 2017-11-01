@@ -25,6 +25,24 @@
             </div>
 
         </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">Votes</div>
+            <div class="panel-body">
+
+                <!--<div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: 60%;">
+                        <span class="sr-only">60% Complete</span>
+                    </div>
+                </div>-->
+
+                <ul>
+                    {{#each votes}}
+                    <li>{{ name }}: {{ value }}</li>
+                    {{/each}}
+                </ul>
+            </div>
+        </div>
     {{/if}}
 
     {{# if closed }}

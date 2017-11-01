@@ -33,12 +33,17 @@ def on_chat_message(data):
 
 @channel.on("next")
 def on_next_message(data):
-    return controller.next(request.sid, data)
+    return controller.move(request.sid, data)
 
 
 @channel.on("close")
 def on_close_message():
     return controller.close(request.sid)
+
+
+@channel.on("vote")
+def on_vote_message(data):
+    return controller.vote(request.sid, current_user, data)
 
 
 @channel.on("disconnect")

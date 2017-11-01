@@ -22,6 +22,10 @@ function createRunController(sessionKey) {
         me._renderStage(data)
     }
 
+    me.onVoteButtonClicked = function(value) {
+        me.socket.emit("vote", {value: value})
+    }
+
     me.connect = function(uri) {
         me.socket = io.connect(uri)
         me.socket.on("connect", me.onConnected)
@@ -54,7 +58,6 @@ function createRunController(sessionKey) {
         $("#stage").html(html)
     }
 
-
     return me
 }
 
@@ -71,5 +74,11 @@ $(document).ready(function() {
             controller.say(msg);
             return false;    //<---- Add this line
         }
-     });
+    });
+
+    $("body").on("click", ".vote", function(e) {
+        e.preventDefault();
+        var value = $(this).data("vote")
+        controller.onVoteButtonClicked(value)
+    });
 })
