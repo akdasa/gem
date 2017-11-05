@@ -22,30 +22,36 @@ def manage(session_id):
 
 
 @channel.on("join")
+@login_required
 def on_join_message(data):
     return controller.join(request.sid, current_user, data)
 
 
 @channel.on("chat")
+@login_required
 def on_chat_message(data):
     return controller.chat(request.sid, current_user, data)
 
 
-@channel.on("next")
-def on_next_message(data):
-    return controller.move(request.sid, data)
+@channel.on("change_stage")
+@login_required
+def on_change_stage_message(data):
+    return controller.change_stage(request.sid, data)
 
 
 @channel.on("close")
+@login_required
 def on_close_message():
     return controller.close(request.sid)
 
 
 @channel.on("vote")
+@login_required
 def on_vote_message(data):
     return controller.vote(request.sid, current_user, data)
 
 
 @channel.on("disconnect")
+@login_required
 def on_disconnect():
     return controller.disconnect(request.sid)

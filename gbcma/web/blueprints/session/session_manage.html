@@ -13,49 +13,42 @@
 </script>
 
 <script id="stage-template" type="text/x-handlebars-template">
-{% raw %}
+    {% raw %}
     {{# if proposal }}
-        <div class="panel panel-default">
-            <div class="panel-heading">Current proposal ({{progress.current}}/{{progress.total}})</div>
-            <div class="panel-body">
-                <h1>
-                    {{ proposal.title }}
-                </h1>
-                <p>{{ trimString proposal.content 512 }}</p>
-            </div>
-
+    <div class="panel panel-default">
+        <div class="panel-heading">Current proposal ({{progress.current}}/{{progress.total}})</div>
+        <div class="panel-body">
+            <h1>
+                {{ proposal.title }}
+            </h1>
+            <p>{{ trimString proposal.content 512 }}</p>
         </div>
 
-        <div class="panel panel-default">
-            <div class="panel-heading">Votes</div>
-            <div class="panel-body">
+    </div>
 
-                <!--<div class="progress">
-                    <div class="progress-bar" role="progressbar" style="width: 60%;">
-                        <span class="sr-only">60% Complete</span>
-                    </div>
-                </div>-->
-
-                <ul>
-                    {{#each votes}}
-                    <li>{{ name }}: {{ value }}</li>
-                    {{/each}}
-                </ul>
+    <div class="panel panel-default">
+        <div class="panel-heading">Votes ({{votes_progress.voted}} of {{votes_progress.total}})</div>
+        <div class="panel-body">
+            <div class="progress">
+                <div class="progress-bar progress-bar-success" style="width: {{votes_progress.yes}}%"></div>
+                <div class="progress-bar progress-bar-warning" style="width: {{votes_progress.unknown}}%"></div>
+                <div class="progress-bar progress-bar-danger" style="width: {{votes_progress.no}}%"></div>
             </div>
         </div>
+    </div>
     {{/if}}
 
     {{# if closed }}
-        <div class="panel panel-default">
-            <div class="panel-heading">Session is about to end</div>
-            <div class="panel-body">
-                <h1>All proposals have been reviewed.</h1>
-                <a href="#" class="btn btn-danger run-close">Close session</a>
-            </div>
-
+    <div class="panel panel-default">
+        <div class="panel-heading">Session is about to end</div>
+        <div class="panel-body">
+            <h1>All proposals have been reviewed.</h1>
+            <a href="#" class="btn btn-danger run-close">Close session</a>
         </div>
+
+    </div>
     {{/if}}
-{% endraw %}
+    {% endraw %}
 </script>
 {% endblock %}
 
@@ -63,8 +56,8 @@
 {% block footer %}
 <footer class="footer">
     <div class="container">
-        <a href="#" class="btn btn-default run-next" data-step="-1">Previous</a>
-        <a href="#" class="btn btn-primary run-next" data-step="1">Next</a>
+        <a href="#" class="btn btn-default change-stage" data-value="-1">Previous</a>
+        <a href="#" class="btn btn-primary change-stage" data-value="1">Next</a>
         <a href="#" class="btn btn-danger run-close">Close</a>
     </div>
 </footer>

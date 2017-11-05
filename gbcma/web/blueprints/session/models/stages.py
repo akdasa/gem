@@ -20,7 +20,7 @@ class SessionStages:
     def current(self):
         return self.__stages[self.__stage_idx]
 
-    def move(self, step=1):
+    def change(self, step=1):
         self.__stage_idx += step
         if self.__stage_idx <= 0:
             self.__stage_idx = 0
@@ -28,6 +28,7 @@ class SessionStages:
             self.__stage_idx = len(self.__stages) - 1
 
         self.__changed.notify(self.current)
+        return True
 
     def __create_stages(self, session_id):
         stages = []

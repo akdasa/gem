@@ -44,6 +44,10 @@ class User(UserMixin):
         return self.__id
 
     @property
+    def id(self):
+        return self.__id
+
+    @property
     def name(self):
         return self.__name
 

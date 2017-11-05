@@ -1,6 +1,7 @@
 function createSessionsController() {
     var me = {}
 
+    me.stageTemplate = Handlebars.compile($("#stage-template").html())
 
     me.isConcreteSessionPage = function() {
         return /sessions\/.+/.test(location.pathname)

@@ -4,6 +4,7 @@
 {% import "session_view.html" as v %}
 
 <script src="/static/session_controller.js"></script>
+<script src="/static/session_user_controller.js"></script>
 
 {{ v.view() }}
 
@@ -33,6 +34,9 @@
                 </a>
                 <a href="#" class="btn btn-danger vote" data-vote="false">
                     <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> No
+                </a>
+                <a href="#" class="btn btn-warning vote" data-vote="null">
+                    <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> Abstained
                 </a>
             </div>
         </div>

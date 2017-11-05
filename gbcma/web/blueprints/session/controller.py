@@ -1,7 +1,6 @@
 from flask import render_template
 
-from gbcma.db.proposals import ProposalsRepository
-from gbcma.db.sessions import SessionsRepository
+from gbcma.db import sessions
 from gbcma.web.app.auth import access_denied
 from .sessions import Sessions
 
@@ -11,9 +10,7 @@ class SessionController:
 
     def __init__(self):
         """Initializes new instance of the SessionController class."""
-        self.__rooms = Sessions()
-        self.__sessions = SessionsRepository()
-        self.__proposals = ProposalsRepository()
+        self.__sessions = Sessions()
 
     # Pages ------------------------------------------------------------------------------------------------------------
 
@@ -23,7 +20,7 @@ class SessionController:
         :param user User
         :param manage: Is it a managing page?"""
         template = "session_index.html" if not manage else "session_manage.html"
-        session = self.__sessions.get(session_id)
+        session = sessions.get(session_id)
         if not session:
             return access_denied("No session found")
         if not manage and not user.has_permission("session.join"):
@@ -37,42 +34,44 @@ class SessionController:
     # Messages ---------------------------------------------------------------------------------------------------------
 
     def join(self, socket_id, user, data):
-        """Joins user (using socket_id and user_id to identification) to specified room.
+        """Joins user (using socket_id and user_id to identification) to specified session.
         :param socket_id: SocketIO Id
         :param user: User
         :param data: Request data"""
-        room = data.get("room")
-        self.__rooms.connect(socket_id, user, room)
+        session_id = data.get("room")
+        self.__sessions.connect(socket_id, user, session_id)
 
     def chat(self, socket_id, user, data):
         """On chat message received.
         :param socket_id: SocketIO Id
         :param user: User
         :param data: Request data"""
-        room = self.__rooms.room_of(socket_id)
-        room.chat.say(user, data.get("msg", None))
+        session_id = self.__sessions.session_of(socket_id)
+        session_id.chat.say(user, data.get("msg", None))
 
-    def move(self, socket_id, data):
+    def change_stage(self, socket_id, data):
         """On next stage command received.
         :param socket_id: SocketIO Id
         :param data: Data"""
-        room = self.__rooms.room_of(socket_id)
-        return room.stages.move(data.get("step", 0))
+        session_id = self.__sessions.session_of(socket_id)
+        direction = data.get("value", 0)
+        return session_id.stages.change(direction)
 
     def vote(self, socket_id, user, data):
         """On next stage command received.
         :param socket_id: SocketIO Id
         :param data: Data"""
-        room = self.__rooms.room_of(socket_id)
-        return room.stages.current.vote(user, data.get("value", None))
+        session_id = self.__sessions.session_of(socket_id)
+        vote_value = data.get("value", None)
+        return session_id.stages.current.vote(user, vote_value)
 
     def close(self, socket_id):
         """On close stage command received.
         :param socket_id: SocketIO Id"""
-        room = self.__rooms.room_of(socket_id)
-        return room.close()
+        session = self.__sessions.session_of(socket_id)
+        return session.close()
 
     def disconnect(self, socket_id):
         """On user disconnected.
         :param socket_id:  SocketIO Id"""
-        self.__rooms.disconnect(socket_id)
+        self.__sessions.disconnect(socket_id)

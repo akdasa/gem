@@ -1,48 +1,33 @@
-function createRunManageController(sessionKey) {
-    var me = {}
-
-    me.sessionKey = sessionKey;
-
-    me.onNextStageResponse = function(data) {
-        console.log(data)
+function extendSessionController(me) {
+    me.onChangeStageResponse = function(data) {
+        //console.log(data)
     }
 
     me.onCloseSessionResponse = function(data) {
-        console.log(data)
+        //console.log(data)
     }
 
-    me.nextStage = function(step) {
-        me.socket.emit("next", { session: me.sessionKey, step: step }, me.onNextStageResponse)
+
+    // Actions ---------------------------------------------------------------------------------------------------------
+
+    me.changeStage = function(value) {
+        me.socket.emit("change_stage", { value: value }, me.onChangeStageResponse)
     }
 
     me.closeSession = function() {
         me.socket.emit("close", me.onCloseSessionResponse)
     }
 
-    me.connect = function(uri) {
-        me.socket = io.connect(uri)
-        me.socket.on("connect", me.onConnected)
-        console.log(uri)
-    }
-
-    me.onConnected = function(socket) {
-        me.socket.emit("join", { room: me.sessionKey })
-    }
-
     return me
 }
 
 $(document).ready(function() {
-    var realTimeHost = "http://" + document.domain + ":" + location.port;
-    var sessionKey = $("#session-key").text().trim()
-    var controller = createRunManageController(sessionKey)
+    extendSessionController(controller)
 
-    controller.connect(realTimeHost)
-
-    $(".run-next").on("click", function(e) {
+    $(".change-stage").on("click", function(e) {
         e.preventDefault()
-        var step = $(this).data("step")
-        controller.nextStage(step)
+        var value = $(this).data("value")
+        controller.changeStage(value)
     })
 
     $(".run-close").on("click", function(e) {
