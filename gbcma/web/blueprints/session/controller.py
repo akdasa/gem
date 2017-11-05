@@ -60,6 +60,7 @@ class SessionController:
     def vote(self, socket_id, user, data):
         """On next stage command received.
         :param socket_id: SocketIO Id
+        :param user: User
         :param data: Data"""
         session_id = self.__sessions.session_of(socket_id)
         vote_value = data.get("value", None)

@@ -1,6 +1,5 @@
 from flask import Flask
 from flask_login import LoginManager
-from flask_socketio import SocketIO
 
 from gbcma.channel import init
 from gbcma.db.users import UsersRepository
@@ -9,7 +8,6 @@ from gbcma.web.blueprints.account import account
 from gbcma.web.blueprints.proposals import proposals
 from gbcma.web.blueprints.sessions import sessions
 from gbcma.web.blueprints.users import users
-
 
 app = Flask(__name__,
             template_folder="gbcma/web/templates",
@@ -32,6 +30,7 @@ login_manager.login_message_category = "info"
 
 if __name__ == "__main__":
     channel.run(app)
+
 
 @app.add_template_global
 def user_has_permission(permission):

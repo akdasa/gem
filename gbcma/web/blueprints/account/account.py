@@ -50,9 +50,9 @@ def login():
 
     elif request.method == "POST":
         data = request.form
-        login = data.get("login", None)
+        lgn = data.get("login", None)
         password = data.get("password", None)
-        user = rep.find({"login": login, "password": password})
+        user = rep.find({"login": lgn, "password": password})
 
         if user:
             u = User(user)
