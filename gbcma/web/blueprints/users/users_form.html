@@ -30,6 +30,16 @@
                {%if not allow_edit%}readonly{%endif%}>
     </div>
 
+    <!-- User role field -->
+    <div class="form-group">
+        <input name="role"
+               class="form-control"
+               placeholder="Role"
+               value="{{ model.role }}"
+               autocomplete="off"
+               {%if not allow_edit%}readonly{%endif%}>
+    </div>
+
     <!-- Proposal permissions field -->
     <div class="form-group">
         <textarea name="permissions"
