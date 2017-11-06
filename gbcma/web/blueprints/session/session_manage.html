@@ -36,6 +36,29 @@
             </div>
         </div>
     </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Comments</div>
+        <div class="panel-body">
+            {{#each comments}}
+
+            <div class="media">
+                <div class="media-left media-top">
+                    <span class="glyphicon {{thumbsIcon type}}" aria-hidden="true"></span>
+                </div>
+
+                <div class="media-body">
+                    <h4 class="media-heading">{{user}}</h4>
+                    {{#if quote}}<blockquote>{{quote}}</blockquote>{{/if}}
+                    {{content}}
+                </div>
+            </div>
+
+            {{else}}
+                No comments yet
+            {{/each}}
+        </div>
+    </div>
     {{/if}}
 
     {{# if closed }}

@@ -1,5 +1,6 @@
 body {
     padding-top: 90px;
+    padding-bottom: 90px;
 }
 
 .navbar-brand img {
@@ -14,7 +15,7 @@ html {
 }
 
 .footer {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   width: 100%;
   /* Set the fixed height of the footer here */

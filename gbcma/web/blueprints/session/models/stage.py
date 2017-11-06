@@ -1,4 +1,4 @@
-from gbcma.db import votes
+from gbcma.db import votes, comments, users
 from gbcma.event import Event
 
 
@@ -39,6 +39,10 @@ class SessionStage:
         return votes.find({"proposal_id": self.proposal_id})
 
     @property
+    def comments(self):
+        return comments.search({"proposal_id": self.proposal_id})
+
+    @property
     def proposal_id(self):
         return self.__proposal["_id"]
 
@@ -48,9 +52,11 @@ class SessionStage:
         all_users = self.__session.users.all
         can_vote = filter(lambda x: x.has_permission("vote"), all_users)
         can_vote_count = len(list(can_vote))
+        comments = map(_map_comment, self.comments)
 
         result = {
             "proposal": {"title": self.__proposal["title"], "content": self.__proposal["content"]},
+            "comments": list(comments),
             "progress": {"current": self.__position[0] + 1, "total": self.__position[1]},
             "votes_progress": {"total": can_vote_count, "voted": 0}
         }
@@ -80,9 +86,20 @@ class SessionStage:
         self.__voted.notify()
         return True
 
-    def comment(self, user, message, quote=None):
-        pass
+    def comment(self, user, message, kind, quote=None):
+        comment = comments.create(self.proposal_id, user.id, message, kind, quote)
+        self.commented.notify(comment)
+        return True
 
 
 def _votes_by(value, ar):
     return len(list(filter(lambda x: ar[x] is value, ar)))
+
+
+def _map_comment(x):
+    return {
+        "content": x["content"],
+        "type": x["type"],
+        "quote": x["quote"],
+        "user": users.get(x["user_id"])["name"]
+    }

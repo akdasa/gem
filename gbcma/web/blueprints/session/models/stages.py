@@ -45,5 +45,5 @@ class SessionStages:
             stages.append(stage)
         return stages
 
-    def __on_stage_changed(self):
+    def __on_stage_changed(self, *options):
         self.__changed.notify(self.current)

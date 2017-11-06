@@ -6,3 +6,9 @@ Handlebars.registerHelper('trimString', function(passedString, length) {
         return passedString
     }
 });
+
+Handlebars.registerHelper('thumbsIcon', function(type) {
+    if (type == "info") return "glyphicon-info-sign";
+    if (type == "plus") return "glyphicon-thumbs-up";
+    if (type == "minus") return "glyphicon-thumbs-down";
+});

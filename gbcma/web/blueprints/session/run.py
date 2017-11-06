@@ -51,6 +51,12 @@ def on_vote_message(data):
     return controller.vote(request.sid, current_user, data)
 
 
+@channel.on("comment")
+@login_required
+def on_comment_message(data):
+    return controller.comment(request.sid, current_user, data)
+
+
 @channel.on("disconnect")
 @login_required
 def on_disconnect():

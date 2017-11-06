@@ -66,6 +66,17 @@ class SessionController:
         vote_value = data.get("value", None)
         return session_id.stages.current.vote(user, vote_value)
 
+    def comment(self, socket_id, user, data):
+        """On comment command received.
+        :param socket_id: SocketIO Id
+        :param user: User
+        :param data: Data"""
+        session_id = self.__sessions.session_of(socket_id)
+        content = data.get("content", None)
+        kind = data.get("type", None)
+        quote = data.get("quote", None)
+        return session_id.stages.current.comment(user, content, kind, quote)
+
     def close(self, socket_id):
         """On close stage command received.
         :param socket_id: SocketIO Id"""
