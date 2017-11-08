@@ -49,30 +49,29 @@ class SessionStage:
     @property
     def view(self):
         """Returns JSON representation of the stage"""
-        all_users = self.__session.users.all
-        can_vote = filter(lambda x: x.has_permission("vote"), all_users)
-        can_vote_count = len(list(can_vote))
-        comments = map(_map_comment, self.comments)
+        can_vote_count = _users_can_vote(self.__session.users.all)
 
         result = {
             "proposal": {"title": self.__proposal["title"], "content": self.__proposal["content"]},
-            "comments": list(comments),
+            "comments": list(map(_map_comment, self.comments)),
             "progress": {"current": self.__position[0] + 1, "total": self.__position[1]},
             "votes_progress": {"total": can_vote_count, "voted": 0}
         }
 
-        if self.votes and can_vote_count > 0:
+        if self.votes:  # if votes document exist
             v = self.votes["votes"]
             y = _votes_by(True, v)
             n = _votes_by(False, v)
             u = _votes_by(None, v)
+            a = y + n + u if can_vote_count == 0 else can_vote_count  # let's use count from document if session without
+            # any person who can vote
 
             result["votes_progress"] = {
-                "yes": y / can_vote_count * 100,
-                "no": n / can_vote_count * 100,
-                "unknown": u / can_vote_count * 100,
-                "total": can_vote_count,
-                "voted": y+n+u
+                "yes": y / a * 100,
+                "no": n / a * 100,
+                "unknown": u / a * 100,
+                "total": a,
+                "voted": y + n + u
             }
 
         return result
@@ -103,3 +102,9 @@ def _map_comment(x):
         "quote": x["quote"],
         "user": users.get(x["user_id"])["name"]
     }
+
+
+def _users_can_vote(users):
+    can_vote = filter(lambda x: x.has_permission("vote"), users)
+    can_vote_count = len(list(can_vote))
+    return can_vote_count
