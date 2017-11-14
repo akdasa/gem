@@ -1,7 +1,7 @@
 from gbcma.db.proposals import ProposalsRepository
 from gbcma.db.sessions import SessionsRepository
 from gbcma.event import Event
-from .stage import SessionStage
+from .stage import VotingSessionStage, CommentingSessionStage, AcquaintanceSessionStage, ClosedSessionStage
 
 
 class SessionStages:
@@ -37,12 +37,18 @@ class SessionStages:
         count = len(proposals)
 
         for idx, proposal in enumerate(proposals):
-            stage = SessionStage(self.__session, proposal, position=(idx, count))
+            acquaintance_stage = AcquaintanceSessionStage(self.__session, proposal, position=(idx, count))
+            voting_stage = VotingSessionStage(self.__session, proposal, position=(idx, count))
+            commenting_stage = CommentingSessionStage(self.__session, proposal, position=(idx, count))
 
-            stage.voted.subscribe(self.__on_stage_changed)
-            stage.commented.subscribe(self.__on_stage_changed)
+            acquaintance_stage.changed.subscribe(self.__on_stage_changed)
+            voting_stage.changed.subscribe(self.__on_stage_changed)
+            commenting_stage.changed.subscribe(self.__on_stage_changed)
 
-            stages.append(stage)
+            stages.append(acquaintance_stage)
+            stages.append(voting_stage)
+            stages.append(commenting_stage)
+        stages.append(ClosedSessionStage(self.__session))
         return stages
 
     def __on_stage_changed(self, *options):

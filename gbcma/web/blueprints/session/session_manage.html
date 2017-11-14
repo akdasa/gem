@@ -16,32 +16,32 @@
     {% raw %}
     {{# if proposal }}
     <div class="panel panel-default">
-        <div class="panel-heading">Current proposal ({{progress.current}}/{{progress.total}})</div>
+        <div class="panel-heading">Current proposal ({{progress.index}}/{{progress.total}})</div>
         <div class="panel-body">
-            <h1>
-                {{ proposal.title }}
-            </h1>
+            <h1>{{ proposal.title }}</h1>
             <p>{{ trimString proposal.content 512 }}</p>
         </div>
-
     </div>
+    {{/if}}
 
+    {{# ifEqual stage.type "voting" }}
     <div class="panel panel-default">
-        <div class="panel-heading">Votes ({{votes_progress.voted}} of {{votes_progress.total}})</div>
+        <div class="panel-heading">Votes ({{votes.progress.voted}} of {{votes.progress.total}})</div>
         <div class="panel-body">
             <div class="progress">
-                <div class="progress-bar progress-bar-success" style="width: {{votes_progress.yes}}%"></div>
-                <div class="progress-bar progress-bar-warning" style="width: {{votes_progress.unknown}}%"></div>
-                <div class="progress-bar progress-bar-danger" style="width: {{votes_progress.no}}%"></div>
+                <div class="progress-bar progress-bar-success" style="width: {{votes.progress.yes}}%"></div>
+                <div class="progress-bar progress-bar-warning" style="width: {{votes.progress.unknown}}%"></div>
+                <div class="progress-bar progress-bar-danger" style="width: {{votes.progress.no}}%"></div>
             </div>
         </div>
     </div>
+    {{/ifEqual}}
 
+    {{# ifEqual stage.type "commenting" }}
     <div class="panel panel-default">
         <div class="panel-heading">Comments</div>
         <div class="panel-body">
             {{#each comments}}
-
             <div class="media">
                 <div class="media-left media-top">
                     <span class="glyphicon {{thumbsIcon type}}" aria-hidden="true"></span>
@@ -53,24 +53,22 @@
                     {{content}}
                 </div>
             </div>
-
             {{else}}
                 No comments yet
             {{/each}}
         </div>
     </div>
-    {{/if}}
+    {{/ifEqual}}
 
-    {{# if closed }}
+    {{# ifEqual stage.type "closed" }}
     <div class="panel panel-default">
         <div class="panel-heading">Session is about to end</div>
         <div class="panel-body">
             <h1>All proposals have been reviewed.</h1>
             <a href="#" class="btn btn-danger run-close">Close session</a>
         </div>
-
     </div>
-    {{/if}}
+    {{/ifEqual}}
     {% endraw %}
 </script>
 {% endblock %}

@@ -3,8 +3,6 @@ from gbcma.event import Event
 
 
 class SessionStage:
-    """Represents one stage of the Session."""
-
     def __init__(self, session, proposal, position=(0, 0)):
         """
         Initializes new instance of the SessionStage class.
@@ -15,58 +13,76 @@ class SessionStage:
         self.__session = session
         self.__proposal = proposal
         self.__position = position
-
-        # events
-        self.__voted = Event()
-        self.__commented = Event()
-
-    # Events -----------------------------------------------------------------------------------------------------------
+        self.__changed = Event()
 
     @property
-    def voted(self):
-        """Raises then user votes."""
-        return self.__voted
+    def kind(self):
+        return self.__class__.__name__.\
+            replace("SessionStage", "").\
+            lower()
 
     @property
-    def commented(self):
-        """Raises then user add a comment."""
-        return self.__commented
-
-    # Properties -------------------------------------------------------------------------------------------------------
+    def changed(self):
+        return self.__changed
 
     @property
-    def votes(self):
-        return votes.find({"proposal_id": self.proposal_id})
-
-    @property
-    def comments(self):
-        return comments.search({"proposal_id": self.proposal_id})
+    def proposal(self):
+        return self.__proposal
 
     @property
     def proposal_id(self):
         return self.__proposal["_id"]
 
     @property
+    def session(self):
+        return self.__session
+
+    @property
+    def position(self):
+        return self.__position
+
+
+class AcquaintanceSessionStage(SessionStage):
+    def __init__(self, session, proposal, position=(0, 0)):
+        super().__init__(session, proposal, position)
+
+    @property
+    def view(self):
+        return {}
+
+
+class VotingSessionStage(SessionStage):
+    def __init__(self, session, proposal, position=(0, 0)):
+        super().__init__(session, proposal, position)
+
+    def vote(self, user, value):
+        doc = votes.find_or_create(self.proposal_id)
+        doc["votes"][user.id] = value
+        votes.save(doc)
+        self.changed.notify()
+        return True
+
+    @property
     def view(self):
         """Returns JSON representation of the stage"""
-        can_vote_count = _users_can_vote(self.__session.users.all)
+        doc = votes.find({"proposal_id": self.proposal_id})
+        can_vote_count = self.__users_can_vote(self.session.users.all)
 
         result = {
-            "proposal": {"title": self.__proposal["title"], "content": self.__proposal["content"]},
-            "comments": list(map(_map_comment, self.comments)),
-            "progress": {"current": self.__position[0] + 1, "total": self.__position[1]},
-            "votes_progress": {"total": can_vote_count, "voted": 0}
+            "votes": {"progress": {"total": can_vote_count, "voted": 0}}
         }
 
-        if self.votes:  # if votes document exist
-            v = self.votes["votes"]
-            y = _votes_by(True, v)
-            n = _votes_by(False, v)
-            u = _votes_by(None, v)
-            a = y + n + u if can_vote_count == 0 else can_vote_count  # let's use count from document if session without
-            # any person who can vote
+        if doc:  # if votes document exist
+            v = doc["votes"]
+            y = self.__votes_by(True, v)
+            n = self.__votes_by(False, v)
+            u = self.__votes_by(None, v)
 
-            result["votes_progress"] = {
+            # let's use count from document if session without
+            # any person who can vote
+            a = y + n + u if can_vote_count == 0 else can_vote_count
+
+            result["votes"]["progress"] = {
                 "yes": y / a * 100,
                 "no": n / a * 100,
                 "unknown": u / a * 100,
@@ -76,35 +92,50 @@ class SessionStage:
 
         return result
 
-    # Actions ----------------------------------------------------------------------------------------------------------
+    @staticmethod
+    def __users_can_vote(users):
+        can_vote = filter(lambda x: x.has_permission("vote"), users)
+        can_vote_count = len(list(can_vote))
+        return can_vote_count
 
-    def vote(self, user, value):
-        doc = votes.find_or_create(self.proposal_id)
-        doc["votes"][user.id] = value
-        votes.save(doc)
-        self.__voted.notify()
-        return True
+    @staticmethod
+    def __votes_by(value, ar):
+        return len(list(filter(lambda x: ar[x] is value, ar)))
+
+
+class CommentingSessionStage(SessionStage):
+    """Represents one stage of the Session."""
+
+    def __init__(self, session, proposal, position=(0, 0)):
+        super().__init__(session, proposal, position)
+
+    @property
+    def view(self):
+        """Returns JSON representation of the stage"""
+        docs = comments.search({"proposal_id": self.proposal_id})
+        return {
+            "comments": list(map(self.__map_comment, docs))
+        }
 
     def comment(self, user, message, kind, quote=None):
-        comment = comments.create(self.proposal_id, user.id, message, kind, quote)
-        self.commented.notify(comment)
+        comments.create(self.proposal_id, user.id, message, kind, quote)
+        self.changed.notify()
         return True
 
-
-def _votes_by(value, ar):
-    return len(list(filter(lambda x: ar[x] is value, ar)))
-
-
-def _map_comment(x):
-    return {
-        "content": x["content"],
-        "type": x["type"],
-        "quote": x["quote"],
-        "user": users.get(x["user_id"])["name"]
-    }
+    @staticmethod
+    def __map_comment(x):
+        return {
+            "content": x["content"],
+            "type": x["type"],
+            "quote": x["quote"],
+            "user": users.get(x["user_id"])["name"]
+        }
 
 
-def _users_can_vote(users):
-    can_vote = filter(lambda x: x.has_permission("vote"), users)
-    can_vote_count = len(list(can_vote))
-    return can_vote_count
+class ClosedSessionStage(SessionStage):
+    def __init__(self, session):
+        super().__init__(session, None, None)
+
+    @property
+    def view(self):
+        return {}

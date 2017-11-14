@@ -7,6 +7,7 @@ from .users import SessionUsers
 
 class Session:
     """Represents Session."""
+
     def __init__(self, session_id):
         """
         Initializes new instance of the Session class.
@@ -41,7 +42,25 @@ class Session:
         emit(event, data, room=room or self.__session_id)
 
     def __on_user_state_changed(self, socket_id, user, joined):
-        self.notify("stage", self.__stages.current.view, room=socket_id)
+        stage_view = self.__stage_view(self.__stages.current)
+        self.notify("stage", stage_view, room=socket_id)
 
     def __on_stage_changed(self, stage):
-        self.notify("stage", stage.view)
+        self.notify("stage", self.__stage_view(stage))
+
+    @staticmethod
+    def __stage_view(stage):
+        result = {"stage": {
+            "type": stage.kind
+        }}
+
+        if stage.proposal:
+            result["proposal"] = {
+                "title": stage.proposal["title"],
+                "content": stage.proposal["content"]}
+            result["progress"] = {
+                "index": stage.position[0] + 1,
+                "total": stage.position[1]}
+
+        result.update(stage.view)
+        return result
