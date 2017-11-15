@@ -29,10 +29,22 @@
         <div class="panel-heading">Votes ({{votes.progress.voted}} of {{votes.progress.total}})</div>
         <div class="panel-body">
             <div class="progress">
-                <div class="progress-bar progress-bar-success" style="width: {{votes.progress.yes}}%"></div>
-                <div class="progress-bar progress-bar-warning" style="width: {{votes.progress.unknown}}%"></div>
-                <div class="progress-bar progress-bar-danger" style="width: {{votes.progress.no}}%"></div>
+                <div class="progress-bar progress-bar-success" style="width: {{votes.progress.yes_p}}%">
+                    {{votes.progress.yes}} ({{votes.progress.yes_p}}%)
+                </div>
+                <div class="progress-bar progress-bar-warning" style="width: {{votes.progress.unknown_p}}%">
+                    {{votes.progress.unknown}} ({{votes.progress.unknown_p}}%)
+                </div>
+                <div class="progress-bar progress-bar-danger" style="width: {{votes.progress.no_p}}%">
+                    {{votes.progress.no}} ({{votes.progress.no_p}}%)
+                </div>
             </div>
+
+            <center>
+                {{#each votes.roles}}
+                <span class="label label-default">{{@key}}: {{this.yes}}/{{this.no}}/{{this.undecided}}</span>
+                {{/each}}
+            </center>
         </div>
     </div>
     {{/ifEqual}}

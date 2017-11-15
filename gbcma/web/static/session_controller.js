@@ -15,6 +15,7 @@ function createSessionController(sessionKey) {
     }
 
     me.onStageMessage = function(data) {
+        console.log(data)
         me._renderStage(data)
     }
 
