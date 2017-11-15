@@ -55,5 +55,6 @@ class SessionUsers:
         return User({
             "_id": user.id,
             "name": user.name,
-            "permissions": user.permissions
+            "permissions": user.permissions,
+            "role": user.role
         })

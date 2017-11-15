@@ -5,6 +5,8 @@ from flask_login import UserMixin, login_required
 from flask_login import current_user
 from werkzeug.utils import redirect
 
+from gbcma.db import roles
+
 
 def access_denied(message=None):
     return render_template("permission_denied.html", message=message)
@@ -38,7 +40,9 @@ class User(UserMixin):
     def __init__(self, dict):
         self.__id = str(dict["_id"])
         self.__name = dict.get("name", "<Noname das>")
-        self.__permissions = dict.get("permissions", [])
+        self.__role = dict.get("role", None)
+        self.__permissions = \
+            roles.find({"name": dict["role"]})["permissions"]
 
     def get_id(self):
         return self.__id
@@ -50,6 +54,10 @@ class User(UserMixin):
     @property
     def name(self):
         return self.__name
+
+    @property
+    def role(self):
+        return self.__role
 
     @property
     def permissions(self):

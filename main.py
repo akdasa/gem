@@ -8,6 +8,7 @@ from gbcma.web.blueprints.account import account
 from gbcma.web.blueprints.proposals import proposals
 from gbcma.web.blueprints.sessions import sessions
 from gbcma.web.blueprints.users import users
+from gbcma.web.blueprints.roles import roles
 
 app = Flask(__name__,
             template_folder="gbcma/web/templates",
@@ -20,6 +21,7 @@ from gbcma.web.blueprints.session import session
 login_manager = LoginManager()
 app.register_blueprint(proposals, url_prefix="/proposals")
 app.register_blueprint(users, url_prefix="/users")
+app.register_blueprint(roles, url_prefix="/roles")
 app.register_blueprint(sessions, url_prefix="/sessions")
 app.register_blueprint(account, url_prefix="/account")
 app.register_blueprint(session, url_prefix="/session")

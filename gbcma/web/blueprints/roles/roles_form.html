@@ -1,0 +1,34 @@
+{% macro form(model, action='', allow_edit=true) -%}
+<form action="{{ action }}" method="post" class="form-horizontal">
+    <!-- Role name field -->
+    <div class="form-group">
+        <input name="name"
+               class="form-control"
+               placeholder="Name"
+               value="{{ model.name }}"
+               autocomplete="off"
+               {%if not allow_edit%}readonly{%endif%}>
+    </div>
+
+    <!-- Permissions field -->
+    <div class="form-group">
+        <textarea name="permissions"
+                  class="form-control"
+                  rows="2"
+                  placeholder="Permissions"
+                  {%if not allow_edit%}readonly{%endif%}>
+            {{- model.permissions|join(" ") -}}
+        </textarea>
+    </div>
+
+
+    <!-- Proposal submit button -->
+    {% if allow_edit %}
+    <div class="form-group">
+        <input id="submit"
+               type="submit"
+               class="form-control btn btn-primary">
+    </div>
+    {% endif %}
+</form>
+{%- endmacro %}

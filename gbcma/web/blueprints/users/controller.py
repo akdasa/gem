@@ -1,3 +1,4 @@
+from gbcma.db import roles
 from gbcma.web.blueprints.crud_controller import CrudController
 
 
@@ -11,7 +12,10 @@ class UsersController(CrudController):
             "name": form.get("name", None),
             "login": form.get("login", None),
             "password": form.get("password", ""),
-            "role": form.get("role", None),
-            "permissions": list(filter(None, str.split(form.get("permissions", ""), " ")))
+            "role": form.get("role", None)
         })
         return d
+
+    def _extend(self, model):
+        r = list(map(lambda x: x["name"], roles.search({})))
+        return {"roles": r}

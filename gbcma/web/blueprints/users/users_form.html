@@ -32,27 +32,15 @@
 
     <!-- User role field -->
     <div class="form-group">
-        <input name="role"
-               class="form-control"
-               placeholder="Role"
-               value="{{ model.role }}"
-               autocomplete="off"
-               {%if not allow_edit%}readonly{%endif%}>
+        <select name="role" class="selectpicker form-control" title="Choose a role" {%if not allow_edit%}disabled{%endif%}>
+            {% for role in roles %}
+                {{ "'" + model.role + "' '" + role + "'" }}
+                <option {%if model.role==role%}selected{%endif%}>{{role}}</option>
+            {% endfor %}
+        </select>
     </div>
 
-    <!-- Proposal permissions field -->
-    <div class="form-group">
-        <textarea name="permissions"
-                  class="form-control"
-                  rows="2"
-                  placeholder="Permissions"
-                  {%if not allow_edit%}readonly{%endif%}>
-            {{- model.permissions|join("  ") -}}
-        </textarea>
-    </div>
-
-
-    <!-- Proposal submit button -->
+    <!-- Submit button -->
     {% if allow_edit %}
     <div class="form-group">
         <input id="submit"

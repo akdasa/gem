@@ -28,6 +28,10 @@
                 <li class="{%if active_page=='users'%}active{%endif%}"><a href="/users">Users</a></li>
                 {% endif %}
 
+                {% if user_has_permission("roles.read") %}
+                <li class="{%if active_page=='roles'%}active{%endif%}"><a href="/roles">Roles</a></li>
+                {% endif %}
+
                 {% if user_has_permission("sessions.read") %}
                 <li class="{%if active_page=='sessions'%}active{%endif%}"><a href="/sessions">Sessions</a></li>
                 {% endif %}
