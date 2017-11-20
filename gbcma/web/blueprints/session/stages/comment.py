@@ -19,9 +19,11 @@ class CommentingSessionStage(SessionStage):
 
     @staticmethod
     def __map_comment(x):
+        user = users.get(x["user_id"])
         return {
             "content": x["content"],
             "type": x["type"],
             "quote": x["quote"],
-            "user": users.get(x["user_id"])["name"]
+            "user": user["name"],
+            "role": user["role"]
         }
