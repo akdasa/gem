@@ -5,6 +5,7 @@ from .acquaintance import AcquaintanceSessionStage
 from .close import ClosedSessionStage
 from .comment import CommentingSessionStage
 from .vote import VotingSessionStage
+from .discussion import DiscussionSessionStage
 
 
 class SessionStages:
@@ -44,7 +45,8 @@ class SessionStages:
             stages = [
                 AcquaintanceSessionStage(self.__session, proposal, position),
                 VotingSessionStage(self.__session, proposal, position),
-                CommentingSessionStage(self.__session, proposal, position)]
+                CommentingSessionStage(self.__session, proposal, position),
+                DiscussionSessionStage(self.__session, proposal, position)]
 
             for stage in stages:
                 stage.changed.subscribe(self.__on_stage_changed)

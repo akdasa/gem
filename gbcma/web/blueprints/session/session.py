@@ -59,6 +59,24 @@ def on_comment_message(data):
     return controller.comment(request.sid, current_user, data)
 
 
+@channel.on("raise_hand")
+@login_required
+def on_raise_hand_message(data):
+    return controller.raise_hand(request.sid, current_user, data)
+
+
+@channel.on("withdraw_hand")
+@login_required
+def on_raise_hand_message(data):
+    return controller.withdraw_hand(request.sid, current_user, data)
+
+
+@channel.on("give_voice")
+@login_required
+def on_give_voice_message(data):
+    return controller.give_voice(request.sid, current_user, data)
+
+
 @channel.on("disconnect")
 @login_required
 def on_disconnect():

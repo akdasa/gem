@@ -23,6 +23,14 @@ function extendSessionController(me) {
         console.log(content, type)
     }
 
+    me.raiseHand = function() {
+        me.socket.emit("raise_hand", {})
+    }
+
+    me.withdrawHand = function() {
+        me.socket.emit("withdraw_hand", {})
+    }
+
     me.setQuotation = function(value) {
         me.quotation = value
         $("#quotation").html(me.quotation)
@@ -51,5 +59,15 @@ $(document).ready(function() {
     $("body").on("mouseup", "#proposal-content", function() {
         var quote = window.getSelection().toString()
         controller.setQuotation(quote)
+    })
+
+    $("body").on("click", "#discussion-raise-hand", function(e) {
+        e.preventDefault()
+        controller.raiseHand()
+    })
+
+    $("body").on("click", "#discussion-withdraw-hand", function(e) {
+        e.preventDefault()
+        controller.withdrawHand()
     })
 })

@@ -18,6 +18,10 @@ function extendSessionController(me) {
         me.socket.emit("close", me.onCloseSessionResponse)
     }
 
+    me.giveVoice = function(user_id) {
+        me.socket.emit("give_voice", { user_id: user_id })
+    }
+
     return me
 }
 
@@ -38,5 +42,11 @@ $(document).ready(function() {
     $("#stage").on("click", ".run-close", function(e) {
         e.preventDefault()
         controller.closeSession()
+    })
+
+    $("#stage").on("click", ".discussion-give-voice", function(e) {
+        e.preventDefault()
+        var id = $(this).data("user-id")
+        controller.giveVoice(id)
     })
 })
