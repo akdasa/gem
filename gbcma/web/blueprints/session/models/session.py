@@ -1,7 +1,7 @@
 from flask_socketio import emit
 
+from gbcma.web.blueprints.session.stages.stages import SessionStages
 from .chat import SessionChat
-from .stages import SessionStages
 from .users import SessionUsers
 
 

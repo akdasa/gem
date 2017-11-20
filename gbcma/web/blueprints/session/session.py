@@ -21,6 +21,8 @@ def manage(session_id):
     return controller.index(session_id, current_user, manage=True)
 
 
+# Messages -------------------------------------------------------------------------------------------------------------
+
 @channel.on("join")
 @login_required
 def on_join_message(data):
