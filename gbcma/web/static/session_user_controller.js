@@ -34,7 +34,7 @@ function extendSessionController(me) {
     me.setQuotation = function(value) {
         me.quotation = value
         $("#quotation").html(me.quotation)
-        $("#quotation").attr("hidden", null)
+        $("#quotation").attr("hidden", value ? null : "hidden")
     }
 
     return me
