@@ -3,62 +3,60 @@ from gbcma.web.blueprints.session.stages.stage import SessionStage
 
 
 class VotingSessionStage(SessionStage):
+    """The stage of voting for the document."""
+
+    def __init__(self, session, proposal):
+        """Initializes new instance of the VotingSessionStage class."""
+        super().__init__(session, proposal)
+        self.__doc = votes.find_or_create(self.proposal_id)
+
     def vote(self, user, value):
-        doc = votes.find_or_create(self.proposal_id)
-        doc["votes"][user.id] = value
-        votes.save(doc)
+        """Commit a vote for the proposal.
+        :param user: User
+        :param value: Vote value
+        :return: True on success
+        """
+        self.__doc["votes"][user.id] = value
+        votes.save(self.__doc)
         self.changed.notify()
         return True
 
     @property
     def view(self):
         """Returns JSON representation of the stage"""
-        doc = votes.find({"proposal_id": self.proposal_id})
-        can_vote_count = self.__users_can_vote(self.session.users.all)
+        can_vote_count = len(self.__users_can_vote(self.session.users.all))
+
+        # calculate votes
+        v = self.__doc["votes"]
+        y = self.__votes_by("yes", v)
+        n = self.__votes_by("no", v)
+        u = self.__votes_by("undecided", v)
+
+        # let's use count from document if session without any person who can vote
+        t = y + n + u if can_vote_count == 0 else max(can_vote_count, y + n + u)
 
         result = {
-            "votes": {"progress": {"total": can_vote_count, "voted": 0}}
+            "yes": y, "no": n, "unknown": u,
+            "voted": y + n + u, "total": t,
+            "roles": {}
         }
 
-        if doc:  # if votes document exist
-            v = doc["votes"]
-            y = self.__votes_by("yes", v)
-            n = self.__votes_by("no", v)
-            u = self.__votes_by("undecided", v)
-
-            # let's use count from document if session without
-            # any person who can vote
-            a = y + n + u if can_vote_count == 0 else max(can_vote_count, y+n+u)
-            a = max(a, 1)
-
-            result["votes"]["progress"] = {
-                "yes": y,
-                "no": n,
-                "unknown": u,
-                "yes_p": round(y / a * 100, 2),
-                "no_p": round(n / a * 100, 2),
-                "unknown_p": round(u / a * 100, 2),
-                "total": a,
-                "voted": y + n + u
-            }
-            result["votes"]["roles"] = {}
-
-            for user_id in doc["votes"]:
-                user = users.get(user_id)
-                value = doc["votes"][user_id]
-                role = user["role"]
-                if role not in result["votes"]["roles"]:
-                    result["votes"]["roles"][role] = {"yes": 0,"no": 0,"undecided": 0}
-                if value in ["yes", "no", "undecided"]:
-                    result["votes"]["roles"][role][value] += 1
-                # result["votes"]["a"]
+        # calculate voted keyed by role
+        for user_id in self.__doc["votes"]:
+            user = users.get(user_id)
+            value = self.__doc["votes"][user_id]
+            role = user["role"]
+            if role not in result["roles"]:
+                result["roles"][role] = {"yes": 0, "no": 0, "undecided": 0}
+            if value in ["yes", "no", "undecided"]:
+                result["roles"][role][value] += 1
 
         return result
 
     @staticmethod
     def __users_can_vote(users):
         can_vote = filter(lambda x: x.has_permission("vote"), users)
-        can_vote_count = len(list(can_vote))
+        can_vote_count = list(can_vote)
         return can_vote_count
 
     @staticmethod

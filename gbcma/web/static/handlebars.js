@@ -19,3 +19,7 @@ Handlebars.registerHelper('ifEqual', function(v1, v2, options) {
     }
     return options.inverse(this);
 });
+
+Handlebars.registerHelper('percent', function(v1, v2, options) {
+    return v1 / v2 * 100;
+});

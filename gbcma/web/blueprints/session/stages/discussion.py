@@ -5,8 +5,8 @@ from .stage import SessionStage
 class DiscussionSessionStage(SessionStage):
     """Represents one stage of the Session."""
 
-    def __init__(self, session, proposal, position=(0, 0)):
-        super().__init__(session, proposal, position)
+    def __init__(self, session, proposal):
+        super().__init__(session, proposal)
         self.__queue = {}
         self.__speaking = None
 

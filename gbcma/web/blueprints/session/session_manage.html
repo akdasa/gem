@@ -16,7 +16,7 @@
     {% raw %}
     {{# if proposal }}
     <div class="panel panel-default">
-        <div class="panel-heading">Current proposal ({{progress.index}}/{{progress.total}})</div>
+        <div class="panel-heading">Current proposal (Stage: {{progress.index}}/{{progress.total}})</div>
         <div class="panel-body">
             <h1>{{ proposal.title }}</h1>
             <p>{{ trimString proposal.content 512 }}</p>
@@ -26,26 +26,41 @@
 
     {{# ifEqual stage.type "voting" }}
     <div class="panel panel-default">
-        <div class="panel-heading">Votes ({{votes.progress.voted}} of {{votes.progress.total}})</div>
+        <div class="panel-heading">Votes ({{voted}} of {{total}})</div>
         <div class="panel-body">
             <div class="progress">
-                <div class="progress-bar progress-bar-success" style="width: {{votes.progress.yes_p}}%">
-                    {{votes.progress.yes}} ({{votes.progress.yes_p}}%)
+                <div class="progress-bar progress-bar-success" style="width: {{percent yes total}}%">
+                    {{yes}} ({{percent yes total}}%)
                 </div>
-                <div class="progress-bar progress-bar-warning" style="width: {{votes.progress.unknown_p}}%">
-                    {{votes.progress.unknown}} ({{votes.progress.unknown_p}}%)
+                <div class="progress-bar progress-bar-warning" style="width: {{percent unknown total}}%">
+                    {{unknown}} ({{percent unknown total}}%)
                 </div>
-                <div class="progress-bar progress-bar-danger" style="width: {{votes.progress.no_p}}%">
-                    {{votes.progress.no}} ({{votes.progress.no_p}}%)
+                <div class="progress-bar progress-bar-danger" style="width: {{percent no total}}%">
+                    {{no}} ({{percent no total}}%)
                 </div>
             </div>
-
-            <center>
-                {{#each votes.roles}}
-                <span class="label label-default">{{@key}}: {{this.yes}}/{{this.no}}/{{this.undecided}}</span>
-                {{/each}}
-            </center>
         </div>
+
+        <table class="table" style="table-layout:fixed">
+            <thead></thead>
+                <tr>
+                    <th>Role</th>
+                    <th><span class="glyphicon glyphicon-thumbs-up"></span></th>
+                    <th><span class="glyphicon glyphicon-thumbs-down"></span></th>
+                    <th><span class="glyphicon glyphicon-question-sign"></span></th>
+                </tr>
+            <tbody>
+
+            {{#each roles}}
+            <tr>
+                <td>{{@key}}</td>
+                <td>{{this.yes}}</td>
+                <td>{{this.no}}</td>
+                <td>{{this.undecided}}</td>
+            </tr>
+            {{/each}}
+            </tbody>
+        </table>
     </div>
     {{/ifEqual}}
 

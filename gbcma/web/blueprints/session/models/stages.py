@@ -1,11 +1,11 @@
 from gbcma.db import sessions, proposals
 from gbcma.event import Event
 
-from .acquaintance import AcquaintanceSessionStage
-from .close import ClosedSessionStage
-from .comment import CommentingSessionStage
-from .vote import VotingSessionStage
-from .discussion import DiscussionSessionStage
+from gbcma.web.blueprints.session.stages.acquaintance import AcquaintanceSessionStage
+from gbcma.web.blueprints.session.stages.close import ClosedSessionStage
+from gbcma.web.blueprints.session.stages.comment import CommentingSessionStage
+from gbcma.web.blueprints.session.stages.vote import VotingSessionStage
+from gbcma.web.blueprints.session.stages.discussion import DiscussionSessionStage
 
 
 class SessionStages:
@@ -19,6 +19,14 @@ class SessionStages:
     @property
     def changed(self):
         return self.__changed
+
+    @property
+    def index(self):
+        return self.__stage_idx
+
+    @property
+    def count(self):
+        return len(self.__stages)
 
     @property
     def current(self):
@@ -36,17 +44,16 @@ class SessionStages:
 
     def __create_stages(self, session_id):
         result = []
-        session = sessions.get(session_id)
+        session = sessions.get(session_id)  # gets session document
         docs = proposals.search_list(session["proposals"])
         count = len(docs)
 
         for idx, proposal in enumerate(docs):
-            position = (idx, count)
             stages = [
-                AcquaintanceSessionStage(self.__session, proposal, position),
-                VotingSessionStage(self.__session, proposal, position),
-                CommentingSessionStage(self.__session, proposal, position),
-                DiscussionSessionStage(self.__session, proposal, position)]
+                AcquaintanceSessionStage(self.__session, proposal),
+                VotingSessionStage(self.__session, proposal),
+                CommentingSessionStage(self.__session, proposal),
+                DiscussionSessionStage(self.__session, proposal)]
 
             for stage in stages:
                 stage.changed.subscribe(self.__on_stage_changed)

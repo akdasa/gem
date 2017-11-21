@@ -2,16 +2,14 @@ from gbcma.event import Event
 
 
 class SessionStage:
-    def __init__(self, session, proposal, position=(0, 0)):
+    def __init__(self, session, proposal):
         """
         Initializes new instance of the SessionStage class.
         :param session: Session
         :param proposal: Proposal document
-        :param position: Position. Tuple (index, all)
         """
         self.__session = session
         self.__proposal = proposal
-        self.__position = position
         self.__changed = Event()
 
     @property
@@ -33,10 +31,6 @@ class SessionStage:
     @property
     def session(self):
         return self.__session
-
-    @property
-    def position(self):
-        return self.__position
 
     @property
     def view(self):

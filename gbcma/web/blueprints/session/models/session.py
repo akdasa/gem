@@ -1,7 +1,7 @@
 from flask_socketio import emit
 
-from gbcma.web.blueprints.session.stages.stages import SessionStages
 from .chat import SessionChat
+from .stages import SessionStages
 from .users import SessionUsers
 
 
@@ -48,8 +48,10 @@ class Session:
     def __on_stage_changed(self, stage):
         self.notify("stage", self.__stage_view(stage))
 
-    @staticmethod
-    def __stage_view(stage):
+    def __stage_view(self, stage):
+        stages_count = self.__stages.count
+        stage_index = self.__stages.index
+
         result = {"stage": {
             "type": stage.kind
         }}
@@ -59,8 +61,8 @@ class Session:
                 "title": stage.proposal["title"],
                 "content": stage.proposal["content"]}
             result["progress"] = {
-                "index": stage.position[0] + 1,
-                "total": stage.position[1]}
+                "index": stage_index + 1,
+                "total": stages_count}
 
         result.update(stage.view)
         return result

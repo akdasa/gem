@@ -3,7 +3,7 @@ from flask_socketio import join_room
 from .models.session import Session
 
 
-class Sessions:
+class SocketSessions:
     def __init__(self):
         self.__rooms = {}
         self.__by_room = {}
