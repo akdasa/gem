@@ -33,7 +33,7 @@ class DiscussionSessionStage(SessionStage):
         if not self.__is_user_raised_hand(user):
             return
 
-        if self.__speaking["id"] == user.id:
+        if self.__speaking and self.__speaking["id"] == user.id:
             self.__speaking = None
 
         del self.__queue[user.id]
@@ -50,5 +50,5 @@ class DiscussionSessionStage(SessionStage):
         self.changed.notify()
 
     def __is_user_raised_hand(self, user):
-        users = map(lambda x: self.__queue[x]["id"], self.__queue)
-        return user.id in users
+        ids = map(lambda x: self.__queue[x]["id"], self.__queue)
+        return user.id in ids
