@@ -46,7 +46,6 @@ class SessionStages:
         result = []
         session = sessions.get(session_id)  # gets session document
         docs = proposals.search_list(session["proposals"])
-        count = len(docs)
 
         for idx, proposal in enumerate(docs):
             stages = [

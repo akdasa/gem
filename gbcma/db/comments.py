@@ -19,3 +19,6 @@ class CommentsRepository(Repository):
             "quote": quote
         }).inserted_id
         return self.get(inserted_id)
+
+    def of(self, proposal_id):
+        return self.search({"proposal_id": proposal_id})

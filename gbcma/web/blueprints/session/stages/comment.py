@@ -3,14 +3,13 @@ from gbcma.web.blueprints.session.stages.stage import SessionStage
 
 
 class CommentingSessionStage(SessionStage):
-    """Represents one stage of the Session."""
+    """The stage of commenting for the document."""
+
     @property
     def view(self):
         """Returns JSON representation of the stage"""
-        docs = comments.search({"proposal_id": self.proposal_id})
-        return {
-            "comments": list(map(self.__map_comment, docs))
-        }
+        docs = comments.of(self.proposal_id)
+        return {"comments": list(map(self.__map, docs))}
 
     def comment(self, user, message, kind, quote=None):
         comments.create(self.proposal_id, user.id, message, kind, quote)
@@ -18,7 +17,7 @@ class CommentingSessionStage(SessionStage):
         return True
 
     @staticmethod
-    def __map_comment(x):
+    def __map(x):
         user = users.get(x["user_id"])
         return {
             "content": x["content"],
