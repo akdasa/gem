@@ -26,17 +26,16 @@ class SessionsController(CrudController):
         else:
             return jsonify({"success": False})
 
-    def _form_to_dict(self, form, d):
-        ids_list = form.get("proposals", "").split(",")
+    def _update_model(self, model, data):
+        ids_list = data.get("proposals", "").split(",")
         ids = list(map(lambda x: ObjectId(x), ids_list))
 
-        d.update({
-            "title": form.get("title", None),
-            "agenda": form.get("agenda", None),
-            "date": form.get("date", None),
+        model.update({
+            "title": data.get("title", None),
+            "agenda": data.get("agenda", None),
+            "date": data.get("date", None),
             "proposals": ids
         })
-        return d
 
     def _extend(self, model):
         d = proposals.find({"_id": {"$in": model.get("proposals", [])}})

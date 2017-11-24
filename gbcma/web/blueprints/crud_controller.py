@@ -5,11 +5,11 @@ from gbcma.web.app.auth import has_permission, access_denied
 
 
 class CrudController:
-    def __init__(self, repository, namespace=None):
+    def __init__(self, repository, namespace=None, columns=None):
         self._repository = repository
-        self._columns = []
+        self._columns = columns or []
         self._namespace = namespace
-        self._model_name = singularize(self._namespace)
+        self._model_name = singularize(self._namespace).capitalize()
         self._actions = []
         self._js = []
 
@@ -38,13 +38,14 @@ class CrudController:
             return access_denied()
 
         if request.method == "GET":
-            return render_template("crud/new.html", **self.__options())
+            return render_template("crud/new.html", **self.__options(), **self._extend(None))
 
         elif request.method == "POST":
-            doc = self._form_to_dict(request.form, {})
-            self._repository.insert(doc)
+            model = {}
+            self._update_model(model, request.form)
+            self._repository.insert(model)
 
-            flash("{} was successfully created".format(self._namespace), category="success")
+            flash("{} was successfully created".format(self._model_name), category="success")
             return redirect("/" + self._url)
 
     def update(self, request, key):
@@ -59,10 +60,10 @@ class CrudController:
         elif request.method == "POST":
             if self._has_permission("update"):
                 d = self._repository.get(key)
-                doc = self._form_to_dict(request.form, d)
-                self._repository.save(doc)
+                self._update_model(d, request.form)
+                self._repository.save(d)
 
-                flash("{} was successfully updated".format(self._namespace), category="success")
+                flash("{} was successfully updated".format(self._model_name), category="success")
                 return redirect("/" + self._url)
             else:
                 return access_denied()
@@ -74,8 +75,8 @@ class CrudController:
             else:
                 return jsonify({"success": False})
 
-    def _form_to_dict(self, form, d):
-        return {}
+    def _update_model(self, model, data):
+        pass
 
     def _has_permission(self, kind):
         # No permission specified, so everything is allowed

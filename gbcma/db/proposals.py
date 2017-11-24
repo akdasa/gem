@@ -8,6 +8,9 @@ class ProposalsRepository(Repository):
     def __init__(self):
         super().__init__(proposals)
 
+    def search_by_title(self, term):
+        return self._c.search({"title": {"$regex": term, "$options": "i"}})
+
     def create(self, title, content=None):
         return self._c.insert_one({
             "title": title,

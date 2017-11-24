@@ -3,6 +3,6 @@
 {% block title %}New {{ model_name }}{% endblock %}
 
 {% block body %}
-    {% import form as f %}
+    {% import form as f with context %}
     {{ f.form(model=None, action="/"+ url + "/new") }}
 {% endblock %}

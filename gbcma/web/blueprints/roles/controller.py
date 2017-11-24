@@ -6,9 +6,8 @@ class RolesController(CrudController):
         super().__init__(repository, namespace="roles")
         self._columns = ["name"]
 
-    def _form_to_dict(self, form, d):
-        d.update({
-            "name": form.get("name", None),
-            "permissions": list(filter(None, str.split(form.get("permissions", ""), " ")))
+    def _update_model(self, model, data):
+        model.update({
+            "name": data.get("name", None),
+            "permissions": list(filter(None, str.split(data.get("permissions", ""), " ")))
         })
-        return d

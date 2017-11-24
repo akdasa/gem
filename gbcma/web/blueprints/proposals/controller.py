@@ -1,22 +1,30 @@
-from flask import jsonify
-
 from gbcma.web.blueprints.crud_controller import CrudController
 
 
 class ProposalsController(CrudController):
     def __init__(self, repository):
-        super().__init__(repository, namespace="proposals")
-        self._columns = ["title"]
+        """Initializes new instance of the ProposalsController class
+        :type repository: ProposalsRepository
+        :param repository: Repository to manipulate entities in."""
+        super().__init__(repository, namespace="proposals", columns=["title"])
 
-    def search(self, request):
-        term = request.args.get("term")
-        data = self._repository.search({"title": {"$regex": term, "$options": "i"}})
-        result = map(lambda x: {"title": x["title"], "key": str(x["_id"])}, data)
-        return jsonify(list(result))
+    def search(self, term):
+        """Returns list of proposals found by title.
+        :param term: Query.
+        :return: List of documents { key, title }."""
+        data = self._repository.search_by_title(term)
+        result = map(self.__map, data)
+        return list(result)
 
-    def _form_to_dict(self, form, d):
-        d.update({
-            "title": form.get("title", None),
-            "content": form.get("content", None)
+    def _update_model(self, model, data):
+        model.update({
+            "title": data.get("title", None),
+            "content": data.get("content", None)
         })
-        return d
+
+    @staticmethod
+    def __map(x):
+        return {
+            "title": x["title"],
+            "key": str(x["_id"])
+        }

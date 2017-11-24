@@ -34,8 +34,7 @@
     <div class="form-group">
         <select name="role" class="selectpicker form-control" title="Choose a role" {%if not allow_edit%}disabled{%endif%}>
             {% for role in roles %}
-                {{ "'" + model.role + "' '" + role + "'" }}
-                <option {%if model.role==role%}selected{%endif%}>{{role}}</option>
+                <option {%if model.role|default('')==role%}selected{%endif%}>{{role}}</option>
             {% endfor %}
         </select>
     </div>

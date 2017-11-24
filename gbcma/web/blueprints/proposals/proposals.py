@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 from flask_login import login_required
 
 from gbcma.db.proposals import ProposalsRepository
@@ -31,4 +31,5 @@ def update(key):
 @proposals.route("/search")
 @login_required
 def search():
-    return controller.search(request)
+    term = request.args.get("term", None)
+    return jsonify(controller.search(term))
