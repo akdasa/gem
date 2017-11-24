@@ -53,6 +53,10 @@ function createSessionController(sessionKey) {
     me._renderStage = function(data) {
         var html = me.stageTemplate(data)
         $("#stage").html(html)
+
+        if (data.stage.type == "voting") {
+            $('.vote-details').popover({ trigger: "hover" })
+        }
     }
 
     return me

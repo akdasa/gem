@@ -47,9 +47,13 @@ class VotingSessionStage(SessionStage):
             value = self.__doc["votes"][user_id]
             role = user["role"]
             if role not in result["roles"]:
-                result["roles"][role] = {"yes": 0, "no": 0, "undecided": 0}
+                result["roles"][role] = {
+                    "yes": 0, "no": 0, "undecided": 0,
+                    "who": {"yes": [], "no": [], "undecided": []}}
+
             if value in ["yes", "no", "undecided"]:
                 result["roles"][role][value] += 1
+                result["roles"][role]["who"][value].append(user["name"])
 
         return result
 

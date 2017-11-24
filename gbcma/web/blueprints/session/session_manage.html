@@ -85,9 +85,15 @@
                 {{#each roles}}
                 <tr>
                     <td>{{@key}}</td>
-                    <td>{{this.yes}}</td>
-                    <td>{{this.no}}</td>
-                    <td>{{this.undecided}}</td>
+                    <td>
+                        <span class="vote-details" data-content="{{this.who.yes}}" rel="popover">{{this.yes}}</span>
+                    </td>
+                    <td>
+                        <span class="vote-details" data-content="{{this.who.no}}" rel="popover">{{this.no}}</span>
+                    </td>
+                    <td>
+                        <span class="vote-details" data-content="{{this.who.undecided}}" rel="popover">{{this.undecided}}</span>
+                    </td>
                 </tr>
                 {{/each}}
             </tbody>
