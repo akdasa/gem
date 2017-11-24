@@ -1,6 +1,19 @@
 {% macro form(model, action='', allow_edit=true) -%}
     {% if allow_edit %}
         <form action="{{ action }}" method="post" class="form-horizontal">
+            <!-- Key -->
+            <div class="form-group">
+                <label for="key" class="col-sm-2 control-label">Key</label>
+                <div class="col-sm-10">
+                    <input id="key"
+                           name="key"
+                           class="form-control input-lg"
+                           placeholder="Key"
+                           value="{{ model.key }}"
+                           autocomplete="off">
+                </div>
+            </div>
+
             <!-- Title -->
             <div class="form-group">
                 <label for="title" class="col-sm-2 control-label">Title</label>

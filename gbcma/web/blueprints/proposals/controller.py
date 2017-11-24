@@ -6,7 +6,7 @@ class ProposalsController(CrudController):
         """Initializes new instance of the ProposalsController class
         :type repository: ProposalsRepository
         :param repository: Repository to manipulate entities in."""
-        super().__init__(repository, namespace="proposals", columns=["title"])
+        super().__init__(repository, namespace="proposals", columns=["key", "title"])
 
     def search(self, term):
         """Returns list of proposals found by title.
@@ -18,6 +18,7 @@ class ProposalsController(CrudController):
 
     def _update_model(self, model, data):
         model.update({
+            "key": data.get("key", None),
             "title": data.get("title", None),
             "content": data.get("content", None)
         })
