@@ -1,7 +1,7 @@
 {% extends "crud/crud.html" %}
 
 {% block body %}
-<table id="{{namespace}}-table" class="table">
+<table id="{{namespace}}-table" class="table table-hover">
     <thead>
         <tr>
             {% for field in fields %}
@@ -51,7 +51,9 @@
 </table>
 
 {% if show_create %}
-    <a id="{{namespace}}-new" href="/{{url}}/new" class="btn btn-primary">Add</a>
+    <a id="{{namespace}}-new" href="/{{url}}/new" class="btn btn-primary btn-sm">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Create {{model_name}}
+    </a>
 {% endif %}
 
 <script>
