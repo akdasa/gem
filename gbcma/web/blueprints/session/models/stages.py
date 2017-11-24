@@ -2,6 +2,7 @@ from gbcma.db import sessions, proposals
 from gbcma.event import Event
 
 from gbcma.web.blueprints.session.stages.acquaintance import AcquaintanceSessionStage
+from gbcma.web.blueprints.session.stages.agenda import AgendaSessionStage
 from gbcma.web.blueprints.session.stages.close import ClosedSessionStage
 from gbcma.web.blueprints.session.stages.comment import CommentingSessionStage
 from gbcma.web.blueprints.session.stages.vote import VotingSessionStage
@@ -71,6 +72,7 @@ class SessionStages:
                 result.append(stage)
 
         result.append(ClosedSessionStage(self.__session))
+        result.insert(0, AgendaSessionStage(self.__session, result))
         return result
 
     def __on_stage_changed(self, *options):

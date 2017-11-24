@@ -24,6 +24,26 @@
     </div>
     {{/if}}
 
+    {{# ifEqual stage.type "agenda" }}
+    <div class="panel panel-default">
+        <div class="panel-heading">Agenda</div>
+        <div class="panel-body">
+            <p>{{agenda}}</p>
+
+            <ul>
+            {{#each proposals}}
+                <li>
+                    {{title}}
+                    {{#each stages}}
+                        <span class="label label-info">{{@this}}</span>
+                    {{/each}}
+                </li>
+            {{/each}}
+            </ul>
+        </div>
+    </div>
+    {{/ifEqual}}
+
     {{# ifEqual stage.type "voting" }}
     <div class="panel panel-default">
         <div class="panel-heading">Votes ({{voted}} of {{total}})</div>
