@@ -32,6 +32,10 @@ class SessionStages:
     def current(self):
         return self.__stages[self.__stage_idx]
 
+    @property
+    def next(self):
+        return self.__stages[self.__stage_idx + 1] if len(self.__stages) > self.__stage_idx + 1 else None
+
     def change(self, step=1):
         self.__stage_idx += step
         if self.__stage_idx <= 0:
@@ -40,7 +44,15 @@ class SessionStages:
             self.__stage_idx = len(self.__stages) - 1
 
         self.__changed.notify(self.current)
-        return True
+        return {
+            "current": {
+                "title": self.current.proposal["title"] if self.current.proposal else ""
+            },
+            "next": {
+                "title": self.next.proposal["title"] if self.next and self.next.proposal else "",
+                "type": self.next.kind if self.next else ""
+            }
+        }
 
     def __create_stages(self, session_id):
         result = []

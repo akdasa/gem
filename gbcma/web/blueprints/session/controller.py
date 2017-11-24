@@ -53,9 +53,9 @@ class SessionController:
         """On next stage command received.
         :param socket_id: SocketIO Id
         :param data: Data"""
-        session_id = self.__sockets.session_of(socket_id)
+        session = self.__sockets.session_of(socket_id)
         direction = data.get("value", 0)
-        return session_id.stages.change(direction)
+        return session.stages.change(direction)
 
     def vote(self, socket_id, user, data):
         """On vote command received.

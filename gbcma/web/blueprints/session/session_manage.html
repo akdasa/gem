@@ -139,8 +139,12 @@
 {% block footer %}
 <footer class="footer">
     <div class="container">
-        <a href="#" class="btn btn-default change-stage" data-value="-1">Previous</a>
-        <a href="#" class="btn btn-primary change-stage" data-value="1">Next</a>
+        <a href="#" class="btn btn-default change-stage" data-value="-1">
+            Previous <span id="state-prev"></span>
+        </a>
+        <a href="#" class="btn btn-primary change-stage" data-value="1">
+            Next <span id="state-next"></span>
+        </a>
         <a href="#" class="btn btn-danger run-close">Close</a>
     </div>
 </footer>
