@@ -21,5 +21,5 @@ Handlebars.registerHelper('ifEqual', function(v1, v2, options) {
 });
 
 Handlebars.registerHelper('percent', function(v1, v2, options) {
-    return v1 / v2 * 100;
+    return (v1 / v2 * 100) || 0;
 });
