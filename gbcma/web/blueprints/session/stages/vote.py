@@ -36,7 +36,7 @@ class VotingSessionStage(SessionStage):
         t = y + n + u if can_vote_count == 0 else max(can_vote_count, y + n + u)
 
         result = {
-            "yes": y, "no": n, "unknown": u,
+            "yes": y, "no": n, "undecided": u,
             "voted": y + n + u, "total": t,
             "roles": {}
         }

@@ -32,8 +32,8 @@
                 <div class="progress-bar progress-bar-success" style="width: {{percent yes total}}%">
                     {{yes}} ({{percent yes total}}%)
                 </div>
-                <div class="progress-bar progress-bar-warning" style="width: {{percent unknown total}}%">
-                    {{unknown}} ({{percent unknown total}}%)
+                <div class="progress-bar progress-bar-warning" style="width: {{percent undecided total}}%">
+                    {{undecided}} ({{percent undecided total}}%)
                 </div>
                 <div class="progress-bar progress-bar-danger" style="width: {{percent no total}}%">
                     {{no}} ({{percent no total}}%)
@@ -42,23 +42,34 @@
         </div>
 
         <table class="table" style="table-layout:fixed">
-            <thead></thead>
+            <thead>
                 <tr>
                     <th>Role</th>
                     <th><span class="glyphicon glyphicon-thumbs-up"></span></th>
                     <th><span class="glyphicon glyphicon-thumbs-down"></span></th>
                     <th><span class="glyphicon glyphicon-question-sign"></span></th>
                 </tr>
-            <tbody>
+            </thead>
 
-            {{#each roles}}
-            <tr>
-                <td>{{@key}}</td>
-                <td>{{this.yes}}</td>
-                <td>{{this.no}}</td>
-                <td>{{this.undecided}}</td>
-            </tr>
-            {{/each}}
+            <tfoot>
+                <tr>
+                    <th>Total</th>
+                    <th>{{yes}} ({{percent yes total}}%)</th>
+                    <th>{{no}} ({{percent no total}}%)</th>
+                    <th>{{undecided}} ({{percent undecided total}}%)</th>
+                </tr>
+            </tfoot>
+
+
+            <tbody>
+                {{#each roles}}
+                <tr>
+                    <td>{{@key}}</td>
+                    <td>{{this.yes}}</td>
+                    <td>{{this.no}}</td>
+                    <td>{{this.undecided}}</td>
+                </tr>
+                {{/each}}
             </tbody>
         </table>
     </div>
