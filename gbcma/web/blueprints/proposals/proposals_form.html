@@ -1,33 +1,40 @@
 {% macro form(model, action='', allow_edit=true) -%}
     {% if allow_edit %}
         <form action="{{ action }}" method="post" class="form-horizontal">
-            <!-- Proposal title field -->
+            <!-- Title -->
             <div class="form-group">
-                <input name="title"
-                       class="form-control input-lg"
-                       placeholder="Title"
-                       value="{{ model.title }}"
-                       autocomplete="off">
+                <label for="title" class="col-sm-2 control-label">Title</label>
+                <div class="col-sm-10">
+                    <input id="title"
+                           name="title"
+                           class="form-control input-lg"
+                           placeholder="Title"
+                           value="{{ model.title }}"
+                           autocomplete="off">
+                </div>
             </div>
 
-            <!-- Proposal content field -->
+            <!-- Content -->
             <div class="form-group">
-                <textarea name="content"
-                          class="form-control"
-                          rows="20"
-                          placeholder="Paste or write content here">
-                    {{- model.content -}}
-                </textarea>
+                <label for="title" class="col-sm-2 control-label">Content</label>
+                <div class="col-sm-10">
+                    <textarea name="content"
+                              class="form-control"
+                              rows="20"
+                              placeholder="Paste or write content here">
+                        {{- model.content -}}
+                    </textarea>
+                </div>
             </div>
 
-            <!-- Proposal submit button -->
-            {% if allow_edit %}
+            <!-- Submit -->
             <div class="form-group">
-                <input id="submit"
-                       type="submit"
-                       class="form-control btn btn-primary">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <input id="submit"
+                           type="submit"
+                           class="form-control btn btn-primary">
+                </div>
             </div>
-            {% endif %}
         </form>
     {% else %}
         <h1>{{model.title}}</h1>
