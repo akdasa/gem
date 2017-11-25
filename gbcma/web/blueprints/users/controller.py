@@ -4,8 +4,8 @@ from gbcma.web.blueprints.crud_controller import CrudController
 
 class UsersController(CrudController):
     def __init__(self, repository):
-        super().__init__(repository, namespace="users")
-        self._columns = ["name", "role"]
+        super().__init__(repository, namespace="users",
+                         columns=["name", "role"])
 
     def _update_model(self, model, data):
         model.update({
@@ -16,5 +16,6 @@ class UsersController(CrudController):
         })
 
     def _extend(self, model):
-        r = list(map(lambda x: x["name"], roles.search({})))
-        return {"roles": r}
+        role_docs = roles.search({})
+        r = map(lambda x: x["name"], role_docs)
+        return {"roles": list(r)}

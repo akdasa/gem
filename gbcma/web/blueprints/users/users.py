@@ -5,9 +5,7 @@ from gbcma.db.users import UsersRepository
 from gbcma.web.blueprints.users.controller import UsersController
 
 users = Blueprint("users", __name__, template_folder=".")
-controller = UsersController(
-    repository=UsersRepository()
-)
+controller = UsersController(repository=UsersRepository())
 
 
 @users.route("/")
