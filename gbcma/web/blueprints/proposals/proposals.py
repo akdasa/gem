@@ -2,12 +2,10 @@ from flask import Blueprint, request, jsonify
 from flask_login import login_required
 
 from gbcma.db.proposals import ProposalsRepository
-from gbcma.web.blueprints.proposals.controller import ProposalsController
+from .controller import ProposalsController
 
 proposals = Blueprint("proposals", __name__, template_folder=".")
-controller = ProposalsController(
-    repository=ProposalsRepository()
-)
+controller = ProposalsController(repository=ProposalsRepository())
 
 
 @proposals.route("/")
