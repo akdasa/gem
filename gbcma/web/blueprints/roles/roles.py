@@ -5,9 +5,7 @@ from gbcma.db.roles import RolesRepository
 from .controller import RolesController
 
 roles = Blueprint("roles", __name__, template_folder=".")
-controller = RolesController(
-    repository=RolesRepository()
-)
+controller = RolesController(repository=RolesRepository())
 
 
 @roles.route("/")
