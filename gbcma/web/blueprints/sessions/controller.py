@@ -38,12 +38,11 @@ class SessionsController(CrudController):
         })
 
     def _extend(self, model):
+        if not model:
+            return {}
         d = proposals.find({"_id": {"$in": model.get("proposals", [])}})
         d2 = {str(key["_id"]): without_keys(key, ["_id"]) for key in d}
-        v = {
-            "proposals_objects": d2
-        }
-        return v
+        return {"proposals_objects": d2}
 
 
 def without_keys(d, keys):

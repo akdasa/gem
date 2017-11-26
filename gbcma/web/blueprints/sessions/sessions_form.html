@@ -3,48 +3,67 @@
 <form action="{{ action }}" method="post" class="form-horizontal">
     <!-- Title -->
     <div class="form-group">
-        <input name="title"
-               class="form-control input-lg"
-               placeholder="Title"
-               value="{{ model.title }}"
-               autocomplete="off"
-               {%if not allow_edit%}readonly{%endif%}>
+        <label for="title" class="col-sm-2 control-label">Title</label>
+        <div class="col-sm-10">
+            <input id="title"
+                   name="title"
+                   class="form-control input-lg"
+                   placeholder="Title"
+                   value="{{ model.title }}"
+                   autocomplete="off"
+                   {%if not allow_edit%}readonly{%endif%}>
+        </div>
     </div>
 
     <!-- Date -->
     <div class="form-group">
-        <input name="date"
-               class="form-control"
-               placeholder="Date"
-               value="{{ model.date }}"
-               autocomplete="off"
-               {%if not allow_edit%}readonly{%endif%}>
+        <label for="date" class="col-sm-2 control-label">Date</label>
+        <div class="col-sm-10">
+            <input id="date"
+                   name="date"
+                   class="form-control"
+                   placeholder="Date"
+                   value="{{ model.date }}"
+                   autocomplete="off"
+                   data-provide="datepicker"
+                   data-date-format="yyyy/mm/dd"
+                   {%if not allow_edit%}readonly{%endif%}>
+        </div>
     </div>
 
     <!-- Agenda -->
     <div class="form-group">
-        <textarea name="agenda"
-                  class="form-control"
-                  rows="10"
-                  placeholder="Paste or write agenda here"
-                  {%if not allow_edit%}readonly{%endif%}>
-            {{- model.agenda -}}
-        </textarea>
+        <label for="agenda" class="col-sm-2 control-label">Agenda</label>
+        <div class="col-sm-10">
+            <textarea id="agenda"
+                      name="agenda"
+                      class="form-control"
+                      rows="10"
+                      placeholder="Paste or write agenda here"
+                      {%if not allow_edit%}readonly{%endif%}>
+                {{- model.agenda -}}
+            </textarea>
+        </div>
     </div>
 
     <div class="form-group">
-        <div id="proposals" class="list-group"></div>
+        <label for="proposals" class="col-sm-2 control-label">Proposals</label>
+        <div class="col-sm-10">
+            <div id="proposals" class="list-group"></div>
 
-        <a id="proposal-add" class="form-control btn btn-primary">Add proposal</a>
-        <input id="proposals-ids" name="proposals" type="hidden">
+            <a id="proposal-add" class="form-control btn btn-primary">Add proposal</a>
+            <input id="proposals-ids" name="proposals" type="hidden">
+        </div>
     </div>
 
     <!-- Proposal submit button -->
     {% if allow_edit %}
     <div class="form-group">
-        <input id="submit"
-               type="submit"
-               class="form-control btn btn-primary">
+        <div class="col-sm-offset-2 col-sm-10">
+            <input id="submit"
+                   type="submit"
+                   class="form-control btn btn-primary">
+        </div>
     </div>
     {% endif %}
 </form>
