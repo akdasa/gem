@@ -1,9 +1,9 @@
 from flask import Flask
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user
 
 from gbcma.channel import init
 from gbcma.db.users import UsersRepository
-from gbcma.web.app.auth import User, has_permission
+from gbcma.web.app.auth import User, has_permission, access_denied
 from gbcma.web.blueprints.account import account
 from gbcma.web.blueprints.proposals import proposals
 from gbcma.web.blueprints.sessions import sessions
@@ -36,6 +36,16 @@ login_manager.login_message_category = "info"
 if __name__ == "__main__":
     channel.run(app)
 
+@app.before_request
+def before_request():
+    if not current_user:
+        return
+
+    if not hasattr(current_user, "suspended"):
+        return
+
+    if current_user.suspended:
+        return access_denied("Your account has been suspended. Reason: " + current_user.suspend_reason)
 
 @app.add_template_global
 def user_has_permission(permission):

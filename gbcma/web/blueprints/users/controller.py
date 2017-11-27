@@ -8,11 +8,16 @@ class UsersController(CrudController):
                          columns=["name", "role"])
 
     def _update_model(self, model, data):
+        print(data)
         model.update({
             "name": data.get("name", None),
             "login": data.get("login", None),
             "password": data.get("password", ""),
-            "role": data.get("role", None)
+            "role": data.get("role", None),
+            "suspend": {
+                "value": data.get("suspend", False),
+                "reason": data.get("suspend-reason", None)
+            }
         })
 
     def _extend(self, model):

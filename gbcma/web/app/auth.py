@@ -41,6 +41,8 @@ class User(UserMixin):
         self.__id = str(dict["_id"])
         self.__name = dict.get("name", "<Noname das>")
         self.__role = dict.get("role", None)
+        self.__suspended = dict.get("suspend", {}).get("value", False)
+        self.__suspend_reason = dict.get("suspend", {}).get("reason", False)
         self.__permissions = \
             roles.find({"name": dict["role"]})["permissions"]
 
@@ -62,6 +64,15 @@ class User(UserMixin):
     @property
     def permissions(self):
         return self.__permissions
+
+    @property
+    def suspended(self):
+        return self.__suspended
+
+    @property
+    def suspend_reason(self):
+        return self.__suspend_reason
+
 
     def has_permission(self, name):
         return name in self.__permissions

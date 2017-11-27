@@ -53,6 +53,34 @@
         </div>
     </div>
 
+    <!-- Suspended -->
+    <div class="form-group">
+        <label for="suspend" class="col-sm-2 control-label">Suspended</label>
+        <div class="col-sm-10">
+            <div class="checkbox">
+                <label>
+                    <input id="suspend"
+                           name="suspend"
+                           type="checkbox"
+                           {%if model and model.suspend and model.suspend.value%}checked{%endif%}> Is user suspended?
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reason -->
+    <div class="form-group">
+        <label for="name" class="col-sm-2 control-label">Reason</label>
+        <div class="col-sm-10">
+            <input name="suspend-reason"
+                   class="form-control"
+                   placeholder="Reason"
+                   value="{{ model.suspend.reason if model and model.suspend else '' }}"
+                   autocomplete="off"
+                   {%if not allow_edit%}readonly{%endif%}>
+        </div>
+    </div>
+
     <!-- Submit -->
     {% if allow_edit %}
     <div class="form-group">
