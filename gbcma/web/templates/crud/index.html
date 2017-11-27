@@ -9,7 +9,7 @@
             {% endfor %}
 
             {% if show_actions %}
-            <th>Actions</th>
+            <th class="text-right">Actions</th>
             {% endif %}
         </tr>
     </thead>
@@ -28,9 +28,9 @@
             {% endfor %}
 
             {% if show_actions %}
-            <td>
+            <td class="text-right">
                 {% if show_delete %}
-                <a class="delete btn btn-danger btn-xs" data-key="{{ model._id }}">
+                <a class="delete btn btn-primary btn-xs" data-key="{{ model._id }}">
                     <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                 </a>
                 {% endif %}
