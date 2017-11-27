@@ -7,13 +7,7 @@ class UsersController(CrudController):
         super().__init__(repository, namespace="users",
                          columns=["name", "role"], row_class=self.__row_class)
 
-    @staticmethod
-    def __row_class(model):
-        print("! ", model)
-        return "danger" if model.get("suspend", {}).get("value", False) is True else None
-
     def _update_model(self, model, data):
-        print(data)
         model.update({
             "name": data.get("name", None),
             "login": data.get("login", None),
@@ -29,3 +23,8 @@ class UsersController(CrudController):
         role_docs = roles.search({})
         r = map(lambda x: x["name"], role_docs)
         return {"roles": list(r)}
+
+    @staticmethod
+    def __row_class(model):
+        return "danger" if model.get("suspend", {}).get("value", False) is True else None
+

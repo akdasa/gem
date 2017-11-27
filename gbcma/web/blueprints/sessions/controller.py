@@ -7,8 +7,9 @@ from gbcma.web.blueprints.crud_controller import CrudController
 
 class SessionsController(CrudController):
     def __init__(self, repository):
-        super().__init__(repository, namespace="sessions")
-        self._columns = ["title", "date", "status"]
+        super().__init__(repository, namespace="sessions",
+                         columns=["title", "date", "status"],
+                         row_class=self.__row_class)
 
         self.register_action("run", "play")
         self.register_action("stop", "pause")
@@ -44,6 +45,12 @@ class SessionsController(CrudController):
         d2 = {str(key["_id"]): without_keys(key, ["_id"]) for key in d}
         return {"proposals_objects": d2}
 
+    @staticmethod
+    def __row_class(model):
+        status = model.get("status", None)
+        return \
+            "success" if status == "closed" else \
+            "warning" if status == "run" else ""
 
 def without_keys(d, keys):
     return {x: d[x] for x in d if x not in keys}
