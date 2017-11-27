@@ -5,12 +5,13 @@ from gbcma.web.app.auth import has_permission, access_denied
 
 
 class CrudController:
-    def __init__(self, repository, namespace=None, columns=None):
+    def __init__(self, repository, namespace=None, columns=None, row_class=None):
         self._repository = repository
         self._columns = columns or []
         self._namespace = namespace
         self._model_name = singularize(self._namespace).capitalize()
         self._actions = []
+        self._row_class = row_class or self.__row_class
         self._js = []
 
         if namespace:
@@ -97,8 +98,13 @@ class CrudController:
             "show_actions": self._has_permission("delete"),
             "show_delete": self._has_permission("delete"),
             "show_create": self._has_permission("create"),
-            "allow_edit": self._has_permission("update")
+            "allow_edit": self._has_permission("update"),
+            "row_class": self._row_class
         }
+
+    @staticmethod
+    def __row_class(model):
+        return ""
 
     def _extend(self, model):
         return {}

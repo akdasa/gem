@@ -16,7 +16,7 @@
 
     <tbody>
         {% for model in models %}
-        <tr data-key="{{ model._id }}">
+        <tr data-key="{{ model._id }}" class="{{ row_class(model) }}">
             {% for field in fields %}
                 <td>
                 {% if loop.index == 1 %}
