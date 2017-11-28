@@ -3,3 +3,4 @@ flask-socketio
 flask-login
 pymongo
 inflection
+eventlet
