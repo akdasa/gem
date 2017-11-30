@@ -1,0 +1,23 @@
+{%raw%}
+<div class="panel panel-default">
+    <div class="panel-heading">Discussion</div>
+    <div class="panel-body">
+        <div>
+            {{#if speaking }}
+                Speaking: {{speaking.name}}
+            {{/if}}
+        </div>
+
+        {{#if queue}}
+            Give a voice to:
+            <ul>
+                {{#each queue}}
+                    <li><a href="#" class="discussion-give-voice" data-user-id="{{id}}">{{name}}</a></li>
+                {{/each}}
+            </ul>
+        {{else}}
+            No one wants to say something yet
+        {{/if}}
+    </div>
+</div>
+{%endraw%}

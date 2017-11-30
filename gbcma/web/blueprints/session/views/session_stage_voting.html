@@ -1,0 +1,56 @@
+{%raw%}
+<div class="panel panel-default">
+    <div class="panel-heading">Votes ({{voted}} of {{total}})</div>
+    <div class="panel-body">
+        <div class="progress">
+            <div class="progress-bar progress-bar-success" style="width: {{percent yes total}}%">
+                {{yes}} ({{percent yes total}}%)
+            </div>
+            <div class="progress-bar progress-bar-warning" style="width: {{percent undecided total}}%">
+                {{undecided}} ({{percent undecided total}}%)
+            </div>
+            <div class="progress-bar progress-bar-danger" style="width: {{percent no total}}%">
+                {{no}} ({{percent no total}}%)
+            </div>
+        </div>
+    </div>
+
+    <table class="table" style="table-layout:fixed">
+        <thead>
+        <tr>
+            <th>Role</th>
+            <th><span class="glyphicon glyphicon-thumbs-up"></span></th>
+            <th><span class="glyphicon glyphicon-thumbs-down"></span></th>
+            <th><span class="glyphicon glyphicon-question-sign"></span></th>
+        </tr>
+        </thead>
+
+        <tfoot>
+        <tr>
+            <th>Total</th>
+            <th>{{yes}} ({{percent yes total}}%)</th>
+            <th>{{no}} ({{percent no total}}%)</th>
+            <th>{{undecided}} ({{percent undecided total}}%)</th>
+        </tr>
+        </tfoot>
+
+
+        <tbody>
+        {{#each roles}}
+        <tr>
+            <td>{{@key}}</td>
+            <td>
+                <span class="vote-details" data-content="{{this.who.yes}}" rel="popover">{{this.yes}}</span>
+            </td>
+            <td>
+                <span class="vote-details" data-content="{{this.who.no}}" rel="popover">{{this.no}}</span>
+            </td>
+            <td>
+                <span class="vote-details" data-content="{{this.who.undecided}}" rel="popover">{{this.undecided}}</span>
+            </td>
+        </tr>
+        {{/each}}
+        </tbody>
+    </table>
+</div>
+{%endraw%}

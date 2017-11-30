@@ -2,6 +2,7 @@
 
 {% block body %}
 {% import "session_view.html" as v %}
+{% import "session_shared.html" as s %}
 
 <script src="/static/session_controller.js"></script>
 <script src="/static/session_manage_controller.js"></script>
@@ -12,153 +13,9 @@
 {{session._id}}
 </script>
 
-<script id="stage-template" type="text/x-handlebars-template">
-    {% raw %}
-    {{# if proposal }}
-    <div class="panel panel-default">
-        <div class="panel-heading">Current proposal (Stage: {{progress.index}}/{{progress.total}})</div>
-        <div class="panel-body">
-            <h1>{{ proposal.title }}</h1>
-            <p>{{ trimString proposal.content 512 }}</p>
-        </div>
-    </div>
-    {{/if}}
 
-    {{# ifEqual stage.type "agenda" }}
-    <div class="panel panel-default">
-        <div class="panel-heading">Agenda</div>
-        <div class="panel-body">
-            <p>{{agenda}}</p>
+{{ s.view() }}
 
-            <ul>
-            {{#each proposals}}
-                <li>
-                    {{title}}
-                    {{#each stages}}
-                        <span class="label label-info">{{@this}}</span>
-                    {{/each}}
-                </li>
-            {{/each}}
-            </ul>
-        </div>
-    </div>
-    {{/ifEqual}}
-
-    {{# ifEqual stage.type "voting" }}
-    <div class="panel panel-default">
-        <div class="panel-heading">Votes ({{voted}} of {{total}})</div>
-        <div class="panel-body">
-            <div class="progress">
-                <div class="progress-bar progress-bar-success" style="width: {{percent yes total}}%">
-                    {{yes}} ({{percent yes total}}%)
-                </div>
-                <div class="progress-bar progress-bar-warning" style="width: {{percent undecided total}}%">
-                    {{undecided}} ({{percent undecided total}}%)
-                </div>
-                <div class="progress-bar progress-bar-danger" style="width: {{percent no total}}%">
-                    {{no}} ({{percent no total}}%)
-                </div>
-            </div>
-        </div>
-
-        <table class="table" style="table-layout:fixed">
-            <thead>
-                <tr>
-                    <th>Role</th>
-                    <th><span class="glyphicon glyphicon-thumbs-up"></span></th>
-                    <th><span class="glyphicon glyphicon-thumbs-down"></span></th>
-                    <th><span class="glyphicon glyphicon-question-sign"></span></th>
-                </tr>
-            </thead>
-
-            <tfoot>
-                <tr>
-                    <th>Total</th>
-                    <th>{{yes}} ({{percent yes total}}%)</th>
-                    <th>{{no}} ({{percent no total}}%)</th>
-                    <th>{{undecided}} ({{percent undecided total}}%)</th>
-                </tr>
-            </tfoot>
-
-
-            <tbody>
-                {{#each roles}}
-                <tr>
-                    <td>{{@key}}</td>
-                    <td>
-                        <span class="vote-details" data-content="{{this.who.yes}}" rel="popover">{{this.yes}}</span>
-                    </td>
-                    <td>
-                        <span class="vote-details" data-content="{{this.who.no}}" rel="popover">{{this.no}}</span>
-                    </td>
-                    <td>
-                        <span class="vote-details" data-content="{{this.who.undecided}}" rel="popover">{{this.undecided}}</span>
-                    </td>
-                </tr>
-                {{/each}}
-            </tbody>
-        </table>
-    </div>
-    {{/ifEqual}}
-
-    {{# ifEqual stage.type "commenting" }}
-    <div class="panel panel-default">
-        <div class="panel-heading">Comments</div>
-        <div class="panel-body">
-            {{#each comments}}
-            <div class="media">
-                <div class="media-left media-top">
-                    <span class="glyphicon {{thumbsIcon type}}" aria-hidden="true"></span>
-                </div>
-
-                <div class="media-body">
-                    <h4 class="media-heading">{{user}} <small>{{role}}</small></h4>
-                    {{#if quote}}<blockquote>{{quote}}</blockquote>{{/if}}
-                    {{content}}
-                </div>
-            </div>
-            {{else}}
-                No comments yet
-            {{/each}}
-        </div>
-    </div>
-    {{/ifEqual}}
-
-    {{# ifEqual stage.type "discussion" }}
-    <div class="panel panel-default">
-        <div class="panel-heading">Discussion</div>
-        <div class="panel-body">
-            <div>
-                {{#if speaking }}
-                    Speaking: {{speaking.name}}
-                {{/if}}
-            </div>
-
-            {{#if queue}}
-                Give a voice to:
-                <ul>
-                    {{#each queue}}
-                        <li><a href="#" class="discussion-give-voice" data-user-id="{{id}}">{{name}}</a></li>
-                    {{/each}}
-                </ul>
-            {{else}}
-                No one wants to say something yet
-            {{/if}}
-        </div>
-    </div>
-    {{/ifEqual}}
-
-    {{# ifEqual stage.type "closed" }}
-    <div class="panel panel-default">
-        <div class="panel-heading">Session is about to end</div>
-        <div class="panel-body">
-            <h1>All proposals have been reviewed.</h1>
-            <a href="#" class="btn btn-danger run-close">Close session</a>
-        </div>
-    </div>
-    {{/ifEqual}}
-    {% endraw %}
-</script>
 {% endblock %}
 
 

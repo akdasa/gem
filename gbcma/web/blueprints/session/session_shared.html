@@ -1,0 +1,25 @@
+{% macro view() %}
+<script id="stage-template" type="text/x-handlebars-template">
+    {% raw %}
+    {{# if proposal }}
+    <div class="panel panel-default">
+        <div class="panel-heading">Current proposal (Stage: {{progress.index}}/{{progress.total}})</div>
+        <div class="panel-body">
+            <h1>{{ proposal.title }}</h1>
+            <p>{{ trimString proposal.content 512 }}</p>
+        </div>
+    </div>
+    {{/if}}
+
+    {{> (stageType) }}
+    {% endraw %}
+</script>
+
+
+{% for stage in ['acquaintance', 'agenda', 'closed', 'commenting', 'discussion', 'voting'] %}
+    <script id="stage-{{stage}}" type="text/x-handlebars-template">
+        {% include "views/session_stage_" + stage + ".html" %}
+    </script>
+{% endfor %}
+
+{% endmacro %}

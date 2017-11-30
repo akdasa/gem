@@ -51,6 +51,8 @@ function createSessionController(sessionKey) {
     }
 
     me._renderStage = function(data) {
+        data.stageType = function() { return data.stage.type; }
+
         var html = me.stageTemplate(data)
         $("#stage").html(html)
 

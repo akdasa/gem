@@ -11,6 +11,7 @@ from gbcma.web.blueprints.users import users
 from gbcma.web.blueprints.roles import roles
 from gbcma.web.blueprints.index import index
 
+
 app = Flask(__name__,
             template_folder="gbcma/web/templates",
             static_folder="gbcma/web/static")
@@ -36,6 +37,7 @@ login_manager.login_message_category = "info"
 if __name__ == "__main__":
     channel.run(app)
 
+
 @app.before_request
 def before_request():
     if not current_user:
@@ -46,6 +48,7 @@ def before_request():
 
     if current_user.suspended:
         return access_denied("Your account has been suspended. Reason: " + current_user.suspend_reason)
+
 
 @app.add_template_global
 def user_has_permission(permission):
