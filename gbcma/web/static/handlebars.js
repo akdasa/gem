@@ -23,3 +23,11 @@ Handlebars.registerHelper('ifEqual', function(v1, v2, options) {
 Handlebars.registerHelper('percent', function(v1, v2, options) {
     return (v1 / v2 * 100) || 0;
 });
+
+Handlebars.registerHelper('ifHas', function(array, value, options) {
+    var value = (array.indexOf(value) != -1)
+    if (value) {
+        return options.fn(this);
+    }
+    return options.inverse(this);
+});

@@ -24,7 +24,9 @@ class RolesController(CrudController):
             {"name": "roles.read", "desc": "Read role data"},
             {"name": "roles.update", "desc": "Update existing role"},
             {"name": "roles.delete", "desc": "Delete role"},
-            {"name": "vote", "desc": "Vote"}]  # 18
+            {"name": "vote", "desc": "Vote"},  # 18
+            {"name": "comment", "desc": "Comment"},
+            {"name": "discussion.manage", "desc": "Manage discussion: give/withdraw a voice."}]
 
     def _update_model(self, model, data):
         pl = map(lambda x: x["name"], self._permissions)
@@ -42,6 +44,6 @@ class RolesController(CrudController):
                 {"name": "Users", "roles": self._permissions[4:8]},
                 {"name": "Sessions", "roles": self._permissions[8:14]},
                 {"name": "Roles", "roles": self._permissions[14:18]},
-                {"name": "Misc", "roles": self._permissions[18:19]}
+                {"name": "Misc", "roles": self._permissions[18:21]}
             ]
         }

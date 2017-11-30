@@ -1,10 +1,15 @@
 function createSessionController(sessionKey) {
     var me = {
         sessionKey: sessionKey,
-        stageTemplate: Handlebars.compile($("#stage-template").html())
+        stageTemplate: Handlebars.compile($("#stage-template").html()),
+        user: {}
     }
 
     // Handlers --------------------------------------------------------------------------------------------------------
+
+    me.onUserInfoMessage = function(data) {
+        me.user = data
+    }
 
     me.onUsersListMessage = function(data) {
         me._renderUsersList(data)
@@ -31,6 +36,7 @@ function createSessionController(sessionKey) {
         me.socket.on("users", me.onUsersListMessage)
         me.socket.on("chat", me.onChatMessage)
         me.socket.on("stage", me.onStageMessage)
+        me.socket.on("user", me.onUserInfoMessage)
     }
 
     me.say = function(message) {
@@ -51,7 +57,8 @@ function createSessionController(sessionKey) {
     }
 
     me._renderStage = function(data) {
-        data.stageType = function() { return data.stage.type; }
+        data.stageType = function() { return data.stage.type }
+        data.user = me.user
 
         var html = me.stageTemplate(data)
         $("#stage").html(html)
@@ -80,4 +87,11 @@ $(document).ready(function() {
             return false;
         }
     })
+
+    Handlebars.registerPartial('agenda', $("#stage-agenda").html())
+    Handlebars.registerPartial('acquaintance', $("#stage-acquaintance").html())
+    Handlebars.registerPartial('voting', $("#stage-voting").html())
+    Handlebars.registerPartial('commenting', $("#stage-commenting").html())
+    Handlebars.registerPartial('discussion', $("#stage-discussion").html())
+    Handlebars.registerPartial('closed', $("#stage-closed").html())
 })

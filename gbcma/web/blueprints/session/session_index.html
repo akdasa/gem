@@ -2,6 +2,7 @@
 
 {% block body %}
 {% import "session_view.html" as v %}
+{% import "session_shared.html" as s %}
 
 <script src="/static/session_controller.js"></script>
 <script src="/static/session_user_controller.js"></script>
@@ -12,128 +13,6 @@
 {{session._id}}
 </script>
 
-<script id="stage-template" type="text/x-handlebars-template">
-    {% raw %}
-    {{# if proposal }}
-    <div id="proposal-content" class="panel panel-default">
-        <div class="panel-heading">Current proposal (Stage: {{progress.index}}/{{progress.total}})</div>
-        <div class="panel-body">
-            <h1>{{ proposal.title }}</h1>
-            <p>{{ proposal.content }}</p>
-        </div>
-    </div>
-    {{/if}}
+{{ s.view() }}
 
-    {{# ifEqual stage.type "agenda" }}
-    <div class="panel panel-default">
-        <div class="panel-heading">Agenda</div>
-        <div class="panel-body">
-            <p>{{agenda}}</p>
-
-            <ul>
-            {{#each proposals}}
-                <li>
-                    {{title}}
-                    {{#each stages}}
-                        <span class="label label-info">{{@this}}</span>
-                    {{/each}}
-                </li>
-            {{/each}}
-            </ul>
-        </div>
-    </div>
-    {{/ifEqual}}
-
-
-    {{# ifEqual stage.type "voting" }}
-    <div class="panel panel-default">
-        <div class="panel-heading">Straw vote</div>
-        <div class="panel-body">
-            <a href="#" class="btn btn-success vote" data-vote="yes">
-                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Yes
-            </a>
-            <a href="#" class="btn btn-danger vote" data-vote="no">
-                <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> No
-            </a>
-            <a href="#" class="btn btn-warning vote" data-vote="undecided">
-                <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> Undecided
-            </a>
-        </div>
-    </div>
-    {{/ifEqual}}
-
-    {{# ifEqual stage.type "commenting" }}
-    <div class="panel panel-default">
-        <div class="panel-heading">Comments</div>
-        <div class="panel-body">
-            {{#each comments}}
-            <div class="media">
-                <div class="media-left media-top">
-                    <span class="glyphicon {{thumbsIcon type}}" aria-hidden="true"></span>
-                </div>
-
-                <div class="media-body">
-                    <h4 class="media-heading">{{user}} <small>{{role}}</small></h4>
-                    {{#if quote}}<blockquote>{{quote}}</blockquote>{{/if}}
-                    {{content}}
-                </div>
-            </div>
-            {{else}}
-                No comments yet
-            {{/each}}
-        </div>
-    </div>
-
-    <div class="panel panel-default">
-        <div class="panel-heading">Add comment</div>
-        <div class="panel-body">
-            <blockquote id="quotation" hidden="hidden"></blockquote>
-            <textarea id="comment-message" class="form-control" placeholder="Write down your PMI here. Select text from document above for a quote."></textarea>
-            <div class="btn-group btn-group-sm btn-group-justified" role="group">
-                <a role="button" class="comment-add btn btn-success" data-type="plus">Plus</a>
-                <a role="button" class="comment-add btn btn-danger" data-type="minus">Minus</a>
-                <a role="button" class="comment-add btn btn-info" data-type="info">Info</a>
-            </div>
-        </div>
-    </div>
-    {{/ifEqual}}
-
-    {{# ifEqual stage.type "discussion" }}
-    <div class="panel panel-default">
-        <div class="panel-heading">Discussion</div>
-        <div class="panel-body">
-            <div>
-                {{#if speaking }}
-                    Speaking: {{speaking.name}}
-                {{/if}}
-            </div>
-
-            <ul>
-            {{#each queue}}
-                <li>{{name}}</li>
-            {{else}}
-                No one want to say something yet
-            {{/each}}
-            </ul>
-
-            <a href="#" class="btn btn-success" id="discussion-raise-hand">
-                <span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Raise a hand
-            </a>
-            <a href="#" class="btn btn-warning" id="discussion-withdraw-hand">
-                <span class="glyphicon glyphicon-hand-down" aria-hidden="true"></span> Withdraw hand
-            </a>
-        </div>
-    </div>
-    {{/ifEqual}}
-
-    {{# ifEqual stage.type "closed" }}
-    <div class="panel panel-default">
-        <div class="panel-heading">Session is about to end</div>
-        <div class="panel-body">
-            <h1>All proposals have been reviewed.</h1>
-        </div>
-    </div>
-    {{/ifEqual}}
-{% endraw %}
-</script>
 {% endblock %}

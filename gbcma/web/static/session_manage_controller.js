@@ -58,11 +58,4 @@ $(document).ready(function() {
         var id = $(this).data("user-id")
         controller.giveVoice(id)
     })
-
-    Handlebars.registerPartial('agenda', $("#stage-agenda").html())
-    Handlebars.registerPartial('acquaintance', $("#stage-acquaintance").html())
-    Handlebars.registerPartial('voting', $("#stage-voting").html())
-    Handlebars.registerPartial('commenting', $("#stage-commenting").html())
-    Handlebars.registerPartial('discussion', $("#stage-discussion").html())
-    Handlebars.registerPartial('closed', $("#stage-closed").html())
 })

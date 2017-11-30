@@ -19,4 +19,20 @@
         {{/each}}
     </div>
 </div>
+
+{{#ifHas user.permissions "comment"}}
+<div class="panel panel-default">
+    <div class="panel-heading">Add comment</div>
+    <div class="panel-body">
+        <blockquote id="quotation" hidden="hidden"></blockquote>
+        <textarea id="comment-message" class="form-control" placeholder="Write down your PMI here. Select text from document above for a quote."></textarea>
+        <div class="btn-group btn-group-sm btn-group-justified" role="group">
+            <a role="button" class="comment-add btn btn-success" data-type="plus">Plus</a>
+            <a role="button" class="comment-add btn btn-danger" data-type="minus">Minus</a>
+            <a role="button" class="comment-add btn btn-info" data-type="info">Info</a>
+        </div>
+    </div>
+</div>
+{{/ifHas}}
+
 {%endraw%}

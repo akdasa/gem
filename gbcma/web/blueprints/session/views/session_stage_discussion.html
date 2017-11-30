@@ -8,16 +8,33 @@
             {{/if}}
         </div>
 
-        {{#if queue}}
-            Give a voice to:
-            <ul>
-                {{#each queue}}
-                    <li><a href="#" class="discussion-give-voice" data-user-id="{{id}}">{{name}}</a></li>
-                {{/each}}
-            </ul>
+        {{#ifHas user.permissions "discussion.manage"}}
+            {{#if queue}}
+                Give a voice to:
+                <ul>
+                    {{#each queue}}
+                        <li><a href="#" class="discussion-give-voice" data-user-id="{{id}}">{{name}}</a></li>
+                    {{/each}}
+                </ul>
+            {{else}}
+                No one wants to say something yet
+            {{/if}}
         {{else}}
-            No one wants to say something yet
-        {{/if}}
+            <ul>
+            {{#each queue}}
+                <li>{{name}}</li>
+            {{else}}
+                No one want to say something yet
+            {{/each}}
+            </ul>
+
+            <a href="#" class="btn btn-success" id="discussion-raise-hand">
+                <span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Raise a hand
+            </a>
+            <a href="#" class="btn btn-warning" id="discussion-withdraw-hand">
+                <span class="glyphicon glyphicon-hand-down" aria-hidden="true"></span> Withdraw hand
+            </a>
+        {{/ifHas}}
     </div>
 </div>
 {%endraw%}

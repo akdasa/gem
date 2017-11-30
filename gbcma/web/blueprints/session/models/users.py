@@ -35,6 +35,7 @@ class SessionUsers:
     def join(self, socket_id, user):
         self.__sockets[socket_id] = self.__map(user)
         self.__notify_changes()
+        self.__session.notify("user", self.__map_json(user), room=socket_id)
         self.__changed.notify(socket_id, user, True)
 
     def leave(self, socket_id):
@@ -51,10 +52,19 @@ class SessionUsers:
         self.__session.notify("users", users)
 
     @staticmethod
-    def __map(user):
+    def __map(user, json=False):
         return User({
-            "_id": user.id,
+            "_id": user.id if not json else str(user.id),
             "name": user.name,
             "permissions": user.permissions,
             "role": user.role
         })
+
+    @staticmethod
+    def __map_json(user):
+        return {
+            "_id": str(user.id),
+            "name": user.name,
+            "permissions": user.permissions,
+            "role": user.role
+        }
