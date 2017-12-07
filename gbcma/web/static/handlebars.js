@@ -20,6 +20,12 @@ Handlebars.registerHelper('ifEqual', function(v1, v2, options) {
     return options.inverse(this);
 });
 
+Handlebars.registerHelper('percentRound', function(v1, v2, options) {
+    var decimals = 1;
+    var value = (v1 / v2 * 100) || 0;
+    return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+});
+
 Handlebars.registerHelper('percent', function(v1, v2, options) {
     return (v1 / v2 * 100) || 0;
 });
@@ -30,4 +36,8 @@ Handlebars.registerHelper('ifHas', function(array, value, options) {
         return options.fn(this);
     }
     return options.inverse(this);
+});
+
+Handlebars.registerHelper('list', function(array) {
+    return array.join(", ");
 });

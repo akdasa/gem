@@ -1,4 +1,3 @@
-import random
 from threading import Thread
 from time import sleep
 
@@ -7,7 +6,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 
 session_id = "5a13ff0686d5a01839d47c1e"
-host = "http://127.0.0.1:5000"
+host = "http://192.168.56.100:8080"
 
 chrome_options = Options()
 chrome_options.add_argument("--headless")
@@ -23,21 +22,22 @@ def run(login, password):
     driver.find_element_by_id("signin").click()
 
     driver.get("{}/session/{}".format(host, session_id))
-    sleep(3)
+    sleep(1)
 
-    random_vote = random.choice(["yes", "no", "undecided"])
-    driver.find_element_by_id("vote-{}".format(random_vote)).click()
+    for i in range(1, 10):
+        driver.find_element_by_id("chat-message").send_keys("Hello!")
+        driver.find_element_by_id("chat-message").send_keys(Keys.ENTER)
 
+    sleep(15)
     print("Close user {}".format(login))
     driver.close()
 
 
-for i in range(1, 90):
+for i in range(1, 10):
     user_id = "user{}".format(i)
     print("Start user {}".format(i))
     thread = Thread(target=run, args=(user_id, user_id))
     thread.start()
-    sleep(2)
 
 
 
