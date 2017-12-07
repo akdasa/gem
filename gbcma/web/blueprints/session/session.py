@@ -81,3 +81,9 @@ def on_give_voice_message(data):
 @login_required
 def on_disconnect():
     return controller.disconnect(request.sid)
+
+
+@channel.on("timer")
+@login_required
+def on_timer(data):
+    return controller.set_timer(request.sid, data)

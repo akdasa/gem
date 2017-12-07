@@ -102,6 +102,11 @@ class SessionController:
         to_user_id = data.get("user_id", None)
         return session.stages.current.give_voice(to_user_id)
 
+    def set_timer(self, socket_id, data):
+        minutes = data.get("interval", 1)
+        session = self.__sockets.session_of(socket_id)
+        return session.notify("timer", {"interval": minutes})
+
     def close(self, socket_id):
         """On close stage command received.
         :param socket_id: SocketIO Id"""

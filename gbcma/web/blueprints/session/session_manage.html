@@ -13,11 +13,9 @@
 {{session._id}}
 </script>
 
-
 {{ s.view() }}
 
 {% endblock %}
-
 
 {% block footer %}
 <footer class="footer">
@@ -29,6 +27,20 @@
             Next <span id="state-next"></span>
         </a>
         <a href="#" class="btn btn-danger run-close">Close</a>
+
+        <div class="btn-group dropup">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                Timer <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="#" class="timer-set" data-value="1">1m timer</a></li>
+                <li><a href="#" class="timer-set" data-value="5">5m timer</a></li>
+                <li><a href="#" class="timer-set" data-value="10">10m timer</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#" class="timer-set" data-value="0">Stop</a></li>
+            </ul>
+        </div>
     </div>
 </footer>
 {% endblock %}

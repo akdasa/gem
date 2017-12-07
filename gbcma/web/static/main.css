@@ -53,3 +53,8 @@ html {
     max-height: 150px;
     overflow-y: scroll;
 }
+
+#timer {
+  font-size: 45px;
+  text-align: center;
+}

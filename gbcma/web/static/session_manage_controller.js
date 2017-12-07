@@ -31,6 +31,10 @@ function extendSessionController(me) {
         me.socket.emit("give_voice", { user_id: user_id })
     }
 
+    me.setCountdownTimer = function(minutes) {
+        me.socket.emit("timer", { interval: minutes })
+    }
+
     return me
 }
 
@@ -57,5 +61,11 @@ $(document).ready(function() {
         e.preventDefault()
         var id = $(this).data("user-id")
         controller.giveVoice(id)
+    })
+
+    $(".timer-set").on("click", function(e) {
+        e.preventDefault()
+        var minutes = $(this).data("value")
+        controller.setCountdownTimer(minutes)
     })
 })
