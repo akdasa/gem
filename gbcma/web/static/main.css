@@ -47,3 +47,9 @@ html {
   text-align: left;
   vertical-align: middle;
 }
+
+
+.small-list-block {
+    max-height: 150px;
+    overflow-y: scroll;
+}

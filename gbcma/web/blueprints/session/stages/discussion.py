@@ -25,6 +25,7 @@ class DiscussionSessionStage(SessionStage):
         self.__queue[user.id] = ({
             "id": user.id,
             "name": user.name,
+            "role": user.role,
             "order": len(self.__queue)
         })
         self.changed.notify()

@@ -13,7 +13,11 @@
                 Give a voice to:
                 <ul>
                     {{#each queue}}
-                        <li><a href="#" class="discussion-give-voice" data-user-id="{{id}}">{{name}}</a></li>
+                    <li>
+                        <a href="#" class="discussion-give-voice" data-user-id="{{id}}">
+                            {{name}} <small>({{role}})</small>
+                        </a>
+                    </li>
                     {{/each}}
                 </ul>
             {{else}}
@@ -22,7 +26,7 @@
         {{else}}
             <ul>
             {{#each queue}}
-                <li>{{name}}</li>
+                <li>{{name}} <small>({{role}})</small></li>
             {{else}}
                 No one want to say something yet
             {{/each}}
