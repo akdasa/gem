@@ -86,7 +86,7 @@ function createSessionController(sessionKey) {
     me._renderUsersList = function(users) {
         $("#run-users-list").empty()
         for (user of users) {
-            $("#run-users-list").append("<li>" + user.name + "</li>")
+            $("#run-users-list").append("<li>" + user.name + " <small>"+user.role+"</small></li>")
         }
     }
 
