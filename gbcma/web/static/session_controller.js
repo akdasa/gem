@@ -3,15 +3,22 @@ function createSessionController(sessionKey) {
         sessionKey: sessionKey,
         stageTemplate: Handlebars.compile($("#stage-template").html()),
         user: {},
-        countdownTimer: null
+        countdownTimer: null,
+        timerPanel: $("#timer-panel"),
+        lastStageType: null
     }
 
     // Handlers --------------------------------------------------------------------------------------------------------
 
     me.onTimerMessage = function(data) {
         var minutes = data.interval
-        var to = new Date().getTime() + (minutes * 60000)
-        me.countdownTo(new Date(to))
+        if (minutes) {
+            var to = new Date().getTime() + (minutes * 60000)
+            me.countdownTo(new Date(to))
+        } else {
+            me.stopTimer()
+            me._showTimerPanel(false)
+        }
     }
 
     me.onUserInfoMessage = function(data) {
@@ -27,8 +34,14 @@ function createSessionController(sessionKey) {
     }
 
     me.onStageMessage = function(data) {
-        console.log(data)
+        if (data.stage.type != me.lastStageType) {
+            me.stopTimer()
+            me._showTimerPanel(false)
+        }
+
+        me.lastStageType = data.stage.type
         me._renderStage(data)
+
     }
 
     me.onConnected = function(socket) {
@@ -52,29 +65,20 @@ function createSessionController(sessionKey) {
     }
 
     me.countdownTo = function(date) {
-        if (me.countdownTimer) {
-            clearInterval(me.countdownTimer);
-        }
+        me.stopTimer()
 
         me.countdownTimer = setInterval(function() {
-            var now = new Date().getTime();
-            var distance = date - now;
+            me._renderTimer(date)
+        }, 1000)
 
-            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        me._showTimerPanel(true)
+        me._renderTimer(date)
+    }
 
-            // Display the result in the element with id="demo"
-            document.getElementById("timer").innerHTML =
-                hours ? hours + "h " + minutes + ":" + seconds :
-                        minutes + ":" + seconds;
-
-            // If the count down is finished, write some text
-            if (distance < 0) {
-                clearInterval(me.countdownTimer);
-                document.getElementById("timer").innerHTML = "EXPIRED";
-            }
-        }, 1000);
+    me.stopTimer = function() {
+        if (me.countdownTimer) {
+            clearInterval(me.countdownTimer)
+        }
     }
 
     // Private members -------------------------------------------------------------------------------------------------
@@ -99,6 +103,42 @@ function createSessionController(sessionKey) {
 
         if (data.stage.type == "voting") {
             $('.vote-details').popover({ trigger: "hover" })
+        }
+    }
+
+    me._showTimerPanel = function(value, danger) {
+        me.timerPanel.toggle(value)
+        if (danger) {
+            me.timerPanel.addClass("panel-danger")
+        } else {
+            me.timerPanel.removeClass("panel-danger")
+        }
+    }
+
+    me._renderTimer = function(date) {
+        var now = new Date().getTime()
+        var distance = date - now
+
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000)
+
+        minutes = String("00" + minutes).slice(-2)
+        seconds = String("00" + seconds).slice(-2)
+
+
+        // Display the result in the element with id="demo"
+        document.getElementById("timer").innerHTML =
+            hours ? hours + "h " + minutes + ":" + seconds :
+                    minutes + ":" + seconds
+
+        if (distance < 0) {
+            clearInterval(me.countdownTimer)
+            document.getElementById("timer").innerHTML = "00:00"
+        }
+
+        if (distance < 1000 * 45) {
+            me._showTimerPanel(true, true)
         }
     }
 
