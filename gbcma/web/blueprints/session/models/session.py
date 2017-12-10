@@ -1,5 +1,6 @@
 from flask_socketio import emit
 
+from gbcma.db import sessions
 from .chat import SessionChat
 from .stages import SessionStages
 from .users import SessionUsers
@@ -37,6 +38,16 @@ class Session:
     @property
     def users(self):
         return self.__users
+
+    @property
+    def presence_roles(self):
+        session = sessions.get(self.session_id)
+        return session["permissions"]["presence"]
+
+    @property
+    def vote_roles(self):
+        session = sessions.get(self.session_id)
+        return session["permissions"]["vote"]
 
     def notify(self, event, data, room=None):
         emit(event, data, room=room or self.__session_id)

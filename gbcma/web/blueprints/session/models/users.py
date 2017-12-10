@@ -60,11 +60,22 @@ class SessionUsers:
             "role": user.role
         })
 
-    @staticmethod
-    def __map_json(user):
+    def __map_json(self, user):
+        can_present = user.role in self.__session.presence_roles
+        can_vote = (user.role in self.__session.vote_roles) and \
+                   ("vote" in user.permissions)
+
+        permissions = list(user.permissions)
+        print(permissions)
+        if permissions:
+            if "vote" in permissions and not can_vote:
+                permissions.remove("vote")
+            if "session.join" in permissions and not can_present:
+                permissions.remove("session.join")
+
         return {
             "_id": str(user.id),
             "name": user.name,
-            "permissions": user.permissions,
-            "role": user.role
+            "permissions": permissions,
+            "role": user.role,
         }

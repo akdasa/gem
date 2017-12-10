@@ -29,6 +29,9 @@ class SessionController:
             return access_denied()
         if session.get("status", None) != "run":
             return access_denied("Session is not started yet or closed")
+        if user.role not in session["permissions"]["presence"]:
+            return access_denied("You have no rights to join this session")
+
         return render_template(template, session=session)
 
     # Messages ---------------------------------------------------------------------------------------------------------
