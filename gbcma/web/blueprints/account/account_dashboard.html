@@ -4,7 +4,6 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block body %}
-
     {% for session in sessions %}
         {% set is_active = (session.status == 'run') %}
         {% set is_closed = (session.status == 'closed') %}
@@ -38,9 +37,4 @@
             </table>
         </div>
     {% endfor %}
-
-
-<p>
-    <a href="/account/logout" class="btn btn-danger">Logout</a>
-</p>
 {% endblock %}
