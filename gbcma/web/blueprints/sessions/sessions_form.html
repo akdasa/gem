@@ -46,6 +46,32 @@
         </div>
     </div>
 
+    <!-- Presence roles -->
+    <div class="form-group">
+        <label for="agenda" class="col-sm-2 control-label">Presence</label>
+        <div class="col-sm-10">
+            <select name="presence" class="selectpicker form-control" title="Choose a role" {%if not allow_edit%}disabled{%endif%} multiple data-actions-box="true">
+                {% set permissions = model.permissions.presence if model else [] %}
+                {% for role in roles %}
+                    <option {%if role in permissions%}selected{%endif%}>{{role}}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <!-- Vote roles -->
+    <div class="form-group">
+        <label for="agenda" class="col-sm-2 control-label">Vote</label>
+        <div class="col-sm-10">
+            <select name="vote" class="selectpicker form-control" title="Choose a role" {%if not allow_edit%}disabled{%endif%} multiple data-actions-box="true">
+                {% set permissions = model.permissions.vote if model else [] %}
+                {% for role in roles %}
+                    <option {%if role in permissions%}selected{%endif%}>{{role}}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
     <div class="form-group">
         <label for="proposals" class="col-sm-2 control-label">Proposals</label>
         <div class="col-sm-10">

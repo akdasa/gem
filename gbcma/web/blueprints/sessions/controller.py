@@ -1,6 +1,7 @@
 from bson import ObjectId
 from flask import jsonify
 
+from gbcma.db import roles
 from gbcma.db.config import proposals
 from gbcma.web.blueprints.crud_controller import CrudController
 
@@ -31,19 +32,32 @@ class SessionsController(CrudController):
         ids_list = data.get("proposals", "").split(",")
         ids = list(map(lambda x: ObjectId(x), ids_list))
 
+        presence = data.getlist("presence")
+        vote = data.getlist("vote")
+
         model.update({
             "title": data.get("title", None),
             "agenda": data.get("agenda", None),
             "date": data.get("date", None),
-            "proposals": ids
+            "proposals": ids,
+            "permissions": {
+                "presence": presence,
+                "vote": vote
+            }
         })
 
     def _extend(self, model):
-        if not model:
-            return {}
-        d = proposals.find({"_id": {"$in": model.get("proposals", [])}})
-        d2 = {str(key["_id"]): without_keys(key, ["_id"]) for key in d}
-        return {"proposals_objects": d2}
+        result_proposals = {}
+        result_roles = {}
+
+        if model:
+            d = proposals.find({"_id": {"$in": model.get("proposals", [])}})
+            result_proposals = {str(key["_id"]): without_keys(key, ["_id"]) for key in d}
+
+        role_docs = roles.search({})
+        result_roles = map(lambda x: x["name"], role_docs)
+
+        return {"proposals_objects": result_proposals, "roles": list(result_roles)}
 
     @staticmethod
     def __row_class(model):
