@@ -17,8 +17,10 @@ prop = ProposalsRepository()
 @account.route("/", methods=["GET", "POST"])
 @login_required
 def index():
+    user = current_user
+
     # loads all proposals objects of sessions
-    sessions_list = list(sessions.upcoming())
+    sessions_list = list(filter(lambda x: user.role in x["permissions"]["presence"], sessions.upcoming()))
     proposal_ids = map(lambda x: x.get("proposals"), sessions_list)
     proposal_ids = list(itertools.chain(*proposal_ids))
     proposal_objects = prop.search({"_id": {"$in": proposal_ids}})
