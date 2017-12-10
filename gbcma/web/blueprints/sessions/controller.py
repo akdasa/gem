@@ -29,7 +29,7 @@ class SessionsController(CrudController):
             return jsonify({"success": False})
 
     def _update_model(self, model, data):
-        ids_list = data.get("proposals", "").split(",")
+        ids_list = filter(None, data.get("proposals", "").split(","))
         ids = list(map(lambda x: ObjectId(x), ids_list))
 
         presence = data.getlist("presence")
