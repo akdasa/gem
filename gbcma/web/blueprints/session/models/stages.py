@@ -58,7 +58,7 @@ class SessionStages:
     def __create_stages(self, session_id):
         result = []
         session = sessions.get(session_id)  # gets session document
-        docs = proposals.search_list(session["proposals"])
+        docs = proposals.get_list(session["proposals"])
 
         for idx, proposal in enumerate(docs):
             stages = [

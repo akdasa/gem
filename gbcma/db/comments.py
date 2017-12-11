@@ -11,7 +11,7 @@ class CommentsRepository(Repository):
         super().__init__(comments)
 
     def create(self, proposal_id, user_id, content, kind, quote=None):
-        inserted_id = self._c.insert_one({
+        inserted_id = self._collection.insert_one({
             "proposal_id": ObjectId(proposal_id),
             "user_id": ObjectId(user_id),
             "content": content,
@@ -21,4 +21,4 @@ class CommentsRepository(Repository):
         return self.get(inserted_id)
 
     def of(self, proposal_id):
-        return self.search({"proposal_id": proposal_id})
+        return self.find({"proposal_id": proposal_id})

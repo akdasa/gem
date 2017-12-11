@@ -4,37 +4,40 @@ from bson.errors import InvalidId
 
 class Repository:
     def __init__(self, collection):
-        self._c = collection
+        """Initializes new instance of the Repository class."""
+        self._collection = collection
 
     def all(self):
-        return self._c.find()
+        """Returns all items in collection.
+        :return: Array of items."""
+        return self._collection.find()
 
-    def get(self, key):
+    def get(self, oid):
         try:
-            return self._c.find_one(ObjectId(key))
+            return self._collection.find_one(ObjectId(oid))
+        except InvalidId:
+            return None
+
+    def get_list(self, oids):
+        return list(self.find({"_id": {"$in": oids}}))
+
+    def find_one(self, criteria):
+        try:
+            return self._collection.find_one(criteria)
         except InvalidId:
             return None
 
     def find(self, criteria):
-        try:
-            return self._c.find_one(criteria)
-        except InvalidId:
-            return None
-
-    def search_list(self, ids):
-        return list(self.search({"_id": {"$in": ids}}))
-
-    def search(self, criteria):
-        return self._c.find(criteria)
+        return self._collection.find(criteria)
 
     def insert(self, doc):
-        return self._c.insert_one(doc)
+        return self._collection.insert_one(doc)
 
     def save(self, doc):
-        return self._c.replace_one(
+        return self._collection.replace_one(
             {"_id": doc["_id"]}, doc)
 
     def delete(self, key):
-        return self._c.find_one_and_delete({
+        return self._collection.find_one_and_delete({
             "_id": ObjectId(key)
         })

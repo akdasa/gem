@@ -11,13 +11,13 @@ class VotesRepository(Repository):
         super().__init__(votes)
 
     def find_or_create(self, proposal_id):
-        doc = self._c.find_one({"proposal_id": ObjectId(proposal_id)})
+        doc = self._collection.find_one({"proposal_id": ObjectId(proposal_id)})
         if not doc:
             doc = self.create(proposal_id)
         return doc
 
     def create(self, proposal_id):
-        inserted_id = self._c.insert_one({
+        inserted_id = self._collection.insert_one({
             "proposal_id": proposal_id,
             "votes": {}
         }).inserted_id

@@ -20,7 +20,7 @@ class UsersController(CrudController):
         })
 
     def _extend(self, model):
-        role_docs = roles.search({})
+        role_docs = roles.all()
         r = map(lambda x: x["name"], role_docs)
         return {"roles": list(r)}
 

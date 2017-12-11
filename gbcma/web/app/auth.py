@@ -44,7 +44,7 @@ class User(UserMixin):
         self.__suspended = dict.get("suspend", {}).get("value", False)
         self.__suspend_reason = dict.get("suspend", {}).get("reason", False)
         self.__permissions = \
-            roles.find({"name": dict["role"]})["permissions"]
+            roles.find_one({"name": dict["role"]})["permissions"]
 
     def get_id(self):
         return self.__id

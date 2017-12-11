@@ -1,8 +1,7 @@
 from bson import ObjectId
 from flask import jsonify
 
-from gbcma.db import roles
-from gbcma.db.config import proposals
+from gbcma.db import roles, proposals
 from gbcma.web.blueprints.crud_controller import CrudController
 
 
@@ -54,7 +53,7 @@ class SessionsController(CrudController):
             d = proposals.find({"_id": {"$in": model.get("proposals", [])}})
             result_proposals = {str(key["_id"]): without_keys(key, ["_id"]) for key in d}
 
-        role_docs = roles.search({})
+        role_docs = roles.all()
         result_roles = map(lambda x: x["name"], role_docs)
 
         return {"proposals_objects": result_proposals, "roles": list(result_roles)}

@@ -11,12 +11,12 @@ class SessionsRepository(Repository):
         super().__init__(sessions)
 
     def active(self):
-        return self._c.find({"status": "run"})
+        return self._collection.find({"status": "run"})
 
     def upcoming(self):
         now = datetime.datetime.now()
 
-        return self._c.find({
+        return self._collection.find({
             "date": {
                 "$gte": now.isoformat()
             }

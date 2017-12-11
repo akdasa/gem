@@ -23,7 +23,7 @@ def index():
     sessions_list = list(filter(lambda x: user.role in x["permissions"]["presence"], sessions.upcoming()))
     proposal_ids = map(lambda x: x.get("proposals"), sessions_list)
     proposal_ids = list(itertools.chain(*proposal_ids))
-    proposal_objects = prop.search({"_id": {"$in": proposal_ids}})
+    proposal_objects = prop.find({"_id": {"$in": proposal_ids}})
     proposal_objects = {key["_id"]: key for key in proposal_objects}
 
     return render_template("account_dashboard.html",
@@ -54,7 +54,7 @@ def login():
         data = request.form
         lgn = data.get("login", None)
         password = data.get("password", None)
-        user = rep.find({"login": lgn, "password": password})
+        user = rep.find_one({"login": lgn, "password": password})
 
         if user:
             u = User(user)
