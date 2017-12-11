@@ -1,10 +1,14 @@
 body {
-    padding-top: 90px;
+    padding-top: 80px;
     padding-bottom: 90px;
 }
 
 .navbar-brand img {
     margin-top: -10px;
+}
+
+.jumbotron {
+  margin-top: -20px;
 }
 
 /* Sticky footer styles
@@ -57,4 +61,20 @@ html {
 #timer {
   font-size: 45px;
   text-align: center;
+}
+
+.form-signin {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+#login {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+#password {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
 }

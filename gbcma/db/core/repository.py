@@ -44,7 +44,9 @@ class Repository:
         })
 
     def __map(self, data):
-        if type(data) is list:
+        if data is None:
+            return None
+        elif type(data) is list:
             return list(map(lambda x: Model(**x), data))
         else:
             return Model(**data)
