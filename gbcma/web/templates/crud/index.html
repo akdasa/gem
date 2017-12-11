@@ -9,7 +9,7 @@
             {% endfor %}
 
             {% if show_actions %}
-            <th class="text-right">Actions</th>
+            <th class="text-right no-sort">Actions</th>
             {% endif %}
         </tr>
     </thead>
@@ -73,6 +73,11 @@ $(document).ready(function() {
             }
         });
     });
+
+    $("table").DataTable({paging:false, searching:true, info:false, columnDefs: [
+        { orderable: false, targets: "no-sort" }
+    ], stateSave: true
+    })
 });
 </script>
 {% endblock %}
