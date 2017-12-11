@@ -1,6 +1,6 @@
 from bson import ObjectId
 
-from gbcma.db.repository import Repository
+from .core import Repository
 from .config import comments
 
 
