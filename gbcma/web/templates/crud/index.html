@@ -20,9 +20,11 @@
             {% for field in fields %}
                 <td>
                 {% if loop.index == 1 %}
-                    <a href="/{{url}}/{{ model._id }}" data-key="{{ model._id }}">{{ model[field] }}</a>
+                    <a href="/{{url}}/{{ model._id }}" data-key="{{ model._id }}">
+                        {{ model[field] or ("<no " + field + ">") }}
+                    </a>
                 {% else %}
-                    {{ model[field] }}
+                    {{ model[field] or ("<no " + field + ">") }}
                 {% endif %}
                 </td>
             {% endfor %}

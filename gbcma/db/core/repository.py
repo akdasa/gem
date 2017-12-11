@@ -1,5 +1,6 @@
 from bson import ObjectId
 from bson.errors import InvalidId
+from .model import Model
 
 
 class Repository:
@@ -10,25 +11,25 @@ class Repository:
     def all(self):
         """Returns all items in collection.
         :return: Array of items."""
-        return self._collection.find()
+        return self.__map(list(self._collection.find()))
 
     def get(self, oid):
         try:
-            return self._collection.find_one(ObjectId(oid))
+            return self.__map(self._collection.find_one(ObjectId(oid)))
         except InvalidId:
             return None
 
     def get_list(self, oids):
-        return list(self.find({"_id": {"$in": oids}}))
+        return self.__map(list(self.find({"_id": {"$in": oids}})))
 
     def find_one(self, criteria):
         try:
-            return self._collection.find_one(criteria)
+            return self.__map(self._collection.find_one(criteria))
         except InvalidId:
             return None
 
     def find(self, criteria):
-        return self._collection.find(criteria)
+        return self.__map(list(self._collection.find(criteria)))
 
     def insert(self, doc):
         return self._collection.insert_one(doc)
@@ -41,3 +42,9 @@ class Repository:
         return self._collection.find_one_and_delete({
             "_id": ObjectId(key)
         })
+
+    def __map(self, data):
+        if type(data) is list:
+            return list(map(lambda x: Model(**x), data))
+        else:
+            return Model(**data)

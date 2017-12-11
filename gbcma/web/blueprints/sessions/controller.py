@@ -1,27 +1,28 @@
 from bson import ObjectId
 from flask import jsonify
+from flask_login import login_required
 
-from gbcma.db import roles, proposals
+from gbcma.db import roles, proposals, sessions
 from gbcma.web.blueprints.crud_controller import CrudController
 
 
 class SessionsController(CrudController):
-    def __init__(self, repository):
-        super().__init__(repository, namespace="sessions",
-                         columns=["title", "date", "status"],
+    def __init__(self):
+        super().__init__(sessions, namespace="sessions", columns=["title", "date", "status"],
                          row_class=self.__row_class)
 
-        self.register_action("run", "play")
-        self.register_action("stop", "pause")
-        self.register_action("manage", "hand-right", "session.manage")
-        self.register_js("sessions_controller.js")
+        self.add_action("run", "play")
+        self.add_action("stop", "pause")
+        self.add_action("manage", "hand-right", "session.manage")
+        self.add_script("sessions_controller.js")
 
+    @login_required
     def run(self, request, key):
         json = request.get_json(force=True)
         status = json.get("status", None)
         if status:  # todo: check status is valid
             s = self._repository.get(key)
-            s["status"] = status
+            s.status = status
             self._repository.save(s)
             return jsonify({"success": True})
         else:
@@ -34,20 +35,17 @@ class SessionsController(CrudController):
         presence = data.getlist("presence")
         vote = data.getlist("vote")
 
-        model.update({
-            "title": data.get("title", None),
-            "agenda": data.get("agenda", None),
-            "date": data.get("date", None),
-            "proposals": ids,
-            "permissions": {
-                "presence": presence,
-                "vote": vote
-            }
-        })
+        model.title = data.get("title", None),
+        model.agenda = data.get("agenda", None),
+        model.date = data.get("date", None),
+        model.proposals = ids,
+        model.permissions = {
+            "presence": presence,
+            "vote": vote
+        }
 
     def _extend(self, model):
         result_proposals = {}
-        result_roles = {}
 
         if model:
             d = proposals.find({"_id": {"$in": model.get("proposals", [])}})

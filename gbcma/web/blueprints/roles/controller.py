@@ -1,10 +1,10 @@
+from gbcma.db import roles
 from gbcma.web.blueprints.crud_controller import CrudController
 
 
 class RolesController(CrudController):
-    def __init__(self, repository):
-        super().__init__(repository, namespace="roles")
-        self._columns = ["name"]
+    def __init__(self):
+        super().__init__(roles, namespace="roles", columns=["name"])
         self._permissions = [
             {"name": "proposals.create", "desc": "Create new proposal"},
             {"name": "proposals.read", "desc": "Read proposal"},
@@ -32,10 +32,8 @@ class RolesController(CrudController):
         pl = map(lambda x: x["name"], self._permissions)
         pl = list(filter(lambda x: data.get(x, False), pl))
 
-        model.update({
-            "name": data.get("name", None),
-            "permissions": pl
-        })
+        model.name = data.get("name", None)
+        model.permissions = pl
 
     def _extend(self, model):
         return {

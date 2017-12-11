@@ -1,4 +1,5 @@
 from flask import render_template, flash, redirect, jsonify
+from flask_login import login_required
 from inflection import singularize
 
 from gbcma.web.app.auth import has_permission, access_denied
@@ -19,12 +20,13 @@ class CrudController:
             self._form = "{}_form.html".format(namespace)
             self._url = namespace
 
-    def register_js(self, name):
+    def add_script(self, name):
         self._js.append(name)
 
-    def register_action(self, css_class, icon, permission=None):
+    def add_action(self, css_class, icon, permission=None):
         self._actions.append({"css_class": css_class, "icon": icon, "permission": permission})
 
+    @login_required
     def index(self):
         """Shows list of models."""
         if not self._has_permission("read"):
@@ -33,6 +35,7 @@ class CrudController:
         models = self._repository.all()
         return render_template("crud/index.html", models=models, fields=self._columns, **self.__options())
 
+    @login_required
     def create(self, request):
         """Creates new user."""
         if not self._has_permission("create"):
@@ -49,6 +52,7 @@ class CrudController:
             flash("{} was successfully created".format(self._model_name), category="success")
             return redirect("/" + self._url)
 
+    @login_required
     def update(self, request, key):
         """Shows user."""
         if request.method == "GET":

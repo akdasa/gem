@@ -1,31 +1,28 @@
+from gbcma.db import proposals
 from gbcma.web.blueprints.crud_controller import CrudController
 
 
 class ProposalsController(CrudController):
-    def __init__(self, repository):
-        """Initializes new instance of the ProposalsController class
-        :type repository: ProposalsRepository
-        :param repository: Repository to manipulate entities in."""
-        super().__init__(repository, namespace="proposals", columns=["key", "title"])
+    def __init__(self):
+        """Initializes new instance of the ProposalsController class"""
+        super().__init__(proposals, namespace="proposals", columns=["key", "title"])
 
-    def search(self, term):
+    def search(self, request):
         """Returns list of proposals found by title.
-        :param term: Query.
+        :param request: Query.
         :return: List of documents { key, title }."""
-        data = self._repository.search_by_title(term)
-        result = map(self.__map, data)
-        return list(result)
+        term = request.args.get("term", None)
+        docs = self._repository.search_by_title(term)
+        return list(map(self.__search_view, docs))
 
     def _update_model(self, model, data):
-        model.update({
-            "key": data.get("key", None),
-            "title": data.get("title", None),
-            "content": data.get("content", None)
-        })
+        model.key = data.get("key", None)
+        model.title = data.get("title", None)
+        model.content = data.get("content", None)
 
     @staticmethod
-    def __map(x):
+    def __search_view(x):
         return {
-            "title": x["title"],
+            "title": x.title,
             "key": str(x["_id"])
         }
