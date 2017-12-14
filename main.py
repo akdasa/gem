@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, redirect, request, flash
 from flask_login import LoginManager, current_user
 
 from gbcma.channel import init
@@ -48,6 +48,9 @@ def before_request():
 
     if current_user.suspended:
         return access_denied("Your account has been suspended. Reason: " + current_user.suspend_reason)
+
+    if not current_user.password and request.path not in ["/account/setup", "/account/logout"]:
+        return redirect("/account/setup")
 
 
 @app.add_template_global

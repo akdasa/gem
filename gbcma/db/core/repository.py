@@ -8,6 +8,9 @@ class Repository:
         """Initializes new instance of the Repository class."""
         self._collection = collection
 
+    def count(self, query):
+        return self._collection.count(query)
+
     def all(self):
         """Returns all items in collection.
         :return: Array of items."""

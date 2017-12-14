@@ -1,9 +1,8 @@
 from functools import wraps
 
-from flask import render_template
+from flask import render_template, redirect
 from flask_login import UserMixin, login_required
 from flask_login import current_user
-from werkzeug.utils import redirect
 
 from gbcma.db import roles
 
@@ -41,6 +40,8 @@ class User(UserMixin):
         self.__id = str(dict["_id"])
         self.__name = dict.get("name", "<Noname das>")
         self.__role = dict.get("role", None)
+        self.__login = dict.get("login", None)
+        self.__password = dict.get("password", None)
         self.__suspended = dict.get("suspend", {}).get("value", False)
         self.__suspend_reason = dict.get("suspend", {}).get("reason", False)
         self.__permissions = \
@@ -58,6 +59,10 @@ class User(UserMixin):
         return self.__name
 
     @property
+    def login(self):
+        return self.__login
+
+    @property
     def role(self):
         return self.__role
 
@@ -73,6 +78,9 @@ class User(UserMixin):
     def suspend_reason(self):
         return self.__suspend_reason
 
+    @property
+    def password(self):
+        return self.__password
 
     def has_permission(self, name):
         return name in self.__permissions

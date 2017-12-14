@@ -2,6 +2,7 @@ from flask import render_template, flash, redirect, jsonify
 from flask_login import login_required
 from inflection import singularize
 
+from gbcma.db.core.model import Model
 from gbcma.web.app.auth import has_permission, access_denied
 
 
@@ -45,7 +46,7 @@ class CrudController:
             return render_template("crud/new.html", **self.__options(), **self._extend(None))
 
         elif request.method == "POST":
-            model = {}
+            model = Model()
             self._update_model(model, request.form)
             self._repository.insert(model)
 

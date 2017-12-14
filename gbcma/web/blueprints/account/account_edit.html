@@ -4,18 +4,63 @@
 {% block title %}Edit profile{% endblock %}
 
 {% block body %}
-<form action="/account/" method="post" class="form-horizontal">
+<form action="/account/{%if setup%}setup{%else%}edit{%endif%}" method="post" class="form-horizontal">
+    {% if setup %}
     <div class="form-group">
-        <input name="name"
-               class="form-control input-lg"
-               placeholder="Name"
-               value="{{ current_user.name }}"
-               autocomplete="off">
+        <div class="col-sm-offset-2 col-sm-10">
+            <p class="lead">
+                Hello, {{current_user.name}}!
+                This is the first time you are logged in. We need some additional information from you.
+            </p>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="form-group">
+        <label for="name" class="col-sm-2 control-label">Name</label>
+        <div class="col-sm-10">
+            <input id="name"
+                   name="name"
+                   class="form-control input-lg"
+                   placeholder="Name"
+                   value="{{ current_user.name }}"
+                   autocomplete="off">
+        </div>
     </div>
 
     <div class="form-group">
-        <input type="submit"
-               class="form-control btn btn-primary">
+        <label for="login" class="col-sm-2 control-label">Login</label>
+        <div class="col-sm-10">
+            <input id="login"
+                   name="login"
+                   class="form-control"
+                   placeholder="Login"
+                   value="{{ current_user.login }}"
+                   autocomplete="off">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="password" class="col-sm-2 control-label">Password</label>
+        <div class="col-sm-10">
+            <input id="password"
+                   name="password"
+                   type="password"
+                   class="form-control"
+                   placeholder="Password"
+                   value="{{ current_user.password }}"
+                   autocomplete="off">
+            {% if setup %}
+            <p class="help-block">You do not have a password now. Enter the new one that will be used to log in.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <input type="submit"
+                   class="form-control btn btn-primary">
+        </div>
     </div>
 </form>
 {% endblock %}
