@@ -4,7 +4,6 @@ from flask_login import LoginManager, current_user
 from gbcma.channel import init
 from gbcma.db.users import UsersRepository
 from gbcma.web.app.auth import User, has_permission, access_denied
-from gbcma.web.blueprints.account import account
 from gbcma.web.blueprints.proposals import proposals
 from gbcma.web.blueprints.sessions import sessions
 from gbcma.web.blueprints.users import users
@@ -18,6 +17,7 @@ app = Flask(__name__,
 app.secret_key = 'some_secret'
 channel = init(app)
 
+from gbcma.web.blueprints.account import account
 from gbcma.web.blueprints.session import session
 
 login_manager = LoginManager()
