@@ -1,7 +1,8 @@
 from bson import ObjectId
 
-from .core import Repository
+from gbcma.db.core.model import Model
 from .config import votes
+from .core import Repository
 
 
 class VotesRepository(Repository):
@@ -14,7 +15,7 @@ class VotesRepository(Repository):
         doc = self._collection.find_one({"proposal_id": ObjectId(proposal_id)})
         if not doc:
             doc = self.create(proposal_id)
-        return doc
+        return Model(**doc)
 
     def create(self, proposal_id):
         inserted_id = self._collection.insert_one({

@@ -2,43 +2,53 @@ from gbcma.event import Event
 
 
 class SessionStage:
+    """Represents stage of a Session."""
+
     def __init__(self, session, proposal):
-        """
-        Initializes new instance of the SessionStage class.
-        :param session: Session
-        :param proposal: Proposal document
-        """
+        """Initializes new instance of the SessionStage class.
+        :type session: Session
+        :type proposal: Proposal
+        :param session: Session to which the stage belongs
+        :param proposal: Proposal document"""
         self.__session = session
         self.__proposal = proposal
         self.__changed = Event()
 
     @property
-    def kind(self):
-        return self.__kind(self.__class__.__name__)
+    def session(self):
+        """Returns session stage belongs to
+        :rtype: Session
+        :return: Session"""
+        return self.__session
+
+    @property
+    def name(self):
+        """Returns name of the stage.
+        :rtype: str
+        :return: Name"""
+        return self.__name(self.__class__.__name__)
 
     @property
     def changed(self):
+        """Stage changed event
+        :rtype: Event
+        :return: Event"""
         return self.__changed
 
     @property
     def proposal(self):
+        """Returns proposal
+        :rtype: Proposal
+        :return: Proposal"""
         return self.__proposal
 
     @property
-    def proposal_id(self):
-        return self.__proposal["_id"]
-
-    @property
-    def session(self):
-        return self.__session
-
-    @property
     def view(self):
+        """Returns view presentation of stage
+        :rtype: dict
+        :return: Dictionary"""
         return {}
 
     @staticmethod
-    def __kind(name):
-        if len(name) > 12:
-            return name.replace("SessionStage", "").lower()
-        else:
-            return name
+    def __name(name):
+        return name.replace("SessionStage", "").lower()

@@ -51,7 +51,7 @@ class SessionStages:
             },
             "next": {
                 "title": self.next.proposal["title"] if self.next and self.next.proposal else "",
-                "type": self.next.kind if self.next else ""
+                "type": self.next.name if self.next else ""
             }
         }
 

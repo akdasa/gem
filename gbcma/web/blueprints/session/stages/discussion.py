@@ -3,12 +3,57 @@ from .stage import SessionStage
 
 
 class DiscussionSessionStage(SessionStage):
-    """Represents one stage of the Session."""
+    """Represents discussion stage of the Session."""
 
     def __init__(self, session, proposal):
+        """Initializes new instance of the SessionStage class.
+        :type session: Session
+        :type proposal: Proposal
+        :param session: Session to which the stage belongs
+        :param proposal: Proposal document"""
         super().__init__(session, proposal)
         self.__queue = {}
         self.__speaking = None
+        self.__order = 0
+
+    def raise_hand(self, user):
+        """User raises a hand.
+        :type user: User
+        :param user: User"""
+        if self.__is_raised_hand(user):
+            return
+
+        self.__order += 1
+        self.__queue[user.id] = ({
+            "id": user.id,
+            "name": user.name,
+            "role": user.role,
+            "order": self.__order
+        })
+        self.changed.notify()
+
+    def withdraw_hand(self, user):
+        """User withdraws a hand.
+        :param user: User"""
+        if not self.__is_raised_hand(user):
+            return
+
+        if self.__speaking and self.__speaking["id"] == user.id:
+            self.__speaking = None
+        del self.__queue[user.id]
+        self.changed.notify()
+
+    def give_voice(self, user_id):
+        """Give a voice for specified user.
+        :param user_id: User's id
+        """
+        user = users.get(user_id)
+        if user:
+            self.__speaking = {
+                "id": user_id,
+                "name": user.name
+            }
+        self.changed.notify()
 
     @property
     def view(self):
@@ -18,38 +63,5 @@ class DiscussionSessionStage(SessionStage):
             "queue": list(map(lambda x: self.__queue[x], self.__queue))
         }
 
-    def raise_hand(self, user):
-        if self.__is_user_raised_hand(user):
-            return
-
-        self.__queue[user.id] = ({
-            "id": user.id,
-            "name": user.name,
-            "role": user.role,
-            "order": len(self.__queue)
-        })
-        self.changed.notify()
-
-    def withdraw_hand(self, user):
-        if not self.__is_user_raised_hand(user):
-            return
-
-        if self.__speaking and self.__speaking["id"] == user.id:
-            self.__speaking = None
-
-        del self.__queue[user.id]
-
-        self.changed.notify()
-
-    def give_voice(self, user_id):
-        user = users.get(user_id)
-        if user:
-            self.__speaking = {
-                "id": user_id,
-                "name": user["name"]
-            }
-        self.changed.notify()
-
-    def __is_user_raised_hand(self, user):
-        ids = map(lambda x: self.__queue[x]["id"], self.__queue)
-        return user.id in ids
+    def __is_raised_hand(self, user):
+        return user.id in self.__queue

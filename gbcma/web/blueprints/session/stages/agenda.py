@@ -1,34 +1,40 @@
-from gbcma.db import sessions
 from .stage import SessionStage
 
 
 class AgendaSessionStage(SessionStage):
     """The stage of acquaintance with the proposal."""
+
     def __init__(self, session, stages):
+        """Initializes new instance of the AgendaSessionStage class.
+        :param session: Session to which the stage belongs
+        :param stages: List of stages"""
         super().__init__(session, None)
         self.__stages = stages
-        self.__doc = sessions.get(self.session.session_id)
-        self.__agenda = self.__doc["agenda"] if self.__doc else None
 
     @property
     def view(self):
-        result = []
-        last_proposal_id = None
-        stages_with_proposal = \
-            filter(lambda x: x.proposal, self.__stages)
-
-        for stage in stages_with_proposal:
-            if last_proposal_id != stage.proposal_id:
-                last_proposal_id = stage.proposal_id
-                result.append({
-                    "title": stage.proposal["title"],
-                    "stages": []
-                })
-            else:
-                last_idx = len(result) - 1
-                result[last_idx]["stages"].append(stage.kind)
+        result = {
+            stage.proposal.id: {
+                "title": stage.proposal.title,
+                "stages": [x.name for x in self.__stages_of_proposal(stage.proposal)]
+            } for stage in self.__stages_with_proposal()
+        }
 
         return {
-            "agenda": self.__agenda,
-            "proposals": result
+            "agenda": self.session.agenda,
+            "proposals": list(result.values())
         }
+
+    def __stages_with_proposal(self):
+        """Returns list of stages with proposals
+        :rtype: list
+        :return: Stages"""
+        return filter(lambda x: x.proposal, self.__stages)
+
+    def __stages_of_proposal(self, proposal):
+        """Returns list of stages for specified proposal
+        :param proposal: Proposal
+        :return: List of stages"""
+        if not proposal:
+            return []
+        return filter(lambda x: x.proposal.id == proposal.id, self.__stages_with_proposal())

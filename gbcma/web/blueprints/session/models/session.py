@@ -14,6 +14,10 @@ class Session:
         Initializes new instance of the Session class.
         :param session_id: Session Id
         """
+
+        self.__doc = sessions.get(session_id)
+        self.__agenda = self.__doc.agenda if self.__doc else None
+
         self.__session_id = session_id
         self.__stages = SessionStages(self)
         self.__users = SessionUsers(self)
@@ -22,6 +26,10 @@ class Session:
         # subscribe for aspects' events
         self.__users.changed.subscribe(self.__on_user_state_changed)
         self.__stages.changed.subscribe(self.__on_stage_changed)
+
+    @property
+    def agenda(self):
+        return self.__agenda
 
     @property
     def session_id(self):
@@ -64,13 +72,13 @@ class Session:
         stage_index = self.__stages.index
 
         result = {"stage": {
-            "type": stage.kind
+            "type": stage.name
         }}
 
         if stage.proposal:
             result["proposal"] = {
-                "title": stage.proposal["title"],
-                "content": stage.proposal["content"]}
+                "title": stage.proposal.title,
+                "content": stage.proposal.content}
             result["progress"] = {
                 "index": stage_index + 1,
                 "total": stages_count}
