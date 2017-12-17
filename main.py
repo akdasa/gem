@@ -46,7 +46,7 @@ def before_request():
     if not hasattr(current_user, "suspended"):
         return
 
-    if current_user.suspended:
+    if current_user.suspended and request.path not in ["/account/logout"]:
         return access_denied("Your account has been suspended. Reason: " + current_user.suspend_reason)
 
     if not current_user.password and request.path not in ["/account/setup", "/account/logout"]:
