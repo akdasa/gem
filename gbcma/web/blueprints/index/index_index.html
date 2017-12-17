@@ -1,19 +1,18 @@
 {% extends "general.html" %}
 {% set active_page = "index" %}
 
-{% block title %}GBCMA{% endblock %}
+{% block title %}GEM{% endblock %}
 
 {% block jumbotron %}
 <div class="jumbotron">
     <div class="container">
         <center>
-        <h1>GBC Meeting</h1>
-        <p class="lead">Application to improve GBC meeting experience</p>
+        <img src="/static/logo.svg" alt="GEM" style="width: 75%; height: auto; max-height:250px;">
 
         {% if not current_user.is_authenticated %}
             <div class="well">
                 <form class="form-signin" action="/account/login" method="post">
-                    <label for="login" class="sr-only">Email address or name</label>
+                    <label for="login" class="sr-only">Login or name</label>
                     <input id="login" name="login" class="form-control" placeholder="Login or name" autofocus>
                     <label for="password" class="sr-only">Password</label>
                     <input type="password" id="password" name="password" class="form-control" placeholder="Password">
