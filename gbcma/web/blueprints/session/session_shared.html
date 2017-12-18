@@ -16,7 +16,7 @@
 </script>
 
 
-{% for stage in ['acquaintance', 'agenda', 'closed', 'commenting', 'discussion', 'voting'] %}
+{% for stage in ['acquaintance', 'agenda', 'closed', 'commenting', 'discussion', 'voting', 'voting_results'] %}
     <script id="stage-{{stage}}" type="text/x-handlebars-template">
         {% include "views/session_stage_" + stage + ".html" %}
     </script>

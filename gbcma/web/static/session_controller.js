@@ -101,7 +101,7 @@ function createSessionController(sessionKey) {
         var html = me.stageTemplate(data)
         $("#stage").html(html)
 
-        if (data.stage.type == "voting") {
+        if (data.stage.type == "votingresults") {
             $('.vote-details').popover({ trigger: "hover" })
         }
     }
@@ -166,6 +166,7 @@ $(document).ready(function() {
     Handlebars.registerPartial('agenda', $("#stage-agenda").html())
     Handlebars.registerPartial('acquaintance', $("#stage-acquaintance").html())
     Handlebars.registerPartial('voting', $("#stage-voting").html())
+    Handlebars.registerPartial('votingresults', $("#stage-voting_results").html())
     Handlebars.registerPartial('commenting', $("#stage-commenting").html())
     Handlebars.registerPartial('discussion', $("#stage-discussion").html())
     Handlebars.registerPartial('closed', $("#stage-closed").html())

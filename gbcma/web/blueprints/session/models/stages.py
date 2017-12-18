@@ -1,12 +1,7 @@
 from gbcma.db import sessions, proposals
 from gbcma.event import Event
 
-from gbcma.web.blueprints.session.stages.acquaintance import AcquaintanceSessionStage
-from gbcma.web.blueprints.session.stages.agenda import AgendaSessionStage
-from gbcma.web.blueprints.session.stages.close import ClosedSessionStage
-from gbcma.web.blueprints.session.stages.comment import CommentingSessionStage
-from gbcma.web.blueprints.session.stages.vote import VotingSessionStage
-from gbcma.web.blueprints.session.stages.discussion import DiscussionSessionStage
+from ..stages import *
 
 
 class SessionStages:
@@ -64,6 +59,7 @@ class SessionStages:
             stages = [
                 AcquaintanceSessionStage(self.__session, proposal),
                 VotingSessionStage(self.__session, proposal),
+                VotingResultsSessionStage(self.__session, proposal),
                 CommentingSessionStage(self.__session, proposal),
                 DiscussionSessionStage(self.__session, proposal)]
 
