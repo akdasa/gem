@@ -78,3 +78,7 @@ html {
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
+
+.btn-join-session {
+  margin-top: -4px;
+}

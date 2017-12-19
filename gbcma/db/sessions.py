@@ -1,7 +1,9 @@
 import datetime
 
-from .core import Repository
+import pymongo
+
 from .config import sessions
+from .core import Repository
 
 
 class SessionsRepository(Repository):
@@ -14,10 +16,12 @@ class SessionsRepository(Repository):
         return self._collection.find({"status": "run"})
 
     def upcoming(self):
-        now = datetime.datetime.now()
-
+        today = datetime.datetime.today()
         return self._collection.find({
             "date": {
-                "$gte": now.isoformat()
+                "$gte": today.strftime('%Y/%m/%d')
+            },
+            "status": {
+                "$ne": "closed"
             }
-        })
+        }).sort([("date", pymongo.ASCENDING)])

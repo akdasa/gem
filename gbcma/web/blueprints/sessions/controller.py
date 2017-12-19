@@ -35,10 +35,10 @@ class SessionsController(CrudController):
         presence = data.getlist("presence")
         vote = data.getlist("vote")
 
-        model.title = data.get("title", None),
-        model.agenda = data.get("agenda", None),
-        model.date = data.get("date", None),
-        model.proposals = ids,
+        model.title = data.get("title", None)
+        model.agenda = data.get("agenda", None)
+        model.date = data.get("date", None)
+        model.proposals = ids
         model.permissions = {
             "presence": presence,
             "vote": vote
