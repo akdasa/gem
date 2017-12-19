@@ -24,11 +24,11 @@ function extendSessionController(me) {
     }
 
     me.raiseHand = function() {
-        me.socket.emit("raise_hand", {})
+        me.socket.emit("manage", { command: "raise_hand" })
     }
 
     me.withdrawHand = function() {
-        me.socket.emit("withdraw_hand", {})
+        me.socket.emit("manage", { command: "withdraw_hand" })
     }
 
     me.setQuotation = function(value) {

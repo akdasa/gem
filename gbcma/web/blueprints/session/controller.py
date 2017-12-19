@@ -80,39 +80,14 @@ class SessionController:
         quote = data.get("quote", None)
         return session.stages.current.comment(user, content, kind, quote)
 
-    def raise_hand(self, socket_id, user, data):
-        """On raise hand command received.
-        :param socket_id: SocketIO Id
-        :param user: User
-        :param data: Data"""
-        session = self.__sockets.session_of(socket_id)
-        return session.stages.current.raise_hand(user)
-
-    def withdraw_hand(self, socket_id, user, data):
-        """On withdraw hand command received.
-        :param socket_id: SocketIO Id
-        :param user: User
-        :param data: Data"""
-        session = self.__sockets.session_of(socket_id)
-        return session.stages.current.withdraw_hand(user)
-
-    def give_voice(self, socket_id, user, data):
-        """On give voice command received.
-        :param socket_id: SocketIO Id
-        :param user: User
-        :param data: Data"""
-        session = self.__sockets.session_of(socket_id)
-        to_user_id = data.get("user_id", None)
-        return session.stages.current.give_voice(to_user_id)
-
     def set_timer(self, socket_id, data):
         minutes = data.get("interval", 1)
         session = self.__sockets.session_of(socket_id)
         return session.notify("timer", {"interval": minutes})
 
-    def manage(self, socket_id, data):
+    def manage(self, socket_id, user, data):
         session = self.__sockets.session_of(socket_id)
-        return session.stages.current.manage(data)
+        return session.stages.current.manage(data, user=user)
 
     def close(self, socket_id):
         """On close stage command received.

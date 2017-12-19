@@ -28,7 +28,7 @@ function extendSessionController(me) {
     }
 
     me.giveVoice = function(user_id) {
-        me.socket.emit("give_voice", { user_id: user_id })
+        me.socket.emit("manage", { command: "give_voice", user_id: user_id })
     }
 
     me.setCountdownTimer = function(minutes) {

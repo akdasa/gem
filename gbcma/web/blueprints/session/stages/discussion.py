@@ -16,7 +16,17 @@ class DiscussionSessionStage(SessionStage):
         self.__speaking = None
         self.__order = 0
 
-    def raise_hand(self, user):
+    def manage(self, data, user=None):
+        cmd = data.get("command", None)
+
+        if cmd == "raise_hand":
+            self.__raise_hand(user)
+        if cmd == "withdraw_hand":
+            self.__withdraw_hand(user)
+        if cmd == "give_voice":
+            self.__give_voice(data["user_id"])
+
+    def __raise_hand(self, user):
         """User raises a hand.
         :type user: User
         :param user: User"""
@@ -32,7 +42,7 @@ class DiscussionSessionStage(SessionStage):
         })
         self.changed.notify()
 
-    def withdraw_hand(self, user):
+    def __withdraw_hand(self, user):
         """User withdraws a hand.
         :param user: User"""
         if not self.__is_raised_hand(user):
@@ -43,10 +53,9 @@ class DiscussionSessionStage(SessionStage):
         del self.__queue[user.id]
         self.changed.notify()
 
-    def give_voice(self, user_id):
+    def __give_voice(self, user_id):
         """Give a voice for specified user.
-        :param user_id: User's id
-        """
+        :param user_id: User's id"""
         user = users.get(user_id)
         if user:
             self.__speaking = {

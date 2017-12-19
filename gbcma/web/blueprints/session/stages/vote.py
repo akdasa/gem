@@ -52,7 +52,7 @@ class VotingSessionStage(VotingBaseSessionStage):
         self.changed.notify()
         return True
 
-    def manage(self, data):
+    def manage(self, data, user=None):
         self._doc.private = data.get("private", True)
 
     @property
