@@ -110,6 +110,10 @@ class SessionController:
         session = self.__sockets.session_of(socket_id)
         return session.notify("timer", {"interval": minutes})
 
+    def manage(self, socket_id, data):
+        session = self.__sockets.session_of(socket_id)
+        return session.stages.current.manage(data)
+
     def close(self, socket_id):
         """On close stage command received.
         :param socket_id: SocketIO Id"""

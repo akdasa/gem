@@ -33,13 +33,16 @@ class SessionStages:
         return self.__stages[self.__stage_idx + 1] if len(self.__stages) > self.__stage_idx + 1 else None
 
     def change(self, step=1):
+        self.current.on_leave()
         self.__stage_idx += step
         if self.__stage_idx <= 0:
             self.__stage_idx = 0
         if self.__stage_idx >= len(self.__stages):
             self.__stage_idx = len(self.__stages) - 1
 
+        self.current.on_enter()
         self.__changed.notify(self.current)
+
         return {
             "current": {
                 "title": self.current.proposal["title"] if self.current.proposal else ""

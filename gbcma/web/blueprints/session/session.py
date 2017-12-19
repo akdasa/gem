@@ -87,3 +87,11 @@ def on_disconnect():
 @login_required
 def on_timer(data):
     return controller.set_timer(request.sid, data)
+
+
+@channel.on("manage")
+@login_required
+def on_manage(data):
+    return controller.manage(request.sid, data)
+
+

@@ -25,6 +25,7 @@ class RolesController(CrudController):
             {"name": "roles.update", "desc": "Update existing role"},
             {"name": "roles.delete", "desc": "Delete role"},
             {"name": "vote", "desc": "Vote"},  # 18
+            {"name": "vote.manage", "desc": "Manage voting"},
             {"name": "comment", "desc": "Comment"},
             {"name": "discussion.manage", "desc": "Manage discussion: give/withdraw a voice."}]
 
@@ -42,6 +43,6 @@ class RolesController(CrudController):
                 {"name": "Users", "roles": self._permissions[4:8]},
                 {"name": "Sessions", "roles": self._permissions[8:14]},
                 {"name": "Roles", "roles": self._permissions[14:18]},
-                {"name": "Misc", "roles": self._permissions[18:21]}
+                {"name": "Misc", "roles": self._permissions[18:22]}
             ]
         }

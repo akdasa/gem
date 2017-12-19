@@ -8,6 +8,12 @@
             </div>
         </div>
 
+        {{#ifHas user.permissions "vote.manage" }}
+            <div class="checkbox">
+                <label><input type="checkbox" id="vote-private" {{#if private}}checked{{/if}}> Private</label>
+            </div>
+        {{/ifHas}}
+
         {{#ifHas user.permissions "vote" }}
             <a id="vote-yes" href="#" class="btn btn-success vote" data-vote="yes">
                 <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Yes

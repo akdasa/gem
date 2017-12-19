@@ -20,6 +20,7 @@ class VotesRepository(Repository):
     def create(self, proposal_id):
         inserted_id = self._collection.insert_one({
             "proposal_id": proposal_id,
+            "private": True,
             "votes": {}
         }).inserted_id
         return self.get(inserted_id)

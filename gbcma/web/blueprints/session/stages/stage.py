@@ -49,6 +49,12 @@ class SessionStage:
         :return: Dictionary"""
         return {}
 
+    def on_enter(self):
+        pass
+
+    def on_leave(self):
+        pass
+
     @staticmethod
     def __name(name):
         return name.replace("SessionStage", "").lower()
