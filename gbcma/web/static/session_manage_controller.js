@@ -2,7 +2,6 @@ function extendSessionController(me) {
     me.nextStageLabel = $("#state-next")
 
     me.onChangeStageResponse = function(data) {
-        console.log(data);
         if (data.next.title != data.current.title) {
             var title = data.next.title ? " &laquo;" + data.next.title + "&raquo;" : ""
             me.nextStageLabel.html(title)

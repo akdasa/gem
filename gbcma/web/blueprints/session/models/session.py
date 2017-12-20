@@ -10,14 +10,8 @@ class Session:
     """Represents Session."""
 
     def __init__(self, session_id):
-        """
-        Initializes new instance of the Session class.
-        :param session_id: Session Id
-        """
-
-        self.__doc = sessions.get(session_id)
-        self.__agenda = self.__doc.agenda if self.__doc else None
-
+        """Initializes new instance of the Session class.
+        :param session_id: Session Id"""
         self.__session_id = session_id
         self.__stages = SessionStages(self)
         self.__users = SessionUsers(self)
@@ -26,10 +20,6 @@ class Session:
         # subscribe for aspects' events
         self.__users.changed.subscribe(self.__on_user_state_changed)
         self.__stages.changed.subscribe(self.__on_stage_changed)
-
-    @property
-    def agenda(self):
-        return self.__agenda
 
     @property
     def session_id(self):
@@ -71,17 +61,18 @@ class Session:
         stages_count = self.__stages.count
         stage_index = self.__stages.index
 
-        result = {"stage": {
-            "type": stage.name
-        }}
+        result = {
+            "stage": {
+                "type": stage.name
+            },
+            "progress": {
+                "index": stage_index + 1,
+                "total": stages_count
+            }
+        }
 
         if stage.proposal:
-            result["proposal"] = {
-                "title": stage.proposal.title,
-                "content": stage.proposal.content}
-            result["progress"] = {
-                "index": stage_index + 1,
-                "total": stages_count}
+            result["proposal_id"] = str(stage.proposal.id)
 
         result.update(stage.view)
         return result

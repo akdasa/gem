@@ -1,6 +1,6 @@
 from flask import render_template
 
-from gbcma.db import sessions
+from gbcma.db import sessions, proposals
 from gbcma.web.app.auth import access_denied
 from .socket_sessions import SocketSessions
 
@@ -20,19 +20,27 @@ class SessionController:
         :param user User
         :param manage: Is it a managing page?"""
         template = "session_index.html" if not manage else "session_manage.html"
-        session = sessions.get(session_id)
-        if not session:
+        session_doc = sessions.get(session_id)
+
+        # check the permissions
+        if not session_doc:
             return access_denied("No session found")
         if not manage and not user.has_permission("session.join"):
             return access_denied()
         if manage and not user.has_permission("session.manage"):
             return access_denied()
-        if session.get("status", None) != "run":
+        if session_doc.get("status", None) != "run":
             return access_denied("Session is not started yet or closed")
-        if user.role not in session["permissions"]["presence"]:
+        if user.role not in session_doc["permissions"]["presence"]:
             return access_denied("You have no rights to join this session")
 
-        return render_template(template, session=session)
+        # fetch additional data
+        proposal_docs = proposals.find({"_id": {"$in": session_doc.proposals}})
+        proposal_map = {
+            str(proposal.id): {"title": proposal.title, "content": proposal.content} for proposal in proposal_docs
+        }
+
+        return render_template(template, session=session_doc, proposals=proposal_map)
 
     # Messages ---------------------------------------------------------------------------------------------------------
 

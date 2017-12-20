@@ -22,6 +22,13 @@ class SessionStage:
         return self.__session
 
     @property
+    def proposal(self):
+        """Returns proposal
+        :rtype: Proposal
+        :return: Proposal"""
+        return self.__proposal
+
+    @property
     def name(self):
         """Returns name of the stage.
         :rtype: str
@@ -36,13 +43,6 @@ class SessionStage:
         return self.__changed
 
     @property
-    def proposal(self):
-        """Returns proposal
-        :rtype: Proposal
-        :return: Proposal"""
-        return self.__proposal
-
-    @property
     def view(self):
         """Returns view presentation of stage
         :rtype: dict
@@ -50,9 +50,11 @@ class SessionStage:
         return {}
 
     def on_enter(self):
+        """Calls when the stage is activated."""
         pass
 
     def on_leave(self):
+        """Calls when the stage is deactivated."""
         pass
 
     @staticmethod

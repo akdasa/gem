@@ -6,7 +6,7 @@
         <div class="panel-heading">Current proposal (Stage: {{progress.index}}/{{progress.total}})</div>
         <div class="panel-body">
             <h1>{{ proposal.title }}</h1>
-            <p>{{ trimString proposal.content 512 }}</p>
+            <p>{{ proposal.content }}</p>
         </div>
     </div>
     {{/if}}

@@ -2,18 +2,15 @@
 <div class="panel panel-default">
     <div class="panel-heading">Agenda</div>
     <div class="panel-body">
-        <p>{{agenda}}</p>
+        {{#if agenda}}
+            <p>{{agenda}}</p>
+        {{/if}}
 
-        <ul>
+        <ol>
         {{#each proposals}}
-            <li>
-                {{title}}
-                {{#each stages}}
-                    <span class="label label-info">{{@this}}</span>
-                {{/each}}
-            </li>
+            <li>{{title}}</li>
         {{/each}}
-        </ul>
+        </ol>
     </div>
 </div>
 {%endraw%}

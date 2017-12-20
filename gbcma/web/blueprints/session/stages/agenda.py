@@ -1,8 +1,9 @@
+from gbcma.db import sessions
 from .stage import SessionStage
 
 
 class AgendaSessionStage(SessionStage):
-    """The stage of acquaintance with the proposal."""
+    """Agenda stage."""
 
     def __init__(self, session, stages):
         """Initializes new instance of the AgendaSessionStage class.
@@ -13,15 +14,20 @@ class AgendaSessionStage(SessionStage):
 
     @property
     def view(self):
+        # retrieve session document from db
+        session_doc = sessions.get(self.session.session_id)
+
+        # get list of proposals keyed by id:
+        # { proposal.id: { title: proposal.title } }
+        # it will return list on unique proposals used in the stages
         result = {
-            stage.proposal.id: {
-                "title": stage.proposal.title,
-                "stages": [x.name for x in self.__stages_of_proposal(stage.proposal)]
-            } for stage in self.__stages_with_proposal()
+            stage.proposal.id: {"title": stage.proposal.title}
+            for stage in self.__stages_with_proposal()
         }
 
+        # returns view of the stage
         return {
-            "agenda": self.session.agenda,
+            "agenda": session_doc.agenda,
             "proposals": list(result.values())
         }
 
@@ -30,11 +36,3 @@ class AgendaSessionStage(SessionStage):
         :rtype: list
         :return: Stages"""
         return filter(lambda x: x.proposal, self.__stages)
-
-    def __stages_of_proposal(self, proposal):
-        """Returns list of stages for specified proposal
-        :param proposal: Proposal
-        :return: List of stages"""
-        if not proposal:
-            return []
-        return filter(lambda x: x.proposal.id == proposal.id, self.__stages_with_proposal())

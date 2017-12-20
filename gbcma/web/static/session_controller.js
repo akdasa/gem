@@ -5,7 +5,8 @@ function createSessionController(sessionKey) {
         user: {},
         countdownTimer: null,
         timerPanel: $("#timer-panel"),
-        lastStageType: null
+        lastStageType: null,
+        proposals: JSON.parse($("#proposals").html())
     }
 
     // Handlers --------------------------------------------------------------------------------------------------------
@@ -34,6 +35,7 @@ function createSessionController(sessionKey) {
     }
 
     me.onStageMessage = function(data) {
+        // stage changed. Lets stop timer
         if (data.stage.type != me.lastStageType) {
             me.stopTimer()
             me._showTimerPanel(false)
@@ -41,7 +43,6 @@ function createSessionController(sessionKey) {
 
         me.lastStageType = data.stage.type
         me._renderStage(data)
-
     }
 
     me.onConnected = function(socket) {
@@ -95,12 +96,21 @@ function createSessionController(sessionKey) {
     }
 
     me._renderStage = function(data) {
+        // provide some additional data for template
         data.stageType = function() { return data.stage.type }
         data.user = me.user
 
+        // load cached proposal data if proposal id is provided
+        if (data.proposal_id) {
+            data.proposal = me.proposals[data.proposal_id]
+        }
+
+        // render template and apply to DOM
         var html = me.stageTemplate(data)
         $("#stage").html(html)
 
+        // some dynamic
+        // TODO: extract to somewhere else
         if (data.stage.type == "votingresults") {
             $('.vote-details').popover({ trigger: "hover" })
         }
