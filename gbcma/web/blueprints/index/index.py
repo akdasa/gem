@@ -16,5 +16,5 @@ def __upcoming_sessions_for_user(user):
     if user and hasattr(user, "role"):
         upcoming = sessions.upcoming()
         result = filter(lambda x: user.role in x["permissions"]["presence"], upcoming)
-        return list(result)
+        return list(result)[:3]
     return []
