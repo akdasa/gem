@@ -1,5 +1,5 @@
-from gbcma.db import roles, users
-from gbcma.db.config import laws
+from gem.db import roles, users
+from gem.db.config import laws
 
 roles.insert({
     "name" : "Secretary",

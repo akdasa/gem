@@ -1,5 +1,5 @@
 import random
-from gbcma.db import users
+from gem.db import users
 
 roles = ["Deputy", "GBC", "Guest", "Minister"]
 

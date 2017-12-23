@@ -1,26 +1,26 @@
 from flask import Flask, redirect, request, flash
 from flask_login import LoginManager, current_user
 
-from gbcma.channel import init
-from gbcma.db.users import UsersRepository
-from gbcma.web.app.auth import User, has_permission, access_denied
-from gbcma.web.blueprints.proposals import proposals
-from gbcma.web.blueprints.sessions import sessions
-from gbcma.web.blueprints.users import users
-from gbcma.web.blueprints.roles import roles
-from gbcma.web.blueprints.index import index
-from gbcma.web.blueprints.laws import laws
-from gbcma.web.blueprints.search import search
+from gem.channel import init
+from gem.db.users import UsersRepository
+from gem.web.app.auth import User, has_permission, access_denied
+from gem.web.blueprints.proposals import proposals
+from gem.web.blueprints.sessions import sessions
+from gem.web.blueprints.users import users
+from gem.web.blueprints.roles import roles
+from gem.web.blueprints.index import index
+from gem.web.blueprints.laws import laws
+from gem.web.blueprints.search import search
 
 
 app = Flask(__name__,
-            template_folder="gbcma/web/templates",
-            static_folder="gbcma/web/static")
+            template_folder="gem/web/templates",
+            static_folder="gem/web/static")
 app.secret_key = 'some_secret'
 channel = init(app)
 
-from gbcma.web.blueprints.account import account
-from gbcma.web.blueprints.session import session
+from gem.web.blueprints.account import account
+from gem.web.blueprints.session import session
 
 login_manager = LoginManager()
 
