@@ -1,0 +1,30 @@
+{% extends "general.html" %}
+{% set active_page = "search" %}
+
+{% block title %}GEM{% endblock %}
+
+
+{% block body %}
+
+    {% if results %}
+    <ol>
+    {% for result in results %}
+        <li>
+        <h3>
+            <a href="{{result.link}}">{{ result.title|safe }}</a>
+        </h3>
+        <p>
+            <ul class="list-unstyled">
+            {% for match in result.matches %}
+                <li>...{{ match|safe }}...</li>
+            {% endfor %}
+            </ul>
+        </p>
+        </li>
+    {% endfor %}
+    </ol>
+    {% else %}
+        <h3>Nothing found</h3>
+    {% endif %}
+
+{% endblock %}

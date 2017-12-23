@@ -1,0 +1,2 @@
+from .laws import laws
+

@@ -1,4 +1,5 @@
 from gbcma.db import roles, users
+from gbcma.db.config import laws
 
 roles.insert({
     "name" : "Secretary",
@@ -24,8 +25,10 @@ roles.insert({
 })
 
 users.insert({
-    "name" : "Secretary das",
-    "login" : "secretary",
-    "password" : "pwd",
-    "role" : "Secretary"
+    "name": "Secretary das",
+    "login": "secretary",
+    "password": "pwd",
+    "role": "Secretary"
 })
+
+laws.create_index([('$**','text')])

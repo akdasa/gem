@@ -82,3 +82,7 @@ html {
 .btn-join-session {
   margin-top: -4px;
 }
+
+.search-highlight {
+    background-color: #FFFF00
+}

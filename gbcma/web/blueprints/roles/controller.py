@@ -24,7 +24,11 @@ class RolesController(CrudController):
             {"name": "roles.read", "desc": "Read role data"},
             {"name": "roles.update", "desc": "Update existing role"},
             {"name": "roles.delete", "desc": "Delete role"},
-            {"name": "vote", "desc": "Vote"},  # 18
+            {"name": "laws.create", "desc": "Create new law"},  # 18
+            {"name": "laws.read", "desc": "Read law"},
+            {"name": "laws.update", "desc": "Update existing law"},
+            {"name": "laws.delete", "desc": "Delete law"},
+            {"name": "vote", "desc": "Vote"},  # 22
             {"name": "vote.manage", "desc": "Manage voting"},
             {"name": "comment", "desc": "Comment"},
             {"name": "discussion.manage", "desc": "Manage discussion: give/withdraw a voice."}]
@@ -43,6 +47,7 @@ class RolesController(CrudController):
                 {"name": "Users", "roles": self._permissions[4:8]},
                 {"name": "Sessions", "roles": self._permissions[8:14]},
                 {"name": "Roles", "roles": self._permissions[14:18]},
-                {"name": "Misc", "roles": self._permissions[18:22]}
+                {"name": "Laws", "roles": self._permissions[18:22]},
+                {"name": "Misc", "roles": self._permissions[22:26]}
             ]
         }

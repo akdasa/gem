@@ -9,6 +9,8 @@ from gbcma.web.blueprints.sessions import sessions
 from gbcma.web.blueprints.users import users
 from gbcma.web.blueprints.roles import roles
 from gbcma.web.blueprints.index import index
+from gbcma.web.blueprints.laws import laws
+from gbcma.web.blueprints.search import search
 
 
 app = Flask(__name__,
@@ -29,6 +31,8 @@ app.register_blueprint(roles, url_prefix="/roles")
 app.register_blueprint(sessions, url_prefix="/sessions")
 app.register_blueprint(account, url_prefix="/account")
 app.register_blueprint(session, url_prefix="/session")
+app.register_blueprint(laws, url_prefix="/laws")
+app.register_blueprint(search, url_prefix="/search")
 
 login_manager.init_app(app)
 login_manager.login_view = "account.login"

@@ -32,6 +32,10 @@
                 <li class="{%if active_page=='roles'%}active{%endif%}"><a href="/roles">Roles</a></li>
                 {% endif %}
 
+                {% if user_has_permission("laws.read") %}
+                <li class="{%if active_page=='laws'%}active{%endif%}"><a href="/laws">Laws</a></li>
+                {% endif %}
+
                 {% if user_has_permission("sessions.read") %}
                 <li class="{%if active_page=='sessions'%}active{%endif%}"><a href="/sessions">Sessions</a></li>
                 {% endif %}
@@ -56,6 +60,20 @@
                 </li>
             {% endif %}
             </ul>
+
+            <div class="col-sm-3 col-md-3 navbar-right">
+                <form action="/search" class="navbar-form" role="search" style="padding-top:5px" target="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control input-sm" placeholder="Search" name="q">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default btn-sm" type="submit">
+                                <i class="glyphicon glyphicon-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
         </div>
 
     </div>

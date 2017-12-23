@@ -1,0 +1,57 @@
+{% macro form(model, action='', allow_edit=true) -%}
+    {% if allow_edit %}
+        <form action="{{ action }}" method="post" class="form-horizontal">
+            <!-- Key -->
+            <div class="form-group">
+                <label for="key" class="col-sm-2 control-label">Key</label>
+                <div class="col-sm-10">
+                    <input id="key"
+                           name="key"
+                           class="form-control input-lg"
+                           placeholder="Unique key"
+                           value="{{ model.key }}"
+                           autocomplete="off">
+                </div>
+            </div>
+
+            <!-- Title -->
+            <div class="form-group">
+                <label for="title" class="col-sm-2 control-label">Title</label>
+                <div class="col-sm-10">
+                    <input id="title"
+                           name="title"
+                           class="form-control input-lg"
+                           placeholder="Title"
+                           value="{{ model.title }}"
+                           autocomplete="off">
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="form-group">
+                <label for="content" class="col-sm-2 control-label">Content</label>
+                <div class="col-sm-10">
+                    <textarea id="content"
+                              name="content"
+                              class="form-control"
+                              rows="20"
+                              placeholder="Paste or write content here">
+                        {{- model.content -}}
+                    </textarea>
+                </div>
+            </div>
+
+            <!-- Submit -->
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <input id="submit"
+                           type="submit"
+                           class="form-control btn btn-primary">
+                </div>
+            </div>
+        </form>
+    {% else %}
+        <h1>{{model.title}}</h1>
+        <p>{{model.content}}</p>
+    {% endif %}
+{%- endmacro %}

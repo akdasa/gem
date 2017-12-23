@@ -4,6 +4,7 @@ from gbcma.db.sessions import SessionsRepository
 from gbcma.db.users import UsersRepository
 from gbcma.db.votes import VotesRepository
 from gbcma.db.roles import RolesRepository
+from gbcma.db.laws import LawsRepository
 
 proposals = ProposalsRepository()
 users = UsersRepository()
@@ -11,3 +12,4 @@ sessions = SessionsRepository()
 votes = VotesRepository()
 comments = CommentsRepository()
 roles = RolesRepository()
+laws = LawsRepository()
