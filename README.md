@@ -1,3 +1,3 @@
-![GitHub Logo](/gbcma/web/static/logo.svg)
+![GitHub Logo](/gem/web/static/logo.svg)
 
 Application to improve GBC meeting experience
