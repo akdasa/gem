@@ -5,6 +5,10 @@ from .stage import SessionStage
 class CommentingSessionStage(SessionStage):
     """The stage of commenting for the document."""
 
+    def __init__(self, session, proposal):
+        super().__init__(session, proposal)
+        self.__private = True  # show comments on users' pages
+
     def comment(self, user, message, kind, quote=None):
         """Create comment
         :type user: User
@@ -20,10 +24,14 @@ class CommentingSessionStage(SessionStage):
         self.changed.notify()
         return True
 
+    def manage(self, data, user=None):
+        self.__private = data.get("private", True)
+        self.changed.notify()
+
     @property
     def view(self):
         docs = comments.of(self.proposal.id)
-        return {"comments": list(map(self.__map, docs))}
+        return {"comments": list(map(self.__map, docs)), "private": self.__private}
 
     @staticmethod
     def __map(x):

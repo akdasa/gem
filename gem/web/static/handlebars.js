@@ -38,6 +38,44 @@ Handlebars.registerHelper('ifHas', function(array, value, options) {
     return options.inverse(this);
 });
 
+Handlebars.registerHelper('has', function(array, value, options) {
+    var value = (array.indexOf(value) != -1)
+    if (value) {
+        return true;
+    }
+    return false;
+});
+
 Handlebars.registerHelper('list', function(array) {
     return array.join(", ");
+});
+
+Handlebars.registerHelper({
+    eq: function (v1, v2) {
+        return v1 === v2;
+    },
+    ne: function (v1, v2) {
+        return v1 !== v2;
+    },
+    lt: function (v1, v2) {
+        return v1 < v2;
+    },
+    gt: function (v1, v2) {
+        return v1 > v2;
+    },
+    lte: function (v1, v2) {
+        return v1 <= v2;
+    },
+    gte: function (v1, v2) {
+        return v1 >= v2;
+    },
+    and: function (v1, v2) {
+        return v1 && v2;
+    },
+    or: function (v1, v2) {
+        return v1 || v2;
+    },
+    not: function (v1) {
+        return !v1;
+    }
 });

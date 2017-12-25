@@ -1,6 +1,24 @@
 {%raw%}
+
+{{!-- Hide the entire block if comments are private,
+      but show it for user with 'comment.manage' permission --}}
+
+{{#if (or (not private) (has user.permissions "comment.manage"))}}
 <div class="panel panel-default">
-    <div class="panel-heading">Comments</div>
+    <div class="panel-heading">
+        Comments
+
+        {{!-- Show "private" checkbox if user has
+              appropriate permissions --}}
+        {{#ifHas user.permissions "comment.manage"}}
+        <div class="pull-right">
+            <label><input id="comment-private" type="checkbox" {{#if private}}checked{{/if}}> Private</label>
+        </div>
+        {{/ifHas}}
+    </div>
+
+
+    {{!-- Render each comment --}}
     <div class="panel-body">
         {{#each comments}}
         <div class="media">
@@ -19,13 +37,16 @@
         {{/each}}
     </div>
 </div>
+{{/if}}
+
 
 {{#ifHas user.permissions "comment"}}
 <div class="panel panel-default">
     <div class="panel-heading">Add comment</div>
     <div class="panel-body">
         <blockquote id="quotation" hidden="hidden"></blockquote>
-        <textarea id="comment-message" class="form-control" placeholder="Write down your PMI here. Select text from document above for a quote."></textarea>
+        <textarea id="comment-message" class="form-control"
+                  placeholder="Write down your PMI here. Select text from document above for a quote."></textarea>
         <div class="btn-group btn-group-sm btn-group-justified" role="group">
             <a role="button" class="comment-add btn btn-success" data-type="plus">Plus</a>
             <a role="button" class="comment-add btn btn-danger" data-type="minus">Minus</a>

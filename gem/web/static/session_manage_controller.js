@@ -35,9 +35,11 @@ function extendSessionController(me) {
     }
 
     me.setVotingPrivate = function(value) {
-        me.socket.emit("manage", {
-            "private": value
-        })
+        me.socket.emit("manage", { "private": value })
+    }
+
+    me.setCommentingPrivate = function(value) {
+        me.socket.emit("manage", { "private": value })
     }
 
     return me
@@ -74,6 +76,11 @@ $(document).ready(function() {
         controller.setVotingPrivate(val)
     })
 
+    $("#stage").on("change", "#comment-private", function(e) {
+        e.preventDefault()
+        var val = $(this).is(":checked")
+        controller.setCommentingPrivate(val)
+    })
 
 
     $(".timer-set").on("click", function(e) {
