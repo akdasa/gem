@@ -1,6 +1,15 @@
 {%raw%}
 <div class="panel panel-default">
-    <div class="panel-heading">Votes ({{voted}} of {{total}})</div>
+    <div class="panel-heading">
+        Votes ({{voted}} of {{total}})
+
+        {{#ifHas user.permissions "vote.manage" }}
+        <div class="pull-right">
+            <label><input type="checkbox" id="vote-private" {{#if private}}checked{{/if}}> Private</label>
+        </div>
+        {{/ifHas}}
+    </div>
+
     <div class="panel-body">
         <div class="progress">
             <div class="progress-bar" role="progressbar" style="width: {{percentRound voted total}}%">
@@ -8,22 +17,16 @@
             </div>
         </div>
 
-        {{#ifHas user.permissions "vote.manage" }}
-            <div class="checkbox">
-                <label><input type="checkbox" id="vote-private" {{#if private}}checked{{/if}}> Private</label>
-            </div>
-        {{/ifHas}}
-
         {{#ifHas user.permissions "vote" }}
-            <a id="vote-yes" href="#" class="btn btn-success vote" data-vote="yes">
-                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Yes
-            </a>
-            <a id="vote-no" href="#" class="btn btn-danger vote" data-vote="no">
-                <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> No
-            </a>
-            <a id="vote-undecided" href="#" class="btn btn-warning vote" data-vote="undecided">
-                <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> Undecided
-            </a>
+        <a id="vote-yes" href="#" class="btn btn-success vote" data-vote="yes">
+            <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Yes
+        </a>
+        <a id="vote-no" href="#" class="btn btn-danger vote" data-vote="no">
+            <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> No
+        </a>
+        <a id="vote-undecided" href="#" class="btn btn-warning vote" data-vote="undecided">
+            <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> Undecided
+        </a>
         {{/ifHas}}
     </div>
 </div>
