@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request
+from flask_login import login_required
 
 from gem.db import laws
 
@@ -6,6 +7,7 @@ search = Blueprint("search", __name__, template_folder=".")
 
 
 @search.route("/")
+@login_required
 def search_results():
     q = request.args.get("q", None)
     sr = laws.find({"$text": {

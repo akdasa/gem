@@ -2,6 +2,7 @@
 
 {% block navigation %}
 {% set active_page = active_page|default("index") -%}
+{% set is_session_page = active_page == "session" %}
 
 <nav class="navbar navbar-fixed-top navbar-inverse">
     <div class="container">
@@ -61,8 +62,9 @@
             {% endif %}
             </ul>
 
-            <div class="col-sm-3 col-md-3 navbar-right">
-                <form action="/search" class="navbar-form" role="search" style="padding-top:5px" target="search">
+            {% if current_user.is_authenticated %}
+            <div class="nav navbar-nav">
+                <form action="/search" class="navbar-form" role="search" style="padding-top:5px" {%if is_session_page%}target="search"{% endif %}>
                     <div class="input-group">
                         <input type="text" class="form-control input-sm" placeholder="Search" name="q">
                         <div class="input-group-btn">
@@ -73,6 +75,7 @@
                     </div>
                 </form>
             </div>
+            {% endif %}
 
         </div>
 
