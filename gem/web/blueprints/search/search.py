@@ -10,14 +10,17 @@ search = Blueprint("search", __name__, template_folder=".")
 @login_required
 def search_results():
     q = request.args.get("q", None)
-    sr = laws.find({"$text": {
-        "$search": q
-    }})
-    sr = map(lambda x: {
-        "title": x.title,
-        "matches": list(__highlight(x.content, q))[:5],
-        "link": "/laws/" + str(x["_id"])
-    }, list(sr))
+    sr = []
+
+    if q:
+        sr = laws.find({"$text": {
+            "$search": q
+        }})
+        sr = map(lambda x: {
+            "title": x.title,
+            "matches": list(__highlight(x.content, q))[:5],
+            "link": "/laws/" + str(x["_id"])
+        }, list(sr))
 
     return render_template("search_results.html", q=q, results=list(sr))
 

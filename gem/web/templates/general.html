@@ -40,6 +40,8 @@
                 {% if user_has_permission("sessions.read") %}
                 <li class="{%if active_page=='sessions'%}active{%endif%}"><a href="/sessions">Sessions</a></li>
                 {% endif %}
+
+                <li class="{%if active_page=='search'%}active{%endif%} hidden-lg hidden-md"><a href="/search">Search</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
@@ -62,8 +64,8 @@
             {% endif %}
             </ul>
 
-            {% if current_user.is_authenticated %}
-            <div class="nav navbar-nav">
+            {% if current_user.is_authenticated and active_page != 'search' %}
+            <div class="nav navbar-nav hidden-sm hidden-xs col-md-3 pull-right">
                 <form action="/search" class="navbar-form" role="search" style="padding-top:5px" {%if is_session_page%}target="search"{% endif %}>
                     <div class="input-group">
                         <input type="text" class="form-control input-sm" placeholder="Search" name="q">
@@ -76,7 +78,6 @@
                 </form>
             </div>
             {% endif %}
-
         </div>
 
     </div>
