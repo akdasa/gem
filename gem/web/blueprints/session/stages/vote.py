@@ -54,6 +54,7 @@ class VotingSessionStage(VotingBaseSessionStage):
 
     def manage(self, data, user=None):
         self._doc.private = data.get("private", True)
+        self.changed.notify()
 
     @property
     def view(self):

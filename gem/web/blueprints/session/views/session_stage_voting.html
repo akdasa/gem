@@ -5,12 +5,17 @@
 
         {{#ifHas user.permissions "vote.manage" }}
         <div class="pull-right">
-            <label><input type="checkbox" id="vote-private" {{#if private}}checked{{/if}}> Private</label>
+            <label><input type="checkbox" id="vote-private" {{#if private}}checked{{/if}}> Secret ballot</label>
         </div>
         {{/ifHas}}
     </div>
 
     <div class="panel-body">
+        {{!-- Display "secret ballot" alert if it so and user has permission to vote--}}
+        {{#if (and private (has user.permissions "vote")) }}
+        <div class="alert alert-info" role="alert">This is a <strong>secret ballot</strong>.</div>
+        {{/if}}
+
         <div class="progress">
             <div class="progress-bar" role="progressbar" style="width: {{percentRound voted total}}%">
                 {{percentRound voted total}}%
@@ -18,15 +23,17 @@
         </div>
 
         {{#ifHas user.permissions "vote" }}
-        <a id="vote-yes" href="#" class="btn btn-success vote" data-vote="yes">
-            <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Yes
-        </a>
-        <a id="vote-no" href="#" class="btn btn-danger vote" data-vote="no">
-            <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> No
-        </a>
-        <a id="vote-undecided" href="#" class="btn btn-warning vote" data-vote="undecided">
-            <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> Undecided
-        </a>
+        <div class="btn-group btn-group-justified" role="group">
+            <a id="vote-yes" href="#" class="btn btn-success vote" data-vote="yes">
+                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Yes
+            </a>
+            <a id="vote-no" href="#" class="btn btn-danger vote" data-vote="no">
+                <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> No
+            </a>
+            <a id="vote-undecided" href="#" class="btn btn-warning vote" data-vote="undecided">
+                <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> Undecided
+            </a>
+        </div>
         {{/ifHas}}
     </div>
 </div>
