@@ -173,6 +173,25 @@ $(document).ready(function() {
         }
     })
 
+    $("#stage").on("change", "#comment-filter input", function(e) {
+        // get list of checked types and roles
+        var checked_types = $("#comment-filter input.type:checked")
+            .map(function(idx, obj) { return $(obj).val(); }).toArray();
+        var checked_roles = $("#comment-filter input.role:checked")
+            .map(function(idx, obj) { return $(obj).val(); }).toArray();
+
+        // hide all comments and show filtered
+        $('#comment-list>.media').hide()
+        $('#comment-list>.media').filter(function(_, a) {
+            var a_role = $(a).data("role")
+            var a_name = $(a).data("name")
+            var a_type = $(a).data("type")
+
+            return checked_types.indexOf(a_type) >= 0 &&
+                checked_roles.indexOf(a_role) >= 0
+        }).show()
+    })
+
     Handlebars.registerPartial('agenda', $("#stage-agenda").html())
     Handlebars.registerPartial('acquaintance', $("#stage-acquaintance").html())
     Handlebars.registerPartial('voting', $("#stage-voting").html())

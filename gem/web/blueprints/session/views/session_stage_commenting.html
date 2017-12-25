@@ -18,23 +18,49 @@
     </div>
 
 
-    {{!-- Render each comment --}}
+    {{! Render each comment }}
     <div class="panel-body">
-        {{#each comments}}
-        <div class="media">
-            <div class="media-left media-top">
-                <span class="glyphicon {{thumbsIcon type}}" aria-hidden="true"></span>
+
+        {{! Filter box }}
+        <div id="comment-filter" class="well well-sm">
+            <div>
+                <div class="checkbox-inline">
+                    <label class="checkbox-inline"><input type="checkbox" class="type" value="plus" checked>Plus</label>
+                </div>
+                <div class="checkbox-inline">
+                    <label class="checkbox-inline"><input type="checkbox" class="type" value="minus" checked>Minus</label>
+                </div>
+                <div class="checkbox-inline">
+                    <label class="checkbox-inline"><input type="checkbox" class="type" value="info" checked>Info</label>
+                </div>
             </div>
 
-            <div class="media-body">
-                <h4 class="media-heading">{{user}} <small>{{role}}</small></h4>
-                {{#if quote}}<blockquote>{{quote}}</blockquote>{{/if}}
-                {{content}}
+            <div>
+                {{#each roles}}
+                <div class="checkbox-inline">
+                    <label class="checkbox-inline"><input type="checkbox" class="role" value="{{@this}}" checked>{{@this}}</label>
+                </div>
+                {{/each}}
             </div>
         </div>
+
+        <div id="comment-list">
+        {{#each comments}}
+            <div class="media" data-name="{{user}}" data-role="{{role}}" data-type="{{type}}">
+                <div class="media-left media-top">
+                    <span class="glyphicon {{thumbsIcon type}}" aria-hidden="true"></span>
+                </div>
+
+                <div class="media-body">
+                    <h4 class="media-heading">{{user}} <small>{{role}}</small></h4>
+                    {{#if quote}}<blockquote>{{quote}}</blockquote>{{/if}}
+                    {{content}}
+                </div>
+            </div>
         {{else}}
             No comments yet
         {{/each}}
+        </div>
     </div>
 </div>
 {{/if}}

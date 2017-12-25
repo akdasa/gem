@@ -1,4 +1,4 @@
-from gem.db import comments, users
+from gem.db import comments, users, roles
 from .stage import SessionStage
 
 
@@ -31,7 +31,17 @@ class CommentingSessionStage(SessionStage):
     @property
     def view(self):
         docs = comments.of(self.proposal.id)
-        return {"comments": list(map(self.__map, docs)), "private": self.__private}
+        return {
+            "comments": list(map(self.__map, docs)),
+            "private": self.__private,
+            "roles": self.__roles_can_comment()}
+
+    @staticmethod
+    def __roles_can_comment():
+        roles_doc = roles.all()
+        commenting_roles = filter(lambda x: "comment" in x.permissions, roles_doc)
+        role_names = map(lambda x: x.name, commenting_roles)
+        return list(role_names)
 
     @staticmethod
     def __map(x):
