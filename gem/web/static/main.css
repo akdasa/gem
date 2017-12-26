@@ -8,60 +8,36 @@ body {
 }
 
 .jumbotron {
-  margin-top: -20px;
+    margin-top: -20px;
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
-.footer {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  /* Set the fixed height of the footer here */
-  height: 85px;
-  background-color: #f5f5f5;
-}
-
-
-
-.footer .container {
-  margin: 20px 0;
-}
+/* Modal dialog */
 
 .modal {
-  text-align: center;
-  padding: 0!important;
+    text-align: center;
+    padding: 0!important;
 }
 
 .modal:before {
-  content: '';
-  display: inline-block;
-  height: 100%;
-  vertical-align: middle;
-  margin-right: -4px;
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+    margin-right: -4px;
 }
 
 .modal-dialog {
-  display: inline-block;
-  text-align: left;
-  vertical-align: middle;
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
 }
 
-
-.small-list-block {
-    max-height: 150px;
-    overflow-y: scroll;
-}
-
-#timer {
-  font-size: 45px;
-  text-align: center;
-}
+/* SignIn form */
 
 .form-signin {
     max-width: 500px;
@@ -73,16 +49,16 @@ html {
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
 }
+
 #password {
     margin-bottom: 10px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
 
-.btn-join-session {
-  margin-top: -4px;
-}
 
-.search-highlight {
-    background-color: #FFFF00
+/* Misc */
+
+.btn-join-session {
+    margin-top: -4px;
 }

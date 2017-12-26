@@ -5,13 +5,15 @@ import re
 
 def compile_assets():
     rootPath = './gem/web'
-    pattern = '*.js'
+    patterns = ['*.js', '*.css']
 
     files_to_process = []
 
     def get_asset_name(path):
         m = re.search('blueprints/(.*?)/', path)
-        return m.group(1) + ".js"
+        blueprint = m.group(1)
+        filename, file_extension = os.path.splitext(path)
+        return blueprint + file_extension
 
     for root, dirs, files in os.walk(rootPath):
         # skip static assets
@@ -19,8 +21,9 @@ def compile_assets():
             continue
 
         # get all files
-        for filename in fnmatch.filter(files, pattern):
-            files_to_process.append(os.path.join(root, filename))
+        for pattern in patterns:
+            for filename in fnmatch.filter(files, pattern):
+                files_to_process.append(os.path.join(root, filename))
 
     rmap = {
         file: get_asset_name(file)

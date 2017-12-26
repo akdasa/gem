@@ -15,7 +15,9 @@
                     {{ session.date }}: {{ session.title }}
                     {% if is_closed %} (Closed) {% endif %}
                     {% if is_active and user_has_permission("session.join") %}
-                        <a href="/session/{{session._id}}" class="btn btn-xs btn-default pull-right">Join</a>
+                        <a href="/session/{{session._id}}" class="btn btn-xs btn-default btn-join-session pull-right">
+                            Join
+                        </a>
                     {% endif %}
                 </h3>
             </div>
