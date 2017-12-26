@@ -17,9 +17,6 @@
                     {% if is_active and user_has_permission("session.join") %}
                         <a href="/session/{{session._id}}" class="btn btn-xs btn-default pull-right">Join</a>
                     {% endif %}
-                    {% if is_active and user_has_permission("session.manage") %}
-                        <a href="/session/{{session._id}}/manage" class="btn btn-xs btn-default pull-right">Manage</a>
-                    {% endif %}
                 </h3>
             </div>
             <div class="panel-body">

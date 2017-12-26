@@ -14,20 +14,16 @@ class SessionController:
 
     # Pages ------------------------------------------------------------------------------------------------------------
 
-    def index(self, session_id, user, manage=False):
+    def index(self, session_id, user):
         """Renders index page of the session using specified ID
         :param session_id: Session Id
-        :param user User
-        :param manage: Is it a managing page?"""
-        template = "session_index.html" if not manage else "session_manage.html"
+        :param user User"""
         session_doc = sessions.get(session_id)
 
         # check the permissions
         if not session_doc:
             return access_denied("No session found")
-        if not manage and not user.has_permission("session.join"):
-            return access_denied()
-        if manage and not user.has_permission("session.manage"):
+        if not user.has_permission("session.join"):
             return access_denied()
         if session_doc.get("status", None) != "run":
             return access_denied("Session is not started yet or closed")
@@ -40,7 +36,7 @@ class SessionController:
             str(proposal.id): {"title": proposal.title, "content": proposal.content} for proposal in proposal_docs
         }
 
-        return render_template(template, session=session_doc, proposals=proposal_map)
+        return render_template("session_index.html", session=session_doc, proposals=proposal_map)
 
     # Messages ---------------------------------------------------------------------------------------------------------
 

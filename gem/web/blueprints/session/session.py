@@ -12,13 +12,7 @@ channel = get()
 @session.route("/<string:session_id>")
 @login_required
 def index(session_id):
-    return controller.index(session_id, current_user, manage=False)
-
-
-@session.route("/<string:session_id>/manage")
-@login_required
-def manage(session_id):
-    return controller.index(session_id, current_user, manage=True)
+    return controller.index(session_id, current_user)
 
 
 # Messages -------------------------------------------------------------------------------------------------------------
