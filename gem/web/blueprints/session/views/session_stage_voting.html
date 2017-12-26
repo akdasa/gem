@@ -16,6 +16,17 @@
         <div class="alert alert-info" role="alert">This is a <strong>secret ballot</strong>.</div>
         {{/if}}
 
+
+        {{#if (eq voteStatus.success true) }}
+        <div class="alert alert-success" role="alert">
+            Your vote <strong>"{{voteStatus.value}}"</strong> is accepted.
+        </div>
+        {{/if}}
+
+        {{#if (eq voteStatus.success false) }}
+        <div class="alert alert-danger" role="alert">Your vote is not accepted.</div>
+        {{/if}}
+
         <div class="progress">
             <div class="progress-bar" role="progressbar" style="width: {{percentRound voted total}}%">
                 {{percentRound voted total}}%

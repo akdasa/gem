@@ -50,7 +50,7 @@ class VotingSessionStage(VotingBaseSessionStage):
         :return: True on success"""
         self._votes[user.id] = value
         self.changed.notify()
-        return True
+        return {"success": True, "value": value}
 
     def manage(self, data, user=None):
         self._doc.private = data.get("private", True)

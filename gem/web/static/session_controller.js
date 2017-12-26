@@ -6,8 +6,13 @@ function createSessionController(sessionKey) {
         countdownTimer: null,
         timerPanel: $("#timer-panel"),
         lastStageType: null,
-        proposals: JSON.parse($("#proposals").html())
+        proposals: JSON.parse($("#proposals").html()),
+        stages: {}
     }
+
+    me.stages["voting"] = votingStageController(me)
+    me.stages["commenting"] = commentingStageController(me)
+    me.stages["discussion"] = discussionStageController(me)
 
     // Handlers --------------------------------------------------------------------------------------------------------
 
@@ -41,8 +46,19 @@ function createSessionController(sessionKey) {
             me._showTimerPanel(false)
         }
 
+        //
+        var stageController = me.stages[data.stage.type]
+        if (stageController) {
+            stageController.data = data
+            if (stageController.enter) { stageController.enter() }
+        }
+
         me.lastStageType = data.stage.type
         me._renderStage(data)
+
+        if (stageController) {
+            if (stageController.register) { stageController.register() }
+        }
     }
 
     me.onConnected = function(socket) {
@@ -79,6 +95,15 @@ function createSessionController(sessionKey) {
     me.stopTimer = function() {
         if (me.countdownTimer) {
             clearInterval(me.countdownTimer)
+        }
+    }
+
+    me.render = function(view) {
+        var stageController = me.stages[me.lastStageType]
+        if (stageController) {
+            var view = stageController.view ? stageController.view() : {}
+            me._renderStage(Object.assign({}, stageController.data, view))
+            if (stageController.register) { stageController.register() }
         }
     }
 
@@ -171,25 +196,6 @@ $(document).ready(function() {
             controller.say(msg)
             return false;
         }
-    })
-
-    $("#stage").on("change", "#comment-filter input", function(e) {
-        // get list of checked types and roles
-        var checked_types = $("#comment-filter input.type:checked")
-            .map(function(idx, obj) { return $(obj).val(); }).toArray();
-        var checked_roles = $("#comment-filter input.role:checked")
-            .map(function(idx, obj) { return $(obj).val(); }).toArray();
-
-        // hide all comments and show filtered
-        $('#comment-list>.media').hide()
-        $('#comment-list>.media').filter(function(_, a) {
-            var a_role = $(a).data("role")
-            var a_name = $(a).data("name")
-            var a_type = $(a).data("type")
-
-            return checked_types.indexOf(a_type) >= 0 &&
-                checked_roles.indexOf(a_role) >= 0
-        }).show()
     })
 
     Handlebars.registerPartial('agenda', $("#stage-agenda").html())

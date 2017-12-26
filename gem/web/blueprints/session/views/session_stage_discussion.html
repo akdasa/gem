@@ -28,16 +28,18 @@
             {{#each queue}}
                 <li>{{name}} <small>({{role}})</small></li>
             {{else}}
-                No one want to say something yet
+                No one wants to say something yet
             {{/each}}
             </ul>
 
-            <a href="#" class="btn btn-success" id="discussion-raise-hand">
-                <span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Raise a hand
-            </a>
-            <a href="#" class="btn btn-warning" id="discussion-withdraw-hand">
-                <span class="glyphicon glyphicon-hand-down" aria-hidden="true"></span> Withdraw hand
-            </a>
+            <div class="btn-group btn-group-justified" role="group">
+                <a href="#" class="btn btn-success" id="discussion-raise-hand">
+                    <span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Raise a hand
+                </a>
+                <a href="#" class="btn btn-warning" id="discussion-withdraw-hand">
+                    <span class="glyphicon glyphicon-hand-down" aria-hidden="true"></span> Withdraw hand
+                </a>
+            </div>
         {{/ifHas}}
     </div>
 </div>
