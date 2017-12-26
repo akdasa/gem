@@ -1,10 +1,24 @@
 {%raw%}
 <div class="panel panel-default">
-    <div class="panel-heading">Discussion</div>
+    <div class="panel-heading">
+        Discussion
+
+        {{#ifHas user.permissions "discussion.manage" }}
+        <div class="pull-right">
+            <label><input type="checkbox" id="discussion-accept" {{#if accept}}checked{{/if}}> Accept new applications</label>
+        </div>
+        {{/ifHas}}
+    </div>
     <div class="panel-body">
+        {{#if (and (not accept) (not (has user.permissions "discussion.manage"))) }}
+        <div class="alert alert-danger" role="alert">
+            New applications are no longer accepted.
+        </div>
+        {{/if}}
+
         <div>
             {{#if speaking }}
-                Speaking: {{speaking.name}}
+            <center><h1>{{speaking.name}}<small> <br>is speaking</small></h1></center><hr>
             {{/if}}
         </div>
 
@@ -21,7 +35,7 @@
                     {{/each}}
                 </ul>
             {{else}}
-                No one wants to say something yet
+                <p>No one wants to say something yet</p>
             {{/if}}
         {{else}}
             <ul>
@@ -32,14 +46,16 @@
             {{/each}}
             </ul>
 
+
             <div class="btn-group btn-group-justified" role="group">
-                <a href="#" class="btn btn-success" id="discussion-raise-hand">
+                <a href="#" class="btn btn-success {{#if (not accept)}}disabled{{/if}}" id="discussion-raise-hand">
                     <span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Raise a hand
                 </a>
                 <a href="#" class="btn btn-warning" id="discussion-withdraw-hand">
                     <span class="glyphicon glyphicon-hand-down" aria-hidden="true"></span> Withdraw hand
                 </a>
             </div>
+
         {{/ifHas}}
     </div>
 </div>

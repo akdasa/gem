@@ -15,6 +15,7 @@ class DiscussionSessionStage(SessionStage):
         self.__queue = {}
         self.__speaking = None
         self.__order = 0
+        self.__accept = True
 
     def manage(self, data, user=None):
         cmd = data.get("command", None)
@@ -25,12 +26,17 @@ class DiscussionSessionStage(SessionStage):
             self.__withdraw_hand(user)
         if cmd == "give_voice":
             self.__give_voice(data["user_id"])
+        if cmd == "accept":
+            self.__accept = data.get("value", True)
+            self.changed.notify()
 
     def __raise_hand(self, user):
         """User raises a hand.
         :type user: User
         :param user: User"""
         if self.__is_raised_hand(user):
+            return
+        if not self.__accept:
             return
 
         self.__order += 1
@@ -69,6 +75,7 @@ class DiscussionSessionStage(SessionStage):
         """Returns JSON representation of the stage"""
         return {
             "speaking": self.__speaking,
+            "accept": self.__accept,
             "queue": list(map(lambda x: self.__queue[x], self.__queue))
         }
 

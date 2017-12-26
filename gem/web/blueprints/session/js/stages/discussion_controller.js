@@ -3,6 +3,12 @@ function discussionStageController(controller) {
         $(".discussion-give-voice").on("click", giveVoiceUserClicked)
         $("#discussion-raise-hand").on("click", raiseHandButtonClicked)
         $("#discussion-withdraw-hand").on("click", withdrawHandButtonClicked)
+        $("#discussion-accept").on("change", onDiscussionAcceptChanged)
+    }
+
+    function onDiscussionAcceptChanged(e) {
+        var value = $(this).is(":checked")
+        controller.socket.emit("manage", {command: "accept", value: value})
     }
 
     function giveVoiceUserClicked(e) {
