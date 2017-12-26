@@ -1,3 +1,5 @@
+// Session controller
+
 function createSessionController(sessionKey) {
     var me = {
         sessionKey: sessionKey,

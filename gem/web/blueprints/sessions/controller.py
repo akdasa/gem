@@ -14,7 +14,7 @@ class SessionsController(CrudController):
         self.add_action("run", "play")
         self.add_action("stop", "pause")
         self.add_action("manage", "hand-right", "session.manage")
-        self.add_script("sessions_controller.js")
+        self.add_script("app/sessions.js")
 
     @login_required
     def run(self, request, key):

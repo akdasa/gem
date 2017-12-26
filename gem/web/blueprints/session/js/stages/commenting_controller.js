@@ -1,43 +1,3 @@
-function votingStageController(controller) {
-    voteStatus = null;
-
-    function register() {
-        $("#vote-private").on("change", onSecretBallotCheckboxChanged)
-        $(".vote").on("click", onVoteButtonClicked)
-    }
-
-    function view() {
-        return {voteStatus: voteStatus}
-    }
-
-    function onSecretBallotCheckboxChanged(e) {
-        var val = $(this).is(":checked") // is checked?
-        setVotingPrivacy(val)
-    }
-
-    function onVoteButtonClicked(e) {
-        e.preventDefault()
-        var value = $(this).data("vote")
-        vote(value)
-    }
-
-    function onVoteResponse(response) {
-        voteStatus = response
-        controller.render()
-    }
-
-    function setVotingPrivacy(value) {
-        controller.socket.emit("manage", {private: value})
-    }
-
-    function vote(value) {
-        controller.socket.emit("vote", {value: value}, onVoteResponse)
-    }
-
-    return { register, view }
-}
-
-
 function commentingStageController(controller) {
     var commentQuote = null
 
@@ -122,34 +82,6 @@ function commentingStageController(controller) {
         return $("#comment-filter input.role:checked")
             .map(function(idx, obj) { return $(obj).val(); })
             .toArray();
-    }
-
-    return { register }
-}
-
-function discussionStageController(controller) {
-    function register() {
-        $(".discussion-give-voice").on("click", giveVoiceUserClicked)
-        $("#discussion-raise-hand").on("click", raiseHandButtonClicked)
-        $("#discussion-withdraw-hand").on("click", withdrawHandButtonClicked)
-    }
-
-    function giveVoiceUserClicked(e) {
-        e.preventDefault();
-        var userId = $(this).data("user-id")
-        giveVoice(userId)
-    }
-
-    function raiseHandButtonClicked(e) {
-        controller.socket.emit("manage", { command: "raise_hand" })
-    }
-
-    function withdrawHandButtonClicked(e) {
-        controller.socket.emit("manage", { command: "withdraw_hand" })
-    }
-
-    function giveVoice(userId) {
-        controller.socket.emit("manage", {command: "give_voice", user_id: userId})
     }
 
     return { register }

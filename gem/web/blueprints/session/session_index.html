@@ -5,13 +5,7 @@
 {% import "session_view.html" as v %}
 {% import "session_shared.html" as s %}
 
-<script src="/static/session_controller.js"></script>
-
-{% if user_has_permission("session.manage") %}
-<script src="/static/session_manage_controller.js"></script>
-{% endif %}
-
-<script src="/static/stages.js"></script>
+<script src="/static/app/session.js"></script>
 
 {{ v.view() }}
 
