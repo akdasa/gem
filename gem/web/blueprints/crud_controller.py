@@ -7,14 +7,14 @@ from gem.web.app.auth import has_permission, access_denied
 
 
 class CrudController:
-    def __init__(self, repository, namespace=None, columns=None, row_class=None):
+    def __init__(self, repository, namespace=None, columns=None, row_class=None, script=None):
         self._repository = repository
         self._columns = columns or []
         self._namespace = namespace
         self._model_name = singularize(self._namespace).capitalize()
         self._actions = []
         self._row_class = row_class or self.__row_class
-        self._js = []
+        self._js = script or []
 
         if namespace:
             self._permission = namespace
