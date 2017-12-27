@@ -10,7 +10,15 @@ python3 ./install.py
 ```
 
 # Development
+Run development server
+```
+export FLASK_DEBUG=1
+export FLASK_APP=main.py
+flask run
+```
+
 Run watchdog to compile assets automatically
 ```
+pip3 install watchdog
 python3 ./tools/assets_watchdog.py
 ```
