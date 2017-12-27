@@ -33,8 +33,6 @@ def compile_assets():
     for key, value in sorted(rmap.items()):
         r.setdefault(value, []).append(key)
 
-    print(r)
-
     for key, value in r.items():
         with open("./gem/web/static/app/" + key, "w") as af:
             af.write("/* Compiled file, do net edit */\n")

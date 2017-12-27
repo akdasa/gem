@@ -66,7 +66,6 @@ class SessionUsers:
                    ("vote" in user.permissions)
 
         permissions = list(user.permissions)
-        print(permissions)
         if permissions:
             if "vote" in permissions and not can_vote:
                 permissions.remove("vote")

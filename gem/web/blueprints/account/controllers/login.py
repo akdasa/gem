@@ -16,7 +16,7 @@ class LoginController:
             password = data.get("password", None)
             remember = data.get("remember-me", False) == "on"
             # user = users.find_one({"login": lgn, "password": password})
-            print("!!!!!!!!!!!", remember)
+
             user = users.find_one(
                 {"$and": [{"password": password}, {"$or": [{"login": lgn}, {"name": lgn}]}]})
 

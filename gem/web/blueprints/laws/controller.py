@@ -5,7 +5,6 @@ from gem.web.blueprints.crud_controller import CrudController
 class LawsController(CrudController):
     def __init__(self):
         """Initializes new instance of the ProposalsController class"""
-        print(laws)
         super().__init__(laws, namespace="laws", columns=["key", "title"])
 
     def _update_model(self, model, data):
