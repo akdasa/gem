@@ -2,7 +2,7 @@ from flask import Flask, redirect, request, flash
 from flask_login import LoginManager, current_user
 
 from gem.channel import init
-from gem.db.users import UsersRepository
+from gem.db import users as users_db
 from gem.web.app.auth import User, has_permission, access_denied
 from gem.web.blueprints.proposals import proposals
 from gem.web.blueprints.sessions import sessions
@@ -64,8 +64,7 @@ def user_has_permission(permission):
 
 @login_manager.user_loader
 def load_user(user_id):
-    r = UsersRepository()
-    user = r.get(user_id)
+    user = users_db.get(user_id)
     if user:
         return User(user)
     return None
