@@ -55,6 +55,9 @@ $(document).ready(function() {
     $(".timer-set").on("click", function(e) {
         e.preventDefault()
         var minutes = $(this).data("value")
+        if (minutes == "custom") {
+            minutes = prompt("Time in minutes. (Start with the '+' sign to add time to the current timer)", "1")
+        }
         controller.setCountdownTimer(minutes)
     })
 })

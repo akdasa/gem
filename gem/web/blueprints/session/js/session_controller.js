@@ -9,7 +9,8 @@ function createSessionController(sessionKey) {
         timerPanel: $("#timer-panel"),
         lastStageType: null,
         proposals: JSON.parse($("#proposals").html()),
-        stages: {}
+        stages: {},
+        timerEnd: null
     }
 
     me.stages["voting"] = votingStageController(me)
@@ -19,10 +20,17 @@ function createSessionController(sessionKey) {
     // Handlers --------------------------------------------------------------------------------------------------------
 
     me.onTimerMessage = function(data) {
+        console.log(data)
         var minutes = data.interval
         if (minutes) {
-            var to = new Date().getTime() + (minutes * 60000)
-            me.countdownTo(new Date(to))
+            var isAppendMode = minutes.toString().indexOf("+") != -1
+            if (isAppendMode) {
+                if (me.timerEnd == null) me.timerEnd = new Date().getTime()
+                me.timerEnd += minutes * 60000
+            } else {
+                me.timerEnd = new Date().getTime() + (minutes * 60000)
+            }
+            me.countdownTo(new Date(me.timerEnd))
         } else {
             me.stopTimer()
             me._showTimerPanel(false)
@@ -84,7 +92,9 @@ function createSessionController(sessionKey) {
     }
 
     me.countdownTo = function(date) {
-        me.stopTimer()
+        if (me.countdownTimer) {
+            clearInterval(me.countdownTimer)
+        }
 
         me.countdownTimer = setInterval(function() {
             me._renderTimer(date)
@@ -95,6 +105,7 @@ function createSessionController(sessionKey) {
     }
 
     me.stopTimer = function() {
+        me.timerEnd = null
         if (me.countdownTimer) {
             clearInterval(me.countdownTimer)
         }
