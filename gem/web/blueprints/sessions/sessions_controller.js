@@ -6,7 +6,7 @@ function createSessionsController() {
     }
 
     me.onManageSessionClicked = function(sessionId) {
-        window.location.href = "/session/" + sessionId + "/manage"
+        window.location.href = "/session/" + sessionId
     }
 
     me.onChangeSessionStatusClicked = function(sessionId, status) {
