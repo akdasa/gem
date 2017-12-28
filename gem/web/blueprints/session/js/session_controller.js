@@ -11,19 +11,25 @@ function createSessionController(sessionKey) {
     me.stage = createStageController(me)
 
 
-
-    // Handlers --------------------------------------------------------------------------------------------------------
-
     function onConnected(socket) {
+        $("#connection-lost").addClass("hidden")
         me.socket.emit("join", { room: sessionKey })
     }
 
-    // Actions ---------------------------------------------------------------------------------------------------------
+    function onDisconnected(socket) {
+        $("#connection-lost").removeClass("hidden")
+    }
+
+    function onReconnected(socket) {
+        $("#connection-lost").addClass("hidden")
+    }
 
     function connect(uri) {
         me.socket = io.connect(uri)
 
         me.socket.on("connect", onConnected)
+        me.socket.on("disconnect", onDisconnected)
+        me.socket.on("reconnect", onReconnected)
         me.socket.on("user", me.stage.onUserInfoMessage)
         me.socket.on("stage", me.stage.processMessage)
         me.socket.on("chat", me.chat.processMessage)

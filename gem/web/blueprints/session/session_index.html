@@ -2,6 +2,8 @@
 {% set active_page = "session" %}
 
 {% block body %}
+<div id="connection-lost" class="alert alert-danger hidden" role="alert">Connection lost.</div>
+
 <link rel="stylesheet" href="/static/app/session.css">
 
 {% import "session_view.html" as v %}
