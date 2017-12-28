@@ -29,6 +29,8 @@ class DiscussionSessionStage(SessionStage):
         if cmd == "accept":
             self.__accept = data.get("value", True)
             self.changed.notify()
+        if cmd == "remove":
+            self.__remove(data.get("user_id", None))
 
     def __raise_hand(self, user):
         """User raises a hand.
@@ -68,6 +70,13 @@ class DiscussionSessionStage(SessionStage):
                 "id": user_id,
                 "name": user.name
             }
+        self.changed.notify()
+
+    def __remove(self, user_id):
+        if user_id in self.__queue:
+            del self.__queue[user_id]
+        if self.__speaking and self.__speaking["id"] == user_id:
+            self.__speaking = None
         self.changed.notify()
 
     @property

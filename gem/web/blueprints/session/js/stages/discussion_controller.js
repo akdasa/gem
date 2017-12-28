@@ -1,35 +1,60 @@
 function discussionStageController(controller) {
     function register() {
-        $(".discussion-give-voice").on("click", giveVoiceUserClicked)
-        $("#discussion-raise-hand").on("click", raiseHandButtonClicked)
-        $("#discussion-withdraw-hand").on("click", withdrawHandButtonClicked)
-        $("#discussion-accept").on("change", onDiscussionAcceptChanged)
+        $("#discussion-accept").on("change", onAcceptCheckboxChanged)
+        $(".discussion-give-voice").on("click", onGiveVoiceToUserClicked)
+        $(".discussion-remove").on("click", onRemoveUserFromQueueClicked)
+        $("#discussion-raise-hand").on("click", onRaiseHandButtonClicked)
+        $("#discussion-withdraw-hand").on("click", onWithdrawHandButtonClicked)
         $("[data-toggle='tooltip']").tooltip()
     }
 
-    function onDiscussionAcceptChanged(e) {
+    function onAcceptCheckboxChanged(e) {
         var value = $(this).is(":checked")
-        controller.socket.emit("manage", {command: "accept", value: value})
+        acceptApplications(value)
     }
 
-    function giveVoiceUserClicked(e) {
-        e.preventDefault();
+    function onGiveVoiceToUserClicked(e) {
+        e.preventDefault()
         var userId = $(this).data("user-id")
         giveVoice(userId)
     }
 
-    function raiseHandButtonClicked(e) {
+    function onRemoveUserFromQueueClicked(e) {
         e.preventDefault()
-        controller.socket.emit("manage", { command: "raise_hand" })
+        var userId = $(this).data("user-id")
+        remove(userId)
     }
 
-    function withdrawHandButtonClicked(e) {
+    function onRaiseHandButtonClicked(e) {
         e.preventDefault()
-        controller.socket.emit("manage", { command: "withdraw_hand" })
+        raiseHand()
+    }
+
+    function onWithdrawHandButtonClicked(e) {
+        e.preventDefault()
+        withdrawHand()
+    }
+
+    // Actions
+
+    function acceptApplications(value) {
+        controller.socket.emit("manage", {command: "accept", value: value})
     }
 
     function giveVoice(userId) {
         controller.socket.emit("manage", {command: "give_voice", user_id: userId})
+    }
+
+    function remove(userId) {
+        controller.socket.emit("manage", {command: "remove", user_id: userId})
+    }
+
+    function raiseHand() {
+        controller.socket.emit("manage", { command: "raise_hand" })
+    }
+
+    function withdrawHand() {
+        controller.socket.emit("manage", { command: "withdraw_hand" })
     }
 
     return { register }

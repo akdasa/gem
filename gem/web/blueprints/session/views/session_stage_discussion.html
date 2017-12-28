@@ -46,10 +46,14 @@
             <td>{{name}}</td>
             <td>{{role}}</td>
             {{#ifHas @root.user.permissions "discussion.manage" }}
-            <td>
+            <td class="pull-right">
                 <a href="#" class="btn btn-primary btn-xs discussion-give-voice"
                    data-user-id="{{id}}" data-toggle="tooltip" title="Give a voice">
                     <span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span>
+                </a>
+                <a href="#" class="btn btn-primary btn-xs discussion-remove"
+                   data-user-id="{{id}}" data-toggle="tooltip" title="Remove from queue">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                 </a>
             </td>
             {{/ifHas}}
