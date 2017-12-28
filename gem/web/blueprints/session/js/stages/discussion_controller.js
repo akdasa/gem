@@ -4,6 +4,7 @@ function discussionStageController(controller) {
         $("#discussion-raise-hand").on("click", raiseHandButtonClicked)
         $("#discussion-withdraw-hand").on("click", withdrawHandButtonClicked)
         $("#discussion-accept").on("change", onDiscussionAcceptChanged)
+        $("[data-toggle='tooltip']").tooltip()
     }
 
     function onDiscussionAcceptChanged(e) {
@@ -18,10 +19,12 @@ function discussionStageController(controller) {
     }
 
     function raiseHandButtonClicked(e) {
+        e.preventDefault()
         controller.socket.emit("manage", { command: "raise_hand" })
     }
 
     function withdrawHandButtonClicked(e) {
+        e.preventDefault()
         controller.socket.emit("manage", { command: "withdraw_hand" })
     }
 

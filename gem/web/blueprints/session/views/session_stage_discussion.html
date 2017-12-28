@@ -18,45 +18,44 @@
 
         <div>
             {{#if speaking }}
-            <center><h1>{{speaking.name}}<small> <br>is speaking</small></h1></center><hr>
+            <center><h1>{{speaking.name}}<small> <br>is speaking</small></h1></center>
+            {{else}}
+                {{#if queue}}
+                {{else}}
+                    <center><p>No one wants to say something.</p></center>
+                {{/if}}
             {{/if}}
         </div>
 
-        {{#ifHas user.permissions "discussion.manage"}}
-            {{#if queue}}
-                Give a voice to:
-                <ul>
-                    {{#each queue}}
-                    <li>
-                        <a href="#" class="discussion-give-voice" data-user-id="{{id}}">
-                            {{name}} <small>({{role}})</small>
-                        </a>
-                    </li>
-                    {{/each}}
-                </ul>
-            {{else}}
-                <p>No one wants to say something yet</p>
-            {{/if}}
-        {{else}}
-            <ul>
-            {{#each queue}}
-                <li>{{name}} <small>({{role}})</small></li>
-            {{else}}
-                No one wants to say something yet
-            {{/each}}
-            </ul>
-
-
-            <div class="btn-group btn-group-justified" role="group">
-                <a href="#" class="btn btn-success {{#if (not accept)}}disabled{{/if}}" id="discussion-raise-hand">
-                    <span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Raise a hand
-                </a>
-                <a href="#" class="btn btn-warning" id="discussion-withdraw-hand">
-                    <span class="glyphicon glyphicon-hand-down" aria-hidden="true"></span> Withdraw hand
-                </a>
-            </div>
-
+        {{#ifHas user.permissions "discussion"}}
+        <div class="btn-group btn-group-justified" role="group">
+            <a href="#" class="btn btn-success {{#if (not accept)}}disabled{{/if}}" id="discussion-raise-hand">
+                <span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Raise a hand
+            </a>
+            <a href="#" class="btn btn-warning" id="discussion-withdraw-hand">
+                <span class="glyphicon glyphicon-hand-down" aria-hidden="true"></span> Withdraw hand
+            </a>
+        </div>
         {{/ifHas}}
     </div>
+
+    {{#if queue}}
+    <table class="table table-hover">
+        {{#each queue}}
+        <tr>
+            <td>{{name}}</td>
+            <td>{{role}}</td>
+            {{#ifHas @root.user.permissions "discussion.manage" }}
+            <td>
+                <a href="#" class="btn btn-primary btn-xs discussion-give-voice"
+                   data-user-id="{{id}}" data-toggle="tooltip" title="Give a voice">
+                    <span class="glyphicon glyphicon-volume-up" aria-hidden="true"></span>
+                </a>
+            </td>
+            {{/ifHas}}
+        </tr>
+        {{/each}}
+    </table>
+    {{/if}}
 </div>
 {%endraw%}

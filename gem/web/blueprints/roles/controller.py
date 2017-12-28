@@ -29,9 +29,10 @@ class RolesController(CrudController):
             {"name": "laws.update", "desc": "Update existing law"},
             {"name": "laws.delete", "desc": "Delete law"},
             {"name": "vote", "desc": "Vote"},  # 22
-            {"name": "vote.manage", "desc": "Manage voting"},
+            {"name": "vote.manage", "desc": "Manage"},
             {"name": "comment", "desc": "Comment"},
-            {"name": "comment.manage", "desc": "Manage comments: set private."},
+            {"name": "comment.manage", "desc": "Manage"},
+            {"name": "discussion", "desc": "Participate in the discussion"},
             {"name": "discussion.manage", "desc": "Manage discussion: give/withdraw a voice."}]
 
     def _update_model(self, model, data):
@@ -49,6 +50,8 @@ class RolesController(CrudController):
                 {"name": "Sessions", "roles": self._permissions[8:14]},
                 {"name": "Roles", "roles": self._permissions[14:18]},
                 {"name": "Laws", "roles": self._permissions[18:22]},
-                {"name": "Misc", "roles": self._permissions[22:27]}
+                {"name": "Vote", "roles": self._permissions[22:24]},
+                {"name": "Comment", "roles": self._permissions[24:26]},
+                {"name": "Discussion", "roles": self._permissions[26:28]}
             ]
         }
