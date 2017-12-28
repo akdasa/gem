@@ -22,9 +22,10 @@ function createManageController(controller) {
         e.preventDefault()
         var minutes = $(this).data("value")
         if (minutes == "custom") {
-            minutes = prompt("Time in minutes. (Start with the '+' sign to add time to the current timer)", "1")
+            minutes = promptCustomTimer()
+        } else {
+            setCountdownTimer(minutes)
         }
-        setCountdownTimer(minutes)
     })
 
 
@@ -50,6 +51,42 @@ function createManageController(controller) {
 
     function setCountdownTimer(minutes) {
         controller.socket.emit("timer", { interval: minutes })
+    }
+
+    function promptCustomTimer() {
+        $.confirm({
+            theme: "bootstrap",
+            title: 'Custom timer',
+            content: $("#timer-custom").html(),
+            buttons: {
+                formSubmit: {
+                    text: 'Submit',
+                    btnClass: 'btn btn-primary',
+                    action: function () {
+                        var value = this.$content.find('#timer-custom-value').val()
+                        if (!value) {
+                            $.alert('Provide a valid value')
+                            return false
+                        }
+                        setCountdownTimer(value)
+                    }
+                },
+                cancel: {
+                    btnClass: "btn btn-danger",
+                    text: "Cancel",
+                    action: function () {}
+                }
+            },
+            onContentReady: function () {
+                // bind to events
+                var jc = this;
+                this.$content.find('form').on('submit', function (e) {
+                    // if the user submits the form by pressing enter in the field.
+                    e.preventDefault();
+                    jc.$$formSubmit.trigger('click'); // reference the button and click it
+                })
+            }
+        })
     }
 
 
