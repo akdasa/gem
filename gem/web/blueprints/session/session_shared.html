@@ -22,4 +22,17 @@
     </script>
 {% endfor %}
 
+<script id="session-users-line" type="text/x-handlebars-template">
+    {%raw%}
+    <li>
+        {{name}} <small>{{role}}</small> {{user}}
+        {{#ifHas @user.permissions "session.manage"}}
+        <a href='#'>
+            <span class='glyphicon glyphicon-remove kick' data-user-id='{{id}}'></span>
+        </a>
+        {{/ifHas}}
+    </li>
+    {%endraw%}
+</script>
+
 {% endmacro %}

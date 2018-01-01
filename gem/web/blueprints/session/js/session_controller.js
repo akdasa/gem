@@ -10,6 +10,7 @@ function createSessionController(sessionKey) {
     me.manage = createManageController(me)
     me.stage = createStageController(me)
 
+    me.user = null
 
     function onKick(data) {
         me.socket.disconnect()
@@ -36,7 +37,11 @@ function createSessionController(sessionKey) {
         me.socket.on("disconnect", onDisconnected)
         me.socket.on("reconnect", onReconnected)
         me.socket.on("kick", onKick)
-        me.socket.on("user", me.stage.onUserInfoMessage)
+        me.socket.on("user", function(data) {
+            me.user=data;
+            me.stage.onUserInfoMessage(data);
+            me.users.render();
+        })
         me.socket.on("stage", me.stage.processMessage)
         me.socket.on("chat", me.chat.processMessage)
         me.socket.on("users", me.users.processMessage)

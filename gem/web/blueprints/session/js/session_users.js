@@ -7,13 +7,15 @@ function createUsersController(controller) {
     // param: data - array of connected users
     //        [{name: "akd", role: "secretary"}, ...]
     function processMessage(data) {
-        render(data)
+        users = data
+        render()
     }
 
     // Private members
 
+    var users    = []
     var panel    = $("#session-users-list")
-    var line     = "<li>{{name}} <small>{{role}}</small><a href='#'><span class='glyphicon glyphicon-remove kick' data-user-id='{{id}}'></span></a></li>"
+    var line     = $("#session-users-line").html()
     var template = Handlebars.compile(line)
 
 
@@ -22,8 +24,6 @@ function createUsersController(controller) {
         showKickDialog(function (reason) {
             controller.socket.emit("kick", {user: userId, reason})
         })
-        //console.log(userId)
-        //controller.socket.emit("kick", {user: userId})
     }
 
     function showKickDialog(callback) {
@@ -61,12 +61,12 @@ function createUsersController(controller) {
         })
     }
 
-    function render(users) {
+    function render() {
         panel.empty()
         for (user of users) {
-            panel.append(template(user))
+            panel.append(template(user, {data: {user: controller.user}}))
         }
     }
 
-    return { processMessage }
+    return { processMessage, render }
 }
