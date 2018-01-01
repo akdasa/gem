@@ -11,6 +11,11 @@ function createSessionController(sessionKey) {
     me.stage = createStageController(me)
 
 
+    function onKick(data) {
+        me.socket.disconnect()
+        showAlert(data.message, function () { window.location = "/" })
+    }
+
     function onConnected(socket) {
         $("#connection-lost").addClass("hidden")
         me.socket.emit("join", { room: sessionKey })
@@ -30,11 +35,28 @@ function createSessionController(sessionKey) {
         me.socket.on("connect", onConnected)
         me.socket.on("disconnect", onDisconnected)
         me.socket.on("reconnect", onReconnected)
+        me.socket.on("kick", onKick)
         me.socket.on("user", me.stage.onUserInfoMessage)
         me.socket.on("stage", me.stage.processMessage)
         me.socket.on("chat", me.chat.processMessage)
         me.socket.on("users", me.users.processMessage)
         me.socket.on("timer", me.timer.processMessage)
+    }
+
+    // Private members
+
+    function showAlert(message, action) {
+        $.alert({
+            title: "Alert!",
+            content: message,
+            type: "red",
+            buttons: {
+                confirm: {
+                    text: "Ok",
+                    action: action
+                }
+            }
+        })
     }
 
     me.connect = connect

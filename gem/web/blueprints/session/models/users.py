@@ -32,6 +32,12 @@ class SessionUsers:
                 ids_present.append(user_id)
         return result
 
+    def is_present(self, user):
+        for u in self.all:
+            if u.get_id() == user.id:
+                return True
+        return False
+
     def join(self, socket_id, user):
         self.__sockets[socket_id] = self.__map(user)
         self.__notify_changes()
