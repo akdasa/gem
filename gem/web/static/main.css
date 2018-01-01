@@ -62,3 +62,15 @@ html {
 .btn-join-session {
     margin-top: -4px;
 }
+
+.progress {
+    height: 30px;
+}
+
+.progress-bar {
+    line-height: 30px !important;
+}
+
+.vote-progress {
+    margin-bottom: 0px;
+}
