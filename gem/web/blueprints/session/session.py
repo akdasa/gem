@@ -69,3 +69,9 @@ def on_timer(data):
 @login_required
 def on_manage(data):
     return controller.manage(request.sid, current_user, data)
+
+
+@channel.on("kick")
+@login_required
+def on_kick(data):
+    return controller.kick(request.sid, current_user, data)

@@ -1,8 +1,9 @@
-from flask import render_template, jsonify
+from flask import render_template
 from flask_socketio import disconnect
 
 from gem.db import sessions, proposals
 from gem.web.app.auth import access_denied
+from gem.web.app.sockets import disconnect_socket
 from .socket_sessions import SocketSessions
 
 
@@ -50,7 +51,7 @@ class SessionController:
         session = self.__sockets.get_session(session_id)
         if session and session.users.is_present(user):
             session.notify("kick", {"message": "Only one connection is allowed to the session"}, room=socket_id)
-            #disconnect()
+            disconnect()
         else:
             self.__sockets.connect(socket_id, user, session_id)
             return {"success": True}
@@ -110,3 +111,13 @@ class SessionController:
         """On user disconnected.
         :param socket_id:  SocketIO Id"""
         self.__sockets.disconnect(socket_id)
+
+    def kick(self, socket_id, current_user, data):
+        user = data.get("user", None)      # user id to kick
+        reason = data.get("reason", None)  # reason
+        sid = self.__sockets.get_socket_id(user)  # socket_id of user to be kicked
+
+        session = self.__sockets.session_of(socket_id)
+        session.notify("kick", {"message": reason}, room=sid)
+
+        disconnect_socket(sid)

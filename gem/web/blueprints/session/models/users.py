@@ -54,7 +54,7 @@ class SessionUsers:
         self.__changed.notify(socket_id, user, False)
 
     def __notify_changes(self):
-        users = list(map(lambda x: {"name": x.name, "role": x.role}, self.all))
+        users = list(map(lambda x: {"name": x.name, "role": x.role, "id": x.id}, self.all))
         self.__session.notify("users", users)
 
     @staticmethod

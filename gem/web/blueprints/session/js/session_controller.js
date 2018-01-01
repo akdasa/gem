@@ -13,7 +13,7 @@ function createSessionController(sessionKey) {
 
     function onKick(data) {
         me.socket.disconnect()
-        showAlert(data.message, function () { window.location = "/" })
+        showAlert("Kicked!", data.message, function () { window.location = "/" })
     }
 
     function onConnected(socket) {
@@ -45,9 +45,9 @@ function createSessionController(sessionKey) {
 
     // Private members
 
-    function showAlert(message, action) {
+    function showAlert(title, message, action) {
         $.alert({
-            title: "Alert!",
+            title: title,
             content: message,
             type: "red",
             buttons: {
