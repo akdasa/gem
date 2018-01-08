@@ -3,6 +3,14 @@
 Application to improve GBC meeting experience
 
 # Installation
+Edit config.ini
+```
+[db]
+host = mongodb_host
+port = 27017
+name = gem
+```
+Complie assets and seed a database
 ```
 pip3 install -r requirements.txt
 python3 ./tools/assets_compile.py
