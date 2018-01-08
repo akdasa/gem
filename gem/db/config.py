@@ -1,7 +1,14 @@
 from pymongo import MongoClient
+import configparser
+config = configparser.ConfigParser()
+config.read("config.ini")
 
-client = MongoClient('192.168.56.100', 27017)
-database = client["gbcma"]
+host = config.get("db", "host", fallback="127.0.0.1")
+port = config.getint("db", "port", fallback="27017")
+name = config.get("db", "name", fallback="gem")
+
+client = MongoClient(host, port)
+database = client[name]
 
 proposals = database["proposals"]
 users = database["users"]
