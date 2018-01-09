@@ -61,10 +61,10 @@ class SessionStages:
         for idx, proposal in enumerate(docs):
             stages = [
                 AcquaintanceSessionStage(self.__session, proposal),
-                VotingSessionStage(self.__session, proposal),
-                VotingResultsSessionStage(self.__session, proposal),
+                DiscussionSessionStage(self.__session, proposal),
                 CommentingSessionStage(self.__session, proposal),
-                DiscussionSessionStage(self.__session, proposal)]
+                VotingSessionStage(self.__session, proposal),
+                VotingResultsSessionStage(self.__session, proposal)]
 
             for stage in stages:
                 stage.changed.subscribe(self.__on_stage_changed)
