@@ -3,9 +3,12 @@ function commentingStageController(controller) {
 
     function register() {
         $("#comment-private").on("change", onPrivateCommentsCheckboxChanged)
-        $("#comment-filter input").on("change", onFilterCheckboxChanged)
         $(".comment-add").on("click", onAddCommentButtonClicked)
         $("#proposal-content").on("mouseup", onProposalContentMouseUp)
+
+        $(".selectpicker").selectpicker()
+        $("#comment-filter-type").on("changed.bs.select", onFilterChanged)
+        $("#comment-filter-role").on("changed.bs.select", onFilterChanged)
     }
 
     // UI Event handlers
@@ -17,7 +20,7 @@ function commentingStageController(controller) {
     }
 
     // on any filter checkbox changed
-    function onFilterCheckboxChanged(e) {
+    function onFilterChanged(e) {
         // get list of checked types and roles
         var checked_types = getCheckedFilterTypes()
         var checked_roles = getCheckedFilterRoles()
@@ -78,15 +81,11 @@ function commentingStageController(controller) {
     }
 
     function getCheckedFilterTypes() {
-        return $("#comment-filter input.type:checked")
-            .map(function(idx, obj) { return $(obj).val(); })
-            .toArray();
+        return $("#comment-filter-type").val()
     }
 
     function getCheckedFilterRoles() {
-        return $("#comment-filter input.role:checked")
-            .map(function(idx, obj) { return $(obj).val(); })
-            .toArray();
+        return $("#comment-filter-role").val()
     }
 
     return { register }

@@ -1,10 +1,12 @@
 {%raw%}
 
+{{#ifHas user.permissions "comment"}}
 {{#if (not private) }}
 <div class="well well-sm">
     <a href="#comment-add-box">Add comment</a>
 </div>
 {{/if}}
+{{/ifHas}}
 
 {{!-- Hide the entire block if comments are private,
       but show it for user with 'comment.manage' permission --}}
@@ -28,27 +30,29 @@
     <div class="panel-body">
 
         {{! Filter box }}
-        <div id="comment-filter" class="well well-sm">
-            <div>
-                <div class="checkbox-inline">
-                    <label class="checkbox-inline"><input type="checkbox" class="type" value="plus" checked>Plus</label>
-                </div>
-                <div class="checkbox-inline">
-                    <label class="checkbox-inline"><input type="checkbox" class="type" value="minus" checked>Minus</label>
-                </div>
-                <div class="checkbox-inline">
-                    <label class="checkbox-inline"><input type="checkbox" class="type" value="info" checked>Info</label>
+        <form id="comment-filter" class="form-horizontal well well-sm">
+            <div class="form-group">
+                <label for="comment-filter-type" class="col-sm-2 control-label">Types:</label>
+                <div class="col-sm-10">
+                    <select id="comment-filter-type" class="selectpicker form-control" multiple>
+                        <option value="plus" selected>Plus</option>
+                        <option value="minus" selected>Minus</option>
+                        <option value="info" selected>Info</option>
+                    </select>
                 </div>
             </div>
 
-            <div>
-                {{#each roles}}
-                <div class="checkbox-inline">
-                    <label class="checkbox-inline"><input type="checkbox" class="role" value="{{@this}}" checked>{{@this}}</label>
+            <div class="form-group">
+                <label for="comment-filter-role" class="col-sm-2 control-label">Roles:</label>
+                <div class="col-sm-10">
+                    <select id="comment-filter-role" class="selectpicker form-control" multiple>
+                        {{#each roles}}
+                        <option value="{{@this}}" selected>{{@this}}</option>
+                        {{/each}}
+                    </select>
                 </div>
-                {{/each}}
             </div>
-        </div>
+        </form>
 
         <div id="comment-list">
         {{#each comments}}
