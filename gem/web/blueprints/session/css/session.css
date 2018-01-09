@@ -19,3 +19,7 @@
 .footer .container {
     margin: 20px 0;
 }
+
+#session-users-list {
+    padding-left: 15px;
+}
