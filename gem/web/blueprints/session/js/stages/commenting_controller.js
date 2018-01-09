@@ -47,11 +47,16 @@ function commentingStageController(controller) {
         comment(content, type, commentQuote)
     }
 
+    function onCommentSubmittedResponse(data) {
+        var flash = $("#comment-submitted")
+        flash.removeClass("hidden")
+        setTimeout(function() { flash.alert("close") }, 5000)
+    }
+
     // Actions
 
     function comment(content, type, quote) {
-        controller.socket.emit("comment", {content, type, quote})
-        console.log(content, type)
+        controller.socket.emit("comment", {content, type, quote}, onCommentSubmittedResponse)
     }
 
     function setCommentingPrivacy(value) {
