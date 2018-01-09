@@ -9,8 +9,9 @@ class Repository:
         self._collection = collection
         self._cache = Cache()
 
-    def count(self, query):
-        return self._collection.count(query)
+    def count(self, criteria):
+        """Returns count of object by specified criteria"""
+        return self._collection.count(criteria)
 
     def all(self):
         """Returns all items in collection.
@@ -18,6 +19,7 @@ class Repository:
         return self.__find({})
 
     def get(self, oid):
+        """Returns object by specified Id"""
         return self.__get(oid)
 
     def find(self, criteria):
@@ -55,7 +57,8 @@ class Repository:
     def __find_one(self, criteria):
         dbo = self._collection.find_one(criteria)  # fetch database
         obj = self.__map(dbo)         # map to object
-        self._cache.set(obj.id, obj)  # save object in cache
+        if obj:
+            self._cache.set(obj.id, obj)  # save object in cache
         return obj
 
     def __get(self, oid):
@@ -63,7 +66,8 @@ class Repository:
         if not obj:  # no
             dbo = self._collection.find_one(ObjectId(oid))
             obj = self.__map(dbo)
-            self._cache.set(oid, obj)
+            if obj:
+                self._cache.set(oid, obj)
         return obj
 
     def __map(self, data):

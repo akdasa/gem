@@ -47,6 +47,11 @@ class Session:
         session = sessions.get(self.session_id)
         return session["permissions"]["vote"]
 
+    def close(self):
+        session = sessions.get(self.session_id)
+        session.status = "closed"
+        sessions.save(session)
+
     def notify(self, event, data, room=None):
         emit(event, data, room=room or self.__session_id)
 
