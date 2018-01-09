@@ -19,7 +19,8 @@ function createUsersController(controller) {
     var template = Handlebars.compile(line)
 
 
-    function onKickButtonClicked() {
+    function onKickButtonClicked(e) {
+        e.preventDefault()
         var userId = $(this).data("user-id")
         showKickDialog(function (reason) {
             controller.socket.emit("kick", {user: userId, reason})

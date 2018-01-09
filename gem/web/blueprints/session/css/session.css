@@ -23,3 +23,11 @@
 #session-users-list {
     padding-left: 15px;
 }
+
+.kick {
+    opacity: .3;
+}
+
+.kick:hover {
+    opacity: 1;
+}
