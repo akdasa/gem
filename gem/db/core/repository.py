@@ -9,8 +9,9 @@ class Repository:
         self._collection = collection
         self._cache = Cache()
 
-    def count(self, query):
-        return self._collection.count(query)
+    def count(self, criteria):
+        """Returns count of object by specified criteria"""
+        return self._collection.count(criteria)
 
     def all(self):
         """Returns all items in collection.
@@ -18,6 +19,7 @@ class Repository:
         return self.__find({})
 
     def get(self, oid):
+        """Returns object by specified Id"""
         return self.__get(oid)
 
     def find(self, criteria):
