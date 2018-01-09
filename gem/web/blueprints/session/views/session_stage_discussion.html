@@ -28,13 +28,16 @@
         </div>
 
         {{#ifHas user.permissions "discussion"}}
-        <div class="btn-group btn-group-justified" role="group">
-            <a href="#" class="btn btn-success {{#if (not accept)}}disabled{{/if}}" id="discussion-raise-hand">
-                <span class="glyphicon glyphicon-hand-up" aria-hidden="true"></span> Raise hand
-            </a>
+        <div class="btn-group-justified" role="group">
+            {{#ifHas (extract queue "id") @root.user._id}}
             <a href="#" class="btn btn-warning" id="discussion-withdraw-hand">
-                <span class="glyphicon glyphicon-hand-down" aria-hidden="true"></span> Withdraw hand
+                Withdraw from queue
             </a>
+            {{else}}
+            <a href="#" class="btn btn-success {{#if (not accept)}}disabled{{/if}}" id="discussion-raise-hand">
+                Request the floor
+            </a>
+            {{/ifHas}}
         </div>
         {{/ifHas}}
     </div>
