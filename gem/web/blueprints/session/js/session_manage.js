@@ -1,5 +1,6 @@
 function createManageController(controller) {
     var nextStageLabel = $("#state-next")
+    var alerts = Alerts()
 
 
     $(".change-stage").on("click", function(e) {
@@ -37,6 +38,12 @@ function createManageController(controller) {
             var type = data.next.type ? " (" + data.next.type + ")" : ""
             nextStageLabel.html(type)
         }
+    }
+
+    function onCloseSessionResponse(data) {
+        alerts.alert("Closed", "Session is closed. You will be redirected to the dashboard page.", function () {
+            window.location = "/account"
+        })
     }
 
     // Actions ---------------------------------------------------------------------------------------------------------
