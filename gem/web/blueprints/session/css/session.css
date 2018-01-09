@@ -8,6 +8,11 @@
     overflow-y: scroll;
 }
 
+.proposal-block {
+    max-height: 400px;
+    overflow-y: scroll;
+}
+
 .footer {
     position: fixed;
     bottom: 0;
