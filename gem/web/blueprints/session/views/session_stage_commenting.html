@@ -1,5 +1,11 @@
 {%raw%}
 
+{{#if (not private) }}
+<div class="well well-sm">
+    <a href="#comment-add-box">Add comment</a>
+</div>
+{{/if}}
+
 {{!-- Hide the entire block if comments are private,
       but show it for user with 'comment.manage' permission --}}
 
@@ -67,6 +73,7 @@
 
 
 {{#ifHas user.permissions "comment"}}
+<a name="comment-add-box"></a>
 <div class="panel panel-default">
     <div class="panel-heading">Add comment</div>
     <div class="panel-body">
