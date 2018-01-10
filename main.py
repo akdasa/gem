@@ -4,6 +4,7 @@ from flask_login import LoginManager, current_user
 from gem.channel import init
 from gem.db import users as users_db
 from gem.web.app.auth import User, has_permission, access_denied
+from gem.web.app.json_encoder import GemJsonEncoder
 from gem.web.blueprints.proposals import proposals
 from gem.web.blueprints.sessions import sessions
 from gem.web.blueprints.users import users
@@ -17,6 +18,7 @@ app = Flask(__name__,
             template_folder="gem/web/templates",
             static_folder="gem/web/static")
 app.secret_key = 'some_secret'
+app.json_encoder = GemJsonEncoder
 channel = init(app)
 
 from gem.web.blueprints.account import account

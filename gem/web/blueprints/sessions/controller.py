@@ -8,7 +8,7 @@ from gem.web.blueprints.crud_controller import CrudController
 
 class SessionsController(CrudController):
     def __init__(self):
-        super().__init__(sessions, namespace="sessions", columns=["title", "date", "status"],
+        super().__init__(sessions, namespace="sessions", columns=["title", "date", "time_start", "time_end", "status"],
                          row_class=self.__row_class)
 
         self.add_action("run", "play")
@@ -38,6 +38,8 @@ class SessionsController(CrudController):
         model.title = data.get("title", None)
         model.agenda = data.get("agenda", None)
         model.date = data.get("date", None)
+        model.time_start = data.get("time-start", None)
+        model.time_end = data.get("time-end", None)
         model.proposals = ids
         model.permissions = {
             "presence": presence,
