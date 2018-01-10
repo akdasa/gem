@@ -1,0 +1,22 @@
+{%raw%}
+<div class='col-sm-4'>
+    <b>{{session.title}}</b>
+</div>
+<div class='col-sm-4'>
+    <center>
+        {{#if timeIsUp}}
+            <span class="text-danger">Time is up!</span>
+        {{else}}
+            {{#if time.days}}{{time.days}}d{{/if}} {{#if time.hours}}{{time.hours}}:{{/if}}{{time.minutes}}:{{time.seconds}}
+        {{/if}}
+    </center>
+</div>
+<div class='col-sm-4'>
+    <div class='pull-right'>
+        {{#each groups}}
+        {{@key}}: {{len @this}} |
+        {{/each}}
+        Total: {{len users}}
+    </div>
+</div>
+{%endraw%}

@@ -52,6 +52,14 @@ Handlebars.registerHelper('list', function(array) {
     return array.join(", ");
 });
 
+Handlebars.registerHelper('len', function(array) {
+    return array.length;
+});
+
+Handlebars.registerHelper('extract', function(array, field) {
+    return array.map(function(x) { return x[field] })
+});
+
 Handlebars.registerHelper({
     eq: function (v1, v2) {
         return v1 === v2;

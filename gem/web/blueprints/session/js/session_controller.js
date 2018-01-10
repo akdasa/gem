@@ -1,6 +1,6 @@
 // Session controller
 
-function createSessionController(sessionKey) {
+function createSessionController(sessionKey, sessionData) {
     me = {}
 
     me.sessionKey = sessionKey
@@ -10,11 +10,17 @@ function createSessionController(sessionKey) {
     me.manage = createManageController(me)
     me.stage = createStageController(me)
 
+    // info line
+    me.infoLine = InfoLine("#footer-info")
+    me.infoLine.setEndTime(new Date(sessionData.date + " " + sessionData.time_end))
+    me.infoLine.setSessionTitle(sessionData.title)
+
+
     me.user = null
 
     function onKick(data) {
         me.socket.disconnect()
-        showAlert("Kicked!", data.message, function () { window.location = "/" })
+        Alerts().alert("Kicked!", data.message, function () { window.location = "/" })
     }
 
     function onConnected(socket) {
@@ -44,24 +50,11 @@ function createSessionController(sessionKey) {
         })
         me.socket.on("stage", me.stage.processMessage)
         me.socket.on("chat", me.chat.processMessage)
-        me.socket.on("users", me.users.processMessage)
-        me.socket.on("timer", me.timer.processMessage)
-    }
-
-    // Private members
-
-    function showAlert(title, message, action) {
-        $.alert({
-            title: title,
-            content: message,
-            type: "red",
-            buttons: {
-                confirm: {
-                    text: "Ok",
-                    action: action
-                }
-            }
+        me.socket.on("users", function(data) {
+            me.infoLine.setUsers(data)
+            me.users.processMessage(data)
         })
+        me.socket.on("timer", me.timer.processMessage)
     }
 
     me.connect = connect
@@ -73,7 +66,8 @@ function createSessionController(sessionKey) {
 $(document).ready(function() {
     var host = "http://" + document.domain + ":" + location.port
     var sessionKey = $("#session-key").text().trim()
-    var controller = createSessionController(sessionKey)
+    var sessionData = JSON.parse($("#session-data").text())
+    var controller = createSessionController(sessionKey, sessionData)
     window.controller = controller
 
     controller.connect(host)

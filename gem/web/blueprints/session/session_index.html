@@ -17,6 +17,10 @@
 {{session._id}}
 </script>
 
+<script id="session-data" type="application/json">
+{{session|tojson}}
+</script>
+
 <script id="proposals" type="application/json">
 {{proposals|tojson}}
 </script>
@@ -27,10 +31,13 @@
 
 
 {% block footer %}
-
-    {% if user_has_permission("session.manage") %}
     <footer class="footer">
-        <div class="container">
+        <div id="footer-info" class="row info-line hidden">
+            {% include "./views/session_info_line.html" %}
+        </div>
+
+        {% if user_has_permission("session.manage") %}
+        <div class="row">
             <a href="#" class="btn btn-default change-stage" data-value="-1">
                 Previous <span id="state-prev"></span>
             </a>
@@ -57,6 +64,7 @@
                 </ul>
             </div>
         </div>
+        {% endif %}
     </footer>
 
     <div class="hidden" id="timer-custom">
@@ -68,6 +76,4 @@
             </div>
         </form>
     </div>
-    {% endif %}
-
 {% endblock %}

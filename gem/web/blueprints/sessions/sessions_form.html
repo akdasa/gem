@@ -31,6 +31,39 @@
         </div>
     </div>
 
+    <!-- Time -->
+    <div class="form-group">
+        <label for="time-start" class="col-sm-2 control-label">Time</label>
+        <div class="col-sm-5">
+            <input id="time-start"
+                   name="time-start"
+                   class="form-control bootstrap-timepicker timepicker"
+                   placeholder="Time start"
+                   value="{{ model.time_start }}"
+                   autocomplete="off"
+                   data-provide="timepicker"
+                   data-minute-step="1"
+                   data-show-meridian="false"
+                   data-modal-backdrop="true"
+                   type="text"
+                   {%if not allow_edit%}readonly{%endif%}>
+        </div>
+        <div class="col-sm-5">
+            <input id="time-end"
+                   name="time-end"
+                   class="form-control bootstrap-timepicker timepicker"
+                   placeholder="Time end"
+                   value="{{ model.time_end }}"
+                   autocomplete="off"
+                   data-provide="timepicker"
+                   data-minute-step="1"
+                   data-show-meridian="false"
+                   data-modal-backdrop="true"
+                   type="text"
+                   {%if not allow_edit%}readonly{%endif%}>
+        </div>
+    </div>
+
     <!-- Agenda -->
     <div class="form-group">
         <label for="agenda" class="col-sm-2 control-label">Agenda</label>
