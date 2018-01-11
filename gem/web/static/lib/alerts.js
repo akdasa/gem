@@ -16,5 +16,29 @@ function Alerts() {
         })
     }
 
-    return {alert:red_alert}
+    function input(title, message, action) {
+        $.confirm({
+            title: title,
+            type: "red",
+            content: '' +
+            '<form action="" class="form">' +
+            '<div class="form-group">' +
+            '<textarea placeholder="'+message+'" class="form-control" id="msg"></textarea>' +
+            '</div>' +
+            '</form>',
+            buttons: {
+                formSubmit: {
+                    text: "Ok",
+                    btnClass: "btn-danger",
+                    action: function () {
+                        var msg = this.$content.find("#msg").val();
+                        action(msg)
+                    }
+                },
+                cancel: function () {}
+            }
+        })
+    }
+
+    return {alert:red_alert, input}
 }

@@ -1,73 +1,50 @@
-/* Manages the list of connected users. */
-function createUsersController(controller) {
+/* Manages the list of connected users.
+ *
+ * param session: session controller
+ * param container: container to display the list of users
+ * param userLineTemplate: template of user line
+ */
+function UsersPanelController(session, container, userLineTemplate) {
 
     $(document).on("click", ".kick", onKickButtonClicked)
 
-    // Processes incoming message
-    // param: data - array of connected users
-    //        [{name: "akd", role: "secretary"}, ...]
-    function processMessage(data) {
-        users = data
+    // Updates panel
+    function update() {
         render()
     }
+
+    // Sets list of connected users
+    // param data: array of connected users
+    //             [{name: "akd", role: "secretary"}, ...]
+    function setUsers(data) {
+        users = data
+        update()
+    }
+
 
     // Private members
 
     var users    = []
-    var panel    = $("#session-users-list")
-    var line     = $("#session-users-line").html()
-    var template = Handlebars.compile(line)
+    var template = Handlebars.compile(userLineTemplate)
+    var alerts   = Alerts()
 
 
+    // On "kick" button clicked
     function onKickButtonClicked(e) {
         e.preventDefault()
         var userId = $(this).data("user-id")
-        showKickDialog(function (reason) {
-            controller.socket.emit("kick", {user: userId, reason})
-        })
-    }
 
-    function showKickDialog(callback) {
-        $.confirm({
-            title: 'Kick!',
-            type: 'red',
-            content: '' +
-            '<form action="" class="form">' +
-            '<div class="form-group">' +
-            '<textarea placeholder="Reason" class="reason form-control" ></textarea>' +
-            '</div>' +
-            '</form>',
-            buttons: {
-                formSubmit: {
-                    text: 'Kick',
-                    btnClass: 'btn-danger',
-                    action: function () {
-                        var reason = this.$content.find('.reason').val();
-                        callback(reason)
-                    }
-                },
-                cancel: function () {
-                    //close
-                },
-            },
-            onContentReady: function () {
-                // bind to events
-                var jc = this;
-                this.$content.find('form').on('submit', function (e) {
-                    // if the user submits the form by pressing enter in the field.
-                    e.preventDefault();
-                    jc.$$formSubmit.trigger('click'); // reference the button and click it
-                });
-            }
+        alerts.input("Remove user from session", "Reason", function(reason) {
+            session.emit("kick", {user: userId, reason})
         })
     }
 
     function render() {
-        panel.empty()
+        container.empty()
         for (user of users) {
-            panel.append(template(user, {data: {user: controller.user}}))
+            container.append(template(user, {data: {user: session.user}}))
         }
     }
 
-    return { processMessage, render }
+    return { setUsers, update }
 }
