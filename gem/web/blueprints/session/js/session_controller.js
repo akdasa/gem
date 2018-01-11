@@ -11,7 +11,7 @@ function createSessionController(sessionKey, sessionData) {
     me.stage = createStageController(me)
 
     // info line
-    me.infoLine = InfoLine("#footer-info")
+    me.infoLine = InfoLineController(me, $("#footer-info"))
     me.infoLine.setEndTime(new Date(sessionData.date + " " + sessionData.time_end))
     me.infoLine.setSessionTitle(sessionData.title)
 

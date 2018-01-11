@@ -1,12 +1,9 @@
-function InfoLine(selector) {
-
-    var node = $(selector)
-
-    var endTime = undefined
-    var sessionTitle = undefined
-    var users = undefined
-    var template = Handlebars.compile($(selector).html())
-    var timer = setInterval(update, 1000)
+/* Manages state of information line
+ *
+ * param session: session controller
+ * param node: node to control
+ */
+function InfoLineController(session, node) {
 
     // sets end time of the session
     // param time: session end time
@@ -26,23 +23,30 @@ function InfoLine(selector) {
         sessionTitle = title
     }
 
-    // internal functions
+    // internal members
+
+    var endTime = undefined
+    var sessionTitle = undefined
+    var users = undefined
+    var template = Handlebars.compile(node.html())
+    var timer = setInterval(update, 1000)
 
     // renders info line
     function update() {
         var now = new Date()
-        var td = timeDiff(endTime, now)
+        var td = timeDiff(now, endTime)
         var usersByRole = groupBy(users, "role")
+        var fiveMinutes = 1000 * 60 * 5
 
-        html = template({
+        node.html(template({
             session: {title: sessionTitle},
             groups: usersByRole,
             users: users,
             time: td,
-            timeIsUp: !(td.days || td.hours || td.minutes || td.seconds)
-        })
+            style: td.negative ? "danger" : td.distance < fiveMinutes ? "warning" : "primary",
+            overtime: td.negative
+        }))
 
-        node.html(html)
         node.removeClass("hidden")
     }
 

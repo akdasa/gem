@@ -4,11 +4,17 @@
 </div>
 <div class='col-sm-4'>
     <center>
-        {{#if timeIsUp}}
-            <span class="text-danger">Time is up!</span>
+        <span class="text-{{style}}">
+        {{#if overtime}}
+            Session overtime:
         {{else}}
-            {{#if time.days}}{{time.days}}d{{/if}} {{#if time.hours}}{{time.hours}}:{{/if}}{{time.minutes}}:{{time.seconds}}
+            Time remaining:
         {{/if}}
+
+        {{#if time.days}}{{time.days}}d{{/if}}
+        {{#if time.hours}}{{padTime time.hours}}:{{/if}}
+        {{padTime time.minutes}}:{{padTime time.seconds}}
+        </span>
     </center>
 </div>
 <div class='col-sm-4'>
