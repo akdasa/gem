@@ -1,84 +1,96 @@
-function createStageController(controller) {
+/* Stage Controller
+ *
+ * param session: Session
+ * param node: Node to render session view
+ */
+function StageController(session, node) {
 
-    // Processes incoming message
-    // param: data - view of stage
     function processMessage(data) {
-        // stage changed. Lets stop timer
-        controller.timer.stop()
+        var proposalId = data.proposal_id
+        var type = data.stage.type
+        var nextStage = getControllers(proposalId)[type] // controller for next stage
+        var isStageChanged = (nextStage != currentStage)
 
-        //
-        if (lastStageType) {
-            var psc = stages[lastStageType]
-            if (psc) {
-                if (psc.unregister) { psc.unregister() }
+        if (isStageChanged) {
+            onStageChanged(currentStage, nextStage)
+        }
+
+        if (nextStage) {
+            currentStage = nextStage
+
+            // extend data with additional info
+            Object.assign(data, {
+                stageType: function() { return data.stage.type },
+                proposal: data.proposal_id ? proposals[data.proposal_id] : null,
+                user: session.user
+            })
+
+            // updates state of the stage controller
+            if (nextStage.setState) {
+                nextStage.setState(data)
             }
         }
 
-        //
-        var stageController = stages[data.stage.type]
-        if (stageController) {
-            stageController.data = data
-            if (stageController.enter) { stageController.enter() }
-        }
-
-        lastStageType = data.stage.type
-        renderStage(data)
-
-        if (stageController) {
-            if (stageController.register) { stageController.register() }
-        }
+        // state is changes, so render it
+        render()
     }
 
-    function onUserInfoMessage(data) {
-        user = data
+    // renders current stage
+    function render() {
+        if (!currentStage) return;
+
+        // render and register handlers
+        node.html(template(currentStage.view()))
+        if (currentStage.register) currentStage.register()
+    }
+
+    // Event handlers
+
+    function onStageChanged(current, next) {
+        // stage changed - stop the timer
+        session.timer.stop()
+
+        // unregister handlers from current stage
+        if (current && current.unregister) {
+            currentStage.unregister()
+        }
+
+        // call "enter" handler for next stage
+        if (next && next.enter) {
+            nextStage.enter()
+        }
     }
 
     // Private members
 
-    var viewHtml = $("#stage-template").html()
-    var proposalsHtml = $("#proposals").html()
+    var currentStage = null
+    var template = Handlebars.compile($("#stage-template").html())
+    var proposals = JSON.parse($("#proposals").html())
+    var controllers = {} // map of controllers keyed by proposalId
 
-    var template = Handlebars.compile(viewHtml)
-    var proposals = JSON.parse(proposalsHtml)
+    // returns controllers for specified proposal
+    // param proposalId: Id of proposal
+    function getControllers(proposalId) {
+        var c = controllers[proposalId]
+        if (!c) {
+            c = createControllers()
+            controllers[proposalId] = c
+        }
+        return c
+    }
 
-    var stages = {}
-    var lastStageType = null
-    var user = {}
-
-    stages["voting"] = VotingStageController(controller)
-    stages["commenting"] = commentingStageController(controller)
-    stages["discussion"] = discussionStageController(controller)
-
-
-    function render(view) {
-        var stageController = stages[lastStageType]
-        if (stageController) {
-            var view = stageController.view ? stageController.view() : {}
-            renderStage(Object.assign({}, stageController.data, view))
-            if (stageController.register) { stageController.register() }
+    // creates a bunch of controllers for each stage
+    function createControllers() {
+        return {
+            "agenda": SimpleStageController(session),
+            "acquaintance": SimpleStageController(session),
+            "closed": SimpleStageController(session),
+            "voting": VotingStageController(session),
+            "votingresults": VotingResultsStageController(session),
+            "commenting": CommentingStageController(session),
+            "discussion": DiscussionStageController(session)
         }
     }
 
-    function renderStage(data) {
-        // provide some additional data for template
-        data.stageType = function() { return data.stage.type }
-        data.user = user
-
-        // load cached proposal data if proposal id is provided
-        if (data.proposal_id) {
-            data.proposal = proposals[data.proposal_id]
-        }
-
-        // render template and apply to DOM
-        var html = template(data)
-        $("#stage").html(html)
-
-        // some dynamic
-        // TODO: extract to somewhere else
-        if (data.stage.type == "votingresults") {
-            $('.vote-details').popover({ trigger: "hover" })
-        }
-    }
-
-    return {processMessage, onUserInfoMessage, render}
+    return { processMessage, render }
 }

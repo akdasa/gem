@@ -1,4 +1,6 @@
-function discussionStageController(controller) {
+function DiscussionStageController(controller) {
+    var state
+
     function register() {
         $("#discussion-accept").on("change", onAcceptCheckboxChanged)
         $(".discussion-give-voice").on("click", onGiveVoiceToUserClicked)
@@ -6,6 +8,14 @@ function discussionStageController(controller) {
         $("#discussion-raise-hand").on("click", onRaiseHandButtonClicked)
         $("#discussion-withdraw-hand").on("click", onWithdrawHandButtonClicked)
         $("[data-toggle='tooltip']").tooltip()
+    }
+
+    function setState(value) {
+        state = value
+    }
+
+    function view() {
+        return state
     }
 
     function onAcceptCheckboxChanged(e) {
@@ -57,5 +67,5 @@ function discussionStageController(controller) {
         controller.socket.emit("manage", { command: "withdraw_hand" })
     }
 
-    return { register }
+    return { register, view, setState }
 }

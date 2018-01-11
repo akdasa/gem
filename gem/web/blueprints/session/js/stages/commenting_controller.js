@@ -1,5 +1,6 @@
-function commentingStageController(controller) {
+function CommentingStageController(controller) {
     var commentQuote = null
+    var state = null
 
     function register() {
         $("#comment-private").on("change", onPrivateCommentsCheckboxChanged)
@@ -9,6 +10,14 @@ function commentingStageController(controller) {
         $(".selectpicker").selectpicker()
         $("#comment-filter-type").on("changed.bs.select", onFilterChanged)
         $("#comment-filter-role").on("changed.bs.select", onFilterChanged)
+    }
+
+    function setState(value) {
+        state = value
+    }
+
+    function view() {
+        return state
     }
 
     // UI Event handlers
@@ -88,5 +97,5 @@ function commentingStageController(controller) {
         return $("#comment-filter-role").val()
     }
 
-    return { register }
+    return { register, view, setState }
 }

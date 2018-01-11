@@ -8,7 +8,7 @@ function createSessionController(sessionKey, sessionData) {
     me.chat = createChatController(me)
     me.timer = createTimerController(me)
     me.manage = createManageController(me)
-    me.stage = createStageController(me)
+    me.stage = StageController(me, $("#stage"))
 
     // info line
     me.infoLine = InfoLineController(me, $("#footer-info"))
@@ -45,7 +45,6 @@ function createSessionController(sessionKey, sessionData) {
         me.socket.on("kick", onKick)
         me.socket.on("user", function(data) {
             me.user=data;
-            me.stage.onUserInfoMessage(data);
             me.users.update();
         })
         me.socket.on("stage", me.stage.processMessage)

@@ -1,8 +1,12 @@
-/* Voting stage controller
+/* Voting Stage Controller
  *
  * param session: session
  */
 function VotingStageController(session) {
+
+    function setState(value) {
+        state = value
+    }
 
     function register() {
         $("#vote-private").on("change", onSecretBallotCheckboxChanged)
@@ -15,11 +19,14 @@ function VotingStageController(session) {
     }
 
     function view() {
-        return { voteStatus: voteStatus, timeIsOver }
+        return Object.assign(state, {
+            voteStatus: voteStatus, timeIsOver
+        })
     }
 
     // Private members
 
+    var state = null
     var voteStatus = null // user's vote status
     var timeIsOver = false
 
@@ -61,5 +68,5 @@ function VotingStageController(session) {
         session.emit("manage", {private: value})
     }
 
-    return { register, unregister, view }
+    return { register, unregister, view, setState }
 }
