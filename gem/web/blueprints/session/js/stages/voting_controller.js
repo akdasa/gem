@@ -4,8 +4,6 @@
  */
 function VotingStageController(session) {
 
-    console.log("CREATE")
-
     function register() {
         $("#vote-private").on("change", onSecretBallotCheckboxChanged)
         $(".vote").on("click", onVoteButtonClicked)
@@ -17,7 +15,6 @@ function VotingStageController(session) {
     }
 
     function view() {
-        console.log("VIEW", timeIsOver)
         return { voteStatus: voteStatus, timeIsOver }
     }
 
