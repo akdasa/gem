@@ -7,6 +7,14 @@ function createStageController(controller) {
         controller.timer.stop()
 
         //
+        if (lastStageType) {
+            var psc = stages[lastStageType]
+            if (psc) {
+                if (psc.unregister) { psc.unregister() }
+            }
+        }
+
+        //
         var stageController = stages[data.stage.type]
         if (stageController) {
             stageController.data = data
@@ -37,7 +45,7 @@ function createStageController(controller) {
     var lastStageType = null
     var user = {}
 
-    stages["voting"] = votingStageController(controller)
+    stages["voting"] = VotingStageController(controller)
     stages["commenting"] = commentingStageController(controller)
     stages["discussion"] = discussionStageController(controller)
 
@@ -72,5 +80,5 @@ function createStageController(controller) {
         }
     }
 
-    return {processMessage, onUserInfoMessage}
+    return {processMessage, onUserInfoMessage, render}
 }

@@ -19,12 +19,21 @@
 
         {{#if (eq voteStatus.success true) }}
         <div class="alert alert-success" role="alert">
-            Your vote <strong>"{{voteStatus.value}}"</strong> is accepted.
+            {{#if (and voteStatus.prev (not (eq voteStatus.prev voteStatus.value))) }}
+                Your vote <strong>{{voteName voteStatus.prev}}</strong> has been changed to
+                    <strong>{{voteName voteStatus.value}}</strong>.
+            {{else}}
+                Your vote <strong>{{voteName voteStatus.value}}</strong> has been submitted.
+            {{/if}}
         </div>
         {{/if}}
 
         {{#if (eq voteStatus.success false) }}
         <div class="alert alert-danger" role="alert">Your vote is not accepted.</div>
+        {{/if}}
+
+        {{#if timeIsOver }}
+        <div class="alert alert-danger" role="alert">Time is over.</div>
         {{/if}}
 
         <div class="progress vote-progress">
@@ -33,19 +42,20 @@
             </div>
         </div>
 
-        {{#ifHas user.permissions "vote" }}
-        <div class="btn-group btn-group-justified" role="group">
+        {{#if (and (has user.permissions "vote") (not timeIsOver)) }}
+        <br>
+        <div id="vote-buttons" class="btn-group btn-group-justified" role="group">
             <a id="vote-yes" href="#" class="btn btn-success vote" data-vote="yes">
-                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Yes
+                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> In Favor
             </a>
             <a id="vote-no" href="#" class="btn btn-danger vote" data-vote="no">
-                <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> No
+                <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> Against
             </a>
             <a id="vote-undecided" href="#" class="btn btn-warning vote" data-vote="undecided">
-                <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> Undecided
+                <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> Abstention
             </a>
         </div>
-        {{/ifHas}}
+        {{/if}}
     </div>
 </div>
 {%endraw%}

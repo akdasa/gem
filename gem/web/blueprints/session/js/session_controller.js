@@ -57,8 +57,12 @@ function createSessionController(sessionKey, sessionData) {
         me.socket.on("timer", me.timer.processMessage)
     }
 
-    me.emit = function(eventName, data) {
-        me.socket.emit(eventName, data)
+    me.emit = function(eventName, data, response) {
+        if (!response) {
+            me.socket.emit(eventName, data)
+        } else {
+            me.socket.emit(eventName, data, response)
+        }
     }
 
     me.connect = connect
