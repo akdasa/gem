@@ -29,7 +29,7 @@ function createUsersController(controller) {
 
     function showKickDialog(callback) {
         $.confirm({
-            title: 'Kick!',
+            title: 'Remove user from session',
             type: 'red',
             content: '' +
             '<form action="" class="form">' +
@@ -39,7 +39,7 @@ function createUsersController(controller) {
             '</form>',
             buttons: {
                 formSubmit: {
-                    text: 'Kick',
+                    text: 'Remove',
                     btnClass: 'btn-danger',
                     action: function () {
                         var reason = this.$content.find('.reason').val();
