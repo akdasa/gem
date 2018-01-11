@@ -4,9 +4,9 @@ function createSessionController(sessionKey, sessionData) {
     me = {}
 
     me.sessionKey = sessionKey
+    me.users = UsersPanelController(me, $("#session-users-list"), $("#session-users-line").html())
     me.chat = createChatController(me)
     me.timer = createTimerController(me)
-    me.users = createUsersController(me)
     me.manage = createManageController(me)
     me.stage = createStageController(me)
 
@@ -46,15 +46,19 @@ function createSessionController(sessionKey, sessionData) {
         me.socket.on("user", function(data) {
             me.user=data;
             me.stage.onUserInfoMessage(data);
-            me.users.render();
+            me.users.update();
         })
         me.socket.on("stage", me.stage.processMessage)
         me.socket.on("chat", me.chat.processMessage)
         me.socket.on("users", function(data) {
             me.infoLine.setUsers(data)
-            me.users.processMessage(data)
+            me.users.setUsers(data)
         })
         me.socket.on("timer", me.timer.processMessage)
+    }
+
+    me.emit = function(eventName, data) {
+        me.socket.emit(eventName, data)
     }
 
     me.connect = connect
