@@ -48,13 +48,8 @@ class SessionController:
         :param user: User
         :param data: Request data"""
         session_id = data.get("room")
-        session = self.__sockets.get_session(session_id)
-        if session and session.users.is_present(user):
-            session.notify("kick", {"message": "Only one connection is allowed to the session"}, room=socket_id)
-            disconnect()
-        else:
-            self.__sockets.connect(socket_id, user, session_id)
-            return {"success": True}
+        self.__sockets.connect(socket_id, user, session_id)
+        return {"success": True}
 
     def chat(self, socket_id, user, data):
         """On chat message received.

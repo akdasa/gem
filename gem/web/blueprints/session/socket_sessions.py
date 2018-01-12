@@ -27,4 +27,5 @@ class SocketSessions:
         self.__socket_id[user.id] = socket_id
 
     def disconnect(self, socket_id):
-        self.__by_room[socket_id].users.leave(socket_id)
+        if socket_id in self.__by_room:
+            self.__by_room[socket_id].users.leave(socket_id)
