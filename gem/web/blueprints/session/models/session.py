@@ -21,6 +21,8 @@ class Session:
         self.__users.changed.subscribe(self.__on_user_state_changed)
         self.__stages.changed.subscribe(self.__on_stage_changed)
 
+
+
     @property
     def session_id(self):
         return self.__session_id
@@ -51,6 +53,12 @@ class Session:
         session = sessions.get(self.session_id)
         session.status = "closed"
         sessions.save(session)
+
+    def manage(self, data, user):
+        if data["command"] == "set_quorum":
+            value = data["value"]
+            print("QUORUM", value)
+
 
     def notify(self, event, data, room=None):
         emit(event, data, room=room or self.__session_id)

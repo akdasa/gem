@@ -9,6 +9,7 @@ function createSessionController(sessionKey, sessionData) {
     me.timer = createTimerController(me)
     me.manage = createManageController(me)
     me.stage = StageController(me, $("#stage"))
+    me.quorum = QuorumController(me)
 
     // info line
     me.infoLine = InfoLineController(me, $("#footer-info"))

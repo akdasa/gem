@@ -71,6 +71,12 @@ def on_manage(data):
     return controller.manage(request.sid, current_user, data)
 
 
+@channel.on("manage_session")
+@login_required
+def on_manage_session(data):
+    return controller.manage_session(request.sid, current_user, data)
+
+
 @channel.on("kick")
 @login_required
 def on_kick(data):
