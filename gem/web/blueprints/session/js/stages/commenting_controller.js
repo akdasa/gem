@@ -10,6 +10,8 @@ function CommentingStageController(controller) {
         $(".selectpicker").selectpicker()
         $("#comment-filter-type").on("changed.bs.select", onFilterChanged)
         $("#comment-filter-role").on("changed.bs.select", onFilterChanged)
+
+        $("#comment-print").on("click", onPrintClicked)
     }
 
     function setState(value) {
@@ -63,6 +65,13 @@ function CommentingStageController(controller) {
         var flash = $("#comment-submitted")
         flash.removeClass("hidden")
         setTimeout(function() { flash.alert("close") }, 5000)
+    }
+
+    function onPrintClicked(e) {
+        e.preventDefault()
+        controller.emit("print", { "type": "comments" }, function(data) {
+            console.log(data)
+        })
     }
 
     // Actions

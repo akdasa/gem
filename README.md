@@ -3,18 +3,28 @@
 Application to improve GBC meeting experience
 
 # Installation
+## Dependencies
+1. Install https://wkhtmltopdf.org/
+2. Install python requirements:
+```
+pip3 install -r requirements.txt
+```
+
+## Assets
+Compile assets and seed a database
+```
+pip3 install -r requirements.txt
+python3 ./tools/assets_compile.py
+python3 ./install.py
+```
+
+## Configure
 Edit config.ini
 ```
 [db]
 host = mongodb_host
 port = 27017
 name = gem
-```
-Complie assets and seed a database
-```
-pip3 install -r requirements.txt
-python3 ./tools/assets_compile.py
-python3 ./install.py
 ```
 
 # Development
