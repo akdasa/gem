@@ -1,4 +1,6 @@
+import hashlib
 from abc import ABCMeta
+
 from gem.db import votes, users
 from .stage import SessionStage
 
@@ -8,12 +10,17 @@ class VotingBaseSessionStage(SessionStage, metaclass=ABCMeta):
         super().__init__(session, proposal)
         self._doc = None
         self._votes = None
+        self._private = True
 
     def on_enter(self):
         self._doc = votes.find_or_create(self.proposal.id)
         self._votes = self._doc.votes
+        self._private = self._doc.get("private", True)
 
     def on_leave(self):
+        self._doc.private = self._private
+        if self._private:
+            self.__anonymize()
         votes.save(self._doc)
 
     def _users_can_vote(self):
@@ -29,7 +36,13 @@ class VotingBaseSessionStage(SessionStage, metaclass=ABCMeta):
         :rtype: int
         :param value: Vote type
         :return: Count of votes"""
-        return len(list(filter(lambda x: self._votes[x] == value, self._votes)))
+        return len(list(filter(lambda x: self._votes[x]["vote"] == value, self._votes)))
+
+    def __anonymize(self):
+        """Removes any personal information form document"""
+        for row_id in self._votes:
+            if "user_id" in self._votes[row_id]:
+                del self._votes[row_id]["user_id"]
 
 
 class VotingSessionStage(VotingBaseSessionStage):
@@ -48,13 +61,18 @@ class VotingSessionStage(VotingBaseSessionStage):
         :param user: User
         :param value: Vote value
         :return: True on success"""
-        prev = self._votes.get(user.id, None)
-        self._votes[user.id] = value
+        user_id = self.__user_id_hash(user.id)
+
+        prev = self._votes.get(user_id, None)
+        prev_vote = prev["vote"] if prev else None
+
+        self._votes[user_id] = {"vote": value, "role": user.role}
+        self._votes[user_id]["user_id"] = user.id
         self.changed.notify()
-        return {"success": True, "value": value, "prev": prev}
+        return {"success": True, "value": value, "prev": prev_vote}
 
     def manage(self, data, user=None):
-        self._doc.private = data.get("private", True)
+        self._private = data.get("private", True)
         self.changed.notify()
 
     @property
@@ -62,7 +80,11 @@ class VotingSessionStage(VotingBaseSessionStage):
         can_vote_count = len(self._users_can_vote())
         voted = len(self._votes)
         t = voted if can_vote_count == 0 else max(can_vote_count, voted)
-        return {"voted": voted, "total": t, "private": self._doc.private}
+        return {"voted": voted, "total": t, "private": self._private}
+
+    @staticmethod
+    def __user_id_hash(key):
+        return hashlib.sha224(str(key).encode("utf-8")).hexdigest()
 
 
 class VotingResultsSessionStage(VotingBaseSessionStage):
@@ -95,10 +117,13 @@ class VotingResultsSessionStage(VotingBaseSessionStage):
 
     def __details(self):
         result = {}
-        for user_id in self._votes:
-            user = users.get(user_id)
-            role = user.role
-            value = self._votes[user_id]
+        for row_id in self._votes:
+            value = self._votes[row_id]
+            user_id = value.get("user_id", None)
+            user = users.get(user_id) if not self._private else None
+            vote = value["vote"]
+            user_name = user.name if user else value.get("name", None)
+            role = user.role if user else value.get("role", None)
 
             # add empty data for new role
             if role not in result:
@@ -108,9 +133,9 @@ class VotingResultsSessionStage(VotingBaseSessionStage):
                 }
 
             # count vote and append person into "who" section
-            if value in ["yes", "no", "undecided"]:
-                result[role][value] += 1
+            if vote in ["yes", "no", "undecided"]:
+                result[role][vote] += 1
                 if not self._doc.private:
-                    result[role]["who"][value].append(user.name)
+                    result[role]["who"][vote].append(user_name)
 
         return result
