@@ -47,9 +47,11 @@ class SessionController:
         :param socket_id: SocketIO Id
         :param user: User
         :param data: Request data"""
-        session_id = data.get("room")
-        self.__sockets.connect(socket_id, user, session_id)
-        return {"success": True}
+        session_id = data.get("session", None)
+        if session_id:
+            self.__sockets.connect(socket_id, user, session_id)
+            return {"success": True}
+        return {"success": False}
 
     def chat(self, socket_id, user, data):
         """On chat message received.

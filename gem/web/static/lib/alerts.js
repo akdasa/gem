@@ -2,10 +2,10 @@
 
 function Alerts() {
 
-    function red_alert(title, message, action) {
+    function red_alert(options, action) {
         $.alert({
-            title: title,
-            content: message,
+            title: options.title || "Alert",
+            content: options.message || "Some error occurred",
             type: "red",
             buttons: {
                 confirm: {

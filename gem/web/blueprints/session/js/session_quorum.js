@@ -7,7 +7,10 @@ function QuorumController(session) {
     }
 
     function showQuorumChangeCode(data) {
-        alerts.alert("Quorum Change Code", data.code)
+        alerts.alert({
+            title: "Quorum Change Code",
+            message: data.code
+        })
     }
 
     // Private members
@@ -40,7 +43,10 @@ function QuorumController(session) {
     // Handlers
     function onChangeQuorumDialogValueEntered(value) {
         if (!Number.isInteger(Number(value))) {
-            alerts.alert("Value is not valid", "Please provide positive integer value")
+            alerts.alert({
+                title: "Value is not valid",
+                message: "Please provide positive integer value"
+            })
         } else {
             sendQuorumChangeRequest(value)
         }
@@ -65,9 +71,9 @@ function QuorumController(session) {
 
     function onQuorumChangeCodesResponse(response) {
         if (response.success) {
-            alerts.alert("Change Quorum", response.message)
+            alerts.alert({title: "Change Quorum", message: response.message})
         } else {
-            alerts.alert("Change Quorum", response.message)
+            alerts.alert({title: "Change Quorum", message: response.message})
         }
     }
 

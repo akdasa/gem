@@ -21,12 +21,15 @@ function createSessionController(sessionKey, sessionData) {
 
     function onKick(data) {
         me.socket.disconnect()
-        Alerts().alert("You have been removed from the session", data.message, function () { window.location = "/" })
+        Alerts().alert({
+            title: "You have been removed from the session",
+            message: data.message},
+            function () { window.location = "/" })
     }
 
     function onConnected(socket) {
         $("#connection-lost").addClass("hidden")
-        me.socket.emit("join", { room: sessionKey })
+        me.socket.emit("join", { "session": sessionKey }, onJoinResponse)
     }
 
     function onDisconnected(socket) {
@@ -35,6 +38,15 @@ function createSessionController(sessionKey, sessionData) {
 
     function onReconnected(socket) {
         $("#connection-lost").addClass("hidden")
+    }
+
+    function onJoinResponse(response) {
+        if (response.success != true) {
+            Alerts().alert({
+                title: "Error",
+                message:"You are not connected to the session" },
+                function () { window.location = "/" })
+        }
     }
 
     function connect(uri) {
