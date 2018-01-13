@@ -10,7 +10,7 @@ from .users import SessionUsers
 class Session:
     """Represents Session."""
 
-    def __init__(self, session_id):
+    def __init__(self, session_id, connections):
         """Initializes new instance of the Session class.
         :param session_id: Session Id"""
         self.__session_id = session_id
@@ -18,6 +18,7 @@ class Session:
         self.__users = SessionUsers(self)
         self.__chat = SessionChat(self)
         self.__quorum = SessionQuorum(self)
+        self.connections = connections
 
         # subscribe for aspects' events
         self.__users.changed.subscribe(self.__on_user_state_changed)

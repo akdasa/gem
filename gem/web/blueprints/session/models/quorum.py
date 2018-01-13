@@ -1,4 +1,4 @@
-from random import randint
+from random import randint, sample
 
 from gem.db import users
 
@@ -12,7 +12,7 @@ class SessionQuorum:
 
     def request_change(self, value):
         self.__new_value = value
-        users = self.__get_persons()
+        users = self.__get_online_users_can_change()
         self.__generate_codes(len(users))
 
         for idx, user in enumerate(users):
@@ -36,9 +36,20 @@ class SessionQuorum:
             code = randint(100, 999)
             self.__codes.append(code)
 
-    @staticmethod
-    def __get_persons():
-        return users.with_permission("quorum.change")
+    def __get_online_users_can_change(self):
+        # get list of users can change quorum
+        users_can_change = users.with_permission("quorum.change")
+
+        # gets connections for users
+        connections = {str(user.id): self.__session.connections.find(user_id=str(user.id)) for user in users_can_change}
+
+        # get online users. filter out users with no connection
+        online = {user_id: connections for user_id, connections in connections.items() if len(connections) > 0}
+        online = list(map(lambda x: users.get(x), online.keys()))
+
+        # return list of users (max 3)
+        count_to_choose = min(3, len(online))
+        return sample(online, count_to_choose)
 
     @staticmethod
     def __user_names(users):

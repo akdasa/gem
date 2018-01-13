@@ -27,7 +27,7 @@ class Connections:
     def add(self, socket_id, user_id, session_id):
         # Create new session controller if not exist
         if session_id not in self.__rooms:
-            self.__rooms[session_id] = Session(session_id)
+            self.__rooms[session_id] = Session(session_id, self)
 
         join_room(session_id, socket_id)
         join_room(user_id, socket_id)
@@ -41,3 +41,4 @@ class Connections:
     def remove(self, socket_id):
         cd = self.find(socket_id=socket_id)
         cd.session.users.leave(cd.user_id)
+        self.__connections.remove(cd)
