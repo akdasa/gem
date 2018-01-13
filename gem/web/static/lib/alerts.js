@@ -16,14 +16,15 @@ function Alerts() {
         })
     }
 
-    function input(title, message, action) {
+    function input(options, action) {
+        // title, message, placeholder, action
         $.confirm({
-            title: title,
+            title: options.title,
             type: "red",
-            content: '' +
+            content: (options.message || "") +
             '<form action="" class="form">' +
             '<div class="form-group">' +
-            '<textarea placeholder="'+message+'" class="form-control" id="msg"></textarea>' +
+            '<textarea placeholder="'+(options.placeholder||"")+'" class="form-control" id="msg"></textarea>' +
             '</div>' +
             '</form>',
             buttons: {
@@ -32,7 +33,7 @@ function Alerts() {
                     btnClass: "btn-danger",
                     action: function () {
                         var msg = this.$content.find("#msg").val();
-                        action(msg)
+                        if (action) action(msg)
                     }
                 },
                 cancel: function () {}

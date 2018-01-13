@@ -2,6 +2,7 @@ from flask_socketio import emit
 
 from gem.db import sessions
 from .chat import SessionChat
+from .quorum import SessionQuorum
 from .stages import SessionStages
 from .users import SessionUsers
 
@@ -16,12 +17,11 @@ class Session:
         self.__stages = SessionStages(self)
         self.__users = SessionUsers(self)
         self.__chat = SessionChat(self)
+        self.__quorum = SessionQuorum(self)
 
         # subscribe for aspects' events
         self.__users.changed.subscribe(self.__on_user_state_changed)
         self.__stages.changed.subscribe(self.__on_stage_changed)
-
-
 
     @property
     def session_id(self):
@@ -55,10 +55,10 @@ class Session:
         sessions.save(session)
 
     def manage(self, data, user):
-        if data["command"] == "set_quorum":
-            value = data["value"]
-            print("QUORUM", value)
-
+        if data["command"] == "set_quorum" and "codes" not in data:
+            return self.__quorum.request_change(data["value"])
+        if data["command"] == "set_quorum" and "codes" in data:
+            return self.__quorum.change(data["codes"])
 
     def notify(self, event, data, room=None):
         emit(event, data, room=room or self.__session_id)

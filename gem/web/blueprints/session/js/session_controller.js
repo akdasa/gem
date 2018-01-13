@@ -54,6 +54,7 @@ function createSessionController(sessionKey, sessionData) {
             me.infoLine.setUsers(data)
             me.users.setUsers(data)
         })
+        me.socket.on("quorum_change_code", me.quorum.showQuorumChangeCode)
         me.socket.on("timer", me.timer.processMessage)
     }
 

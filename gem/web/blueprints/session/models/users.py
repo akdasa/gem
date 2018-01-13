@@ -1,3 +1,5 @@
+from flask_socketio import join_room
+
 from gem.event import Event
 from gem.web.app.auth import User
 
@@ -43,6 +45,8 @@ class SessionUsers:
         self.__notify_changes()
         self.__session.notify("user", self.__map_json(user), room=socket_id)
         self.__changed.notify(socket_id, user, True)
+
+        join_room(str(user.id), socket_id)
 
     def leave(self, socket_id):
         if socket_id not in self.__sockets:
