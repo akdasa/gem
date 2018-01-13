@@ -1,6 +1,9 @@
 /* Quorum controller. */
 function QuorumController(session) {
 
+    function getQuorum() {
+        return quorum
+    }
 
     function requestChange() {
         showChangeQuorumDialog()
@@ -72,10 +75,11 @@ function QuorumController(session) {
     function onQuorumChangeCodesResponse(response) {
         if (response.success) {
             alerts.alert({title: "Change Quorum", message: response.message})
+            quorum = response.value
         } else {
             alerts.alert({title: "Change Quorum", message: response.message})
         }
     }
 
-    return { requestChange, showQuorumChangeCode }
+    return { requestChange, showQuorumChangeCode, getQuorum }
 }

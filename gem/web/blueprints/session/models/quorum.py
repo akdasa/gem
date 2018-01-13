@@ -26,7 +26,7 @@ class SessionQuorum:
 
         if codes_match:
             self.__value = self.__new_value
-            return {"success": True, "message": "Quorum changed to {}".format(self.__value)}
+            return {"success": True, "message": "Quorum changed to {}".format(self.__value), "value": self.__value}
         else:
             return {"success": False, "message": "Codes doesn't match"}
 
