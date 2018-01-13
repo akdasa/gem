@@ -29,6 +29,11 @@ function createManageController(controller) {
         }
     })
 
+    $("#session-quorum-set").on("click", function(e) {
+        e.preventDefault()
+        controller.quorum.requestChange()
+    })
+
 
     function onChangeStageResponse(data) {
         if (data.next.title != data.current.title) {
