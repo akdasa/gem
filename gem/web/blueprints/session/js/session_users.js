@@ -35,7 +35,7 @@ function UsersPanelController(session, container, userLineTemplate) {
         var userId = $(this).data("user-id")
 
         alerts.input({title: "Remove user from session", placeholder: "Reason"}, function(reason) {
-            session.emit("kick", {user: userId, reason})
+            session.emit("kick", {user: userId, reason: reason || "No reason provided"})
         })
     }
 

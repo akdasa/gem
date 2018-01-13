@@ -42,23 +42,24 @@ class SessionController:
 
     # Messages ---------------------------------------------------------------------------------------------------------
 
-    def join(self, socket_id, user, data):
+    def join(self, socket_id, user_id, data):
         """Joins user (using socket_id and user for identification) to specified session.
         :param socket_id: SocketIO Id
-        :param user: User
+        :param user_id: User Id
         :param data: Request data"""
         session_id = data.get("session", None)
-        if session_id:
-            self.__sockets.connect(socket_id, user, session_id)
+        if session_id:  # session id is provided
+            self.__sockets.connect(socket_id, user_id, session_id)
             return {"success": True}
         return {"success": False}
 
-    def chat(self, socket_id, user, data):
+    def chat(self, socket_id, data):
         """On chat message received.
         :param socket_id: SocketIO Id
         :param user: User
         :param data: Request data"""
         session = self.__sockets.session_of(socket_id)
+        user = self.__sockets.user_of(socket_id)
         session.chat.say(user, data.get("msg", None))
 
     def change_stage(self, socket_id, data):
@@ -69,21 +70,22 @@ class SessionController:
         direction = data.get("value", 0)
         return session.stages.change(direction)
 
-    def vote(self, socket_id, user, data):
+    def vote(self, socket_id, data):
         """On vote command received.
         :param socket_id: SocketIO Id
-        :param user: User
         :param data: Data"""
         session = self.__sockets.session_of(socket_id)
+        user = self.__sockets.user_of(socket_id)
         vote_value = data.get("value", None)
         return session.stages.current.vote(user, vote_value)
 
-    def comment(self, socket_id, user, data):
+    def comment(self, socket_id, data):
         """On comment command received.
         :param socket_id: SocketIO Id
         :param user: User
         :param data: Data"""
         session = self.__sockets.session_of(socket_id)
+        user = self.__sockets.user_of(socket_id)
         content = data.get("content", None)
         kind = data.get("type", None)
         quote = data.get("quote", None)
@@ -94,12 +96,14 @@ class SessionController:
         session = self.__sockets.session_of(socket_id)
         return session.notify("timer", {"interval": minutes})
 
-    def manage(self, socket_id, user, data):
+    def manage(self, socket_id, data):
         session = self.__sockets.session_of(socket_id)
+        user = self.__sockets.user_of(socket_id)
         return session.stages.current.manage(data, user=user)
 
-    def manage_session(self, socket_id, user, data):
+    def manage_session(self, socket_id, data):
         session = self.__sockets.session_of(socket_id)
+        user = self.__sockets.user_of(socket_id)
         return session.manage(data, user)
 
     def close(self, socket_id):
@@ -113,7 +117,7 @@ class SessionController:
         :param socket_id:  SocketIO Id"""
         self.__sockets.disconnect(socket_id)
 
-    def kick(self, socket_id, current_user, data):
+    def kick(self, socket_id, data):
         user = data.get("user", None)      # user id to kick
         reason = data.get("reason", None)  # reason
         sid = self.__sockets.get_socket_id(user)  # socket_id of user to be kicked

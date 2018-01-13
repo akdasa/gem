@@ -41,7 +41,7 @@ function createManageController(controller) {
     }
 
     function onCloseSessionResponse(data) {
-        alerts.alert("Closed", "Session is closed. You will be redirected to the dashboard page.", function () {
+        alerts.alert({title: "Closed", message: "Session is closed. You will be redirected to the dashboard page."}, function () {
             window.location = "/account"
         })
     }

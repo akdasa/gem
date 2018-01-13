@@ -5,12 +5,12 @@ function Alerts() {
     function red_alert(options, action) {
         $.alert({
             title: options.title || "Alert",
-            content: options.message || "Some error occurred",
+            content: options.message || "",
             type: "red",
             buttons: {
                 confirm: {
                     text: "Ok",
-                    action: action
+                    action: action || function() {}
                 }
             }
         })
