@@ -1,10 +1,9 @@
 from flask import render_template
-from flask_socketio import disconnect
 
 from gem.db import sessions, proposals
 from gem.web.app.auth import access_denied
 from gem.web.app.sockets import disconnect_socket
-from .socket_sessions import SocketSessions
+from .connections import Connections
 
 
 class SessionController:
@@ -12,7 +11,7 @@ class SessionController:
 
     def __init__(self):
         """Initializes new instance of the SessionController class."""
-        self.__sockets = SocketSessions()
+        self.__connections = Connections()
 
     # Pages ------------------------------------------------------------------------------------------------------------
 
@@ -42,77 +41,81 @@ class SessionController:
 
     # Messages ---------------------------------------------------------------------------------------------------------
 
-    def join(self, socket_id, user, data):
+    def join(self, socket_id, user_id, data):
         """Joins user (using socket_id and user for identification) to specified session.
         :param socket_id: SocketIO Id
-        :param user: User
+        :param user_id: User Id
         :param data: Request data"""
-        session_id = data.get("room")
-        self.__sockets.connect(socket_id, user, session_id)
-        return {"success": True}
+        session_id = data.get("session", None)
+        if session_id:  # session id is provided
+            self.__connections.add(socket_id, user_id, session_id)
+            return {"success": True}
+        return {"success": False}
 
-    def chat(self, socket_id, user, data):
+    def chat(self, socket_id, data):
         """On chat message received.
         :param socket_id: SocketIO Id
         :param user: User
         :param data: Request data"""
-        session = self.__sockets.session_of(socket_id)
-        session.chat.say(user, data.get("msg", None))
+        cd = self.__connections.find(socket_id=socket_id)
+        cd.session.chat.say(cd.user, data.get("msg", None))
 
     def change_stage(self, socket_id, data):
         """On next stage command received.
         :param socket_id: SocketIO Id
         :param data: Data"""
-        session = self.__sockets.session_of(socket_id)
+        cd = self.__connections.find(socket_id=socket_id)
         direction = data.get("value", 0)
-        return session.stages.change(direction)
+        return cd.session.stages.change(direction)
 
-    def vote(self, socket_id, user, data):
+    def vote(self, socket_id, data):
         """On vote command received.
         :param socket_id: SocketIO Id
-        :param user: User
         :param data: Data"""
-        session = self.__sockets.session_of(socket_id)
+        cd = self.__connections.find(socket_id=socket_id)
         vote_value = data.get("value", None)
-        return session.stages.current.vote(user, vote_value)
+        return cd.session.stages.current.vote(cd.user, vote_value)
 
-    def comment(self, socket_id, user, data):
+    def comment(self, socket_id, data):
         """On comment command received.
         :param socket_id: SocketIO Id
         :param user: User
         :param data: Data"""
-        session = self.__sockets.session_of(socket_id)
+        cd = self.__connections.find(socket_id=socket_id)
         content = data.get("content", None)
         kind = data.get("type", None)
         quote = data.get("quote", None)
-        return session.stages.current.comment(user, content, kind, quote)
+        return cd.session.stages.current.comment(cd.user, content, kind, quote)
 
     def set_timer(self, socket_id, data):
         minutes = data.get("interval", 1)
-        session = self.__sockets.session_of(socket_id)
-        return session.notify("timer", {"interval": minutes})
+        cd = self.__connections.find(socket_id=socket_id)
+        return cd.session.notify("timer", {"interval": minutes})
 
-    def manage(self, socket_id, user, data):
-        session = self.__sockets.session_of(socket_id)
-        return session.stages.current.manage(data, user=user)
+    def manage(self, socket_id, data):
+        cd = self.__connections.find(socket_id=socket_id)
+        return cd.session.stages.current.manage(data, user=cd.user)
+
+    def manage_session(self, socket_id, data):
+        cd = self.__connections.find(socket_id=socket_id)
+        return cd.session.manage(data, cd.user)
 
     def close(self, socket_id):
         """On close stage command received.
         :param socket_id: SocketIO Id"""
-        session = self.__sockets.session_of(socket_id)
-        return session.close()
+        cd = self.__connections.find(socket_id=socket_id)
+        return cd.session.close()
 
     def disconnect(self, socket_id):
         """On user disconnected.
         :param socket_id:  SocketIO Id"""
-        self.__sockets.disconnect(socket_id)
+        self.__connections.remove(socket_id)
 
-    def kick(self, socket_id, current_user, data):
-        user = data.get("user", None)      # user id to kick
-        reason = data.get("reason", None)  # reason
-        sid = self.__sockets.get_socket_id(user)  # socket_id of user to be kicked
+    def kick(self, socket_id, data):
+        user_id = data.get("user", None)  # user id to kick
+        reason = data.get("reason", None) # reason
 
-        session = self.__sockets.session_of(socket_id)
-        session.notify("kick", {"message": reason}, room=sid)
-
-        disconnect_socket(sid)
+        cds = self.__connections.find(user_id=user_id)
+        for cd in cds:
+            cd.session.notify("kick", {"message": reason}, room=cd.socket_id)
+            disconnect_socket(cd.socket_id)

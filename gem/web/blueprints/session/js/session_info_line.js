@@ -25,9 +25,9 @@ function InfoLineController(session, node) {
 
     // internal members
 
-    var endTime = undefined
-    var sessionTitle = undefined
-    var users = undefined
+    var endTime = new Date()
+    var sessionTitle = ""
+    var users = []
     var template = Handlebars.compile(node.html())
     var timer = setInterval(update, 1000)
 

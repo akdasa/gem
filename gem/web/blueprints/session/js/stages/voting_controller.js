@@ -20,7 +20,8 @@ function VotingStageController(session) {
 
     function view() {
         return Object.assign(state, {
-            voteStatus: voteStatus, timeIsOver
+            voteStatus: voteStatus, timeIsOver,
+            quorum: session.quorum.getQuorum()
         })
     }
 
