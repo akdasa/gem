@@ -22,8 +22,7 @@ function StageController(session, node) {
             Object.assign(data, {
                 stageType: function() { return data.stage.type },
                 proposal: data.proposal_id ? proposals[data.proposal_id] : null,
-                user: session.user,
-                quorum: session.quorum.getQuorum()
+                user: session.user
             })
 
             // updates state of the stage controller
