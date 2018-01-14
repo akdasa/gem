@@ -1,7 +1,7 @@
 {%raw%}
 <div class="panel panel-default">
     <div class="panel-heading">
-        Votes ({{voted}} of {{total}})
+        {{#if isFinalVote}}Final vote{{else}}Straw vote{{/if}}
 
         {{#ifHas user.permissions "vote.manage" }}
         <div class="pull-right">
@@ -38,7 +38,7 @@
 
         <div class="progress vote-progress">
             <div class="progress-bar" role="progressbar" style="width: {{percentRound voted total}}%">
-                {{percentRound voted total}}%
+                {{percentRound voted total}}% ({{voted}} of {{total}})
             </div>
         </div>
 

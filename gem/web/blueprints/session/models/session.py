@@ -1,6 +1,7 @@
 from flask_socketio import emit
 
-from gem.db import sessions
+from gem.db import sessions, proposals
+from gem.web.app.flow import ProposalFlow
 from .chat import SessionChat
 from .quorum import SessionQuorum
 from .stages import SessionStages
@@ -52,6 +53,11 @@ class Session:
 
     def close(self):
         session = sessions.get(self.session_id)
+        for proposal_id in session.proposals:
+            proposal = proposals.get(proposal_id)
+            ProposalFlow(proposal).move_next()
+            proposals.save(proposal)
+
         session.status = "closed"
         sessions.save(session)
 

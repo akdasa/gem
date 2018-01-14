@@ -21,7 +21,8 @@ function VotingStageController(session) {
     function view() {
         return Object.assign(state, {
             voteStatus: voteStatus, timeIsOver,
-            quorum: session.quorum.getQuorum()
+            quorum: session.quorum.getQuorum(),
+            isFinalVote: state.type == "final"
         })
     }
 
