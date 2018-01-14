@@ -20,7 +20,7 @@ function VotingStageController(session) {
 
     function view() {
         var permissions = session.user.permissions
-        
+
         return Object.assign(state, {
             voteStatus: voteStatus, timeIsOver,
             quorum: state.quorum,
@@ -34,7 +34,7 @@ function VotingStageController(session) {
             canManage: permissions.indexOf("vote.manage") != -1,
             privateChecked: state.private ? "checked" : "",
             showPrivateAlert: state.private && permissions.indexOf("vote") != -1,
-            noQuorum: state.can_vote < state.quorum
+            noQuorum: state.type == "final" && state.can_vote < state.quorum
         })
     }
 
