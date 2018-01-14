@@ -63,6 +63,18 @@
                     <li><a href="#" class="timer-set" data-value="0">Stop</a></li>
                 </ul>
             </div>
+
+            <div class="btn-group dropup">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                    Options <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    {% if user_has_permission("quorum.request_change") %}
+                    <li><a href="#" id="session-quorum-set" data-value="1">Set Quorum</a></li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
         {% endif %}
     </footer>

@@ -60,6 +60,10 @@ Handlebars.registerHelper('extract', function(array, field) {
     return array.map(function(x) { return x[field] })
 });
 
+Handlebars.registerHelper('padTime', function(value) {
+    return String("00" + value).slice(-2)
+});
+
 Handlebars.registerHelper({
     eq: function (v1, v2) {
         return v1 === v2;

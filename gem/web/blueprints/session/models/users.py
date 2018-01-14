@@ -1,3 +1,4 @@
+from gem.db import users
 from gem.event import Event
 from gem.web.app.auth import User
 
@@ -9,49 +10,29 @@ class SessionUsers:
         :param session: Session
         """
         self.__session = session
-        self.__sockets = {}  # multiple sockets per one user is possible
+        self.__users = {}
         self.__changed = Event()
 
     @property
     def changed(self):
-        """
-        On users changed
-        :return: Event
-        """
         return self.__changed
 
     @property
     def all(self):
-        result = []
-        ids_present = []
-        users = self.__sockets.values()
-        for user in users:
-            user_id = user.get_id()
-            if user_id not in ids_present:
-                result.append(user)
-                ids_present.append(user_id)
-        return result
+        return self.__users.values()
 
-    def is_present(self, user):
-        for u in self.all:
-            if u.get_id() == user.id:
-                return True
-        return False
-
-    def join(self, socket_id, user):
-        self.__sockets[socket_id] = self.__map(user)
+    def join(self, user_id):
+        user = User(users.get(user_id))
+        self.__users[user_id] = self.__map(user)
         self.__notify_changes()
-        self.__session.notify("user", self.__map_json(user), room=socket_id)
-        self.__changed.notify(socket_id, user, True)
+        self.__session.notify("user", self.__map_json(user), room=user_id)
+        self.__changed.notify(user_id, user, True)
 
-    def leave(self, socket_id):
-        if socket_id not in self.__sockets:
-            return
-
-        user = self.__sockets[socket_id]
-        del self.__sockets[socket_id]
+    def leave(self, user_id):
+        if user_id in self.__users:
+            del self.__users[user_id]
         self.__notify_changes()
-        self.__changed.notify(socket_id, user, False)
+        #self.__changed.notify(user_id, user, False)
 
     def __notify_changes(self):
         users = list(map(lambda x: {"name": x.name, "role": x.role, "id": x.id}, self.all))

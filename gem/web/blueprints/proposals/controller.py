@@ -5,7 +5,10 @@ from gem.web.blueprints.crud_controller import CrudController
 class ProposalsController(CrudController):
     def __init__(self):
         """Initializes new instance of the ProposalsController class"""
-        super().__init__(proposals, namespace="proposals", columns=["key", "title"], script=["app/proposals.js"])
+        super().__init__(proposals,
+                         namespace="proposals",
+                         columns=["key", "title", "state"],
+                         script=["app/proposals.js"])
 
     def search(self, request):
         """Returns list of proposals found by title.

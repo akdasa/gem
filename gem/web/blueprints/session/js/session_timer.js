@@ -42,11 +42,20 @@ function createTimerController(controller) {
         showPanel(false)
     }
 
+    function on(handler) {
+        callbacks.push(handler)
+    }
+
+    function off(handler) {
+        callbacks.remove(handler)
+    }
+
     // Private members
 
     var timer = null  // timer object
     var end   = null  // countdown to this date/time
     var panel = $("#timer-panel") // timer's panel
+    var callbacks = []
 
     // Shows timer's panel
     // param: value  - true/false
@@ -64,6 +73,9 @@ function createTimerController(controller) {
     function render() {
         var now = new Date().getTime()
         var distance = end - now
+        for (c in callbacks) {
+            callbacks[c](distance)
+        }
 
         var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
         var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
@@ -88,5 +100,5 @@ function createTimerController(controller) {
         }
     }
 
-    return { processMessage, countdownTo, stop }
+    return { processMessage, countdownTo, stop, on, off }
 }

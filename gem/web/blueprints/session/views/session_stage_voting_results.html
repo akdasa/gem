@@ -1,7 +1,13 @@
 {%raw%}
 <div class="panel panel-default">
-    <div class="panel-heading">Votes ({{voted}} of {{total}})</div>
+    <div class="panel-heading">Ballot results</div>
     <div class="panel-body">
+        {{#if passes}}
+        <div class="alert alert-success" role="alert">Passes</div>
+        {{else}}
+        <div class="alert alert-danger" role="alert">Not passes</div>
+        {{/if}}
+
         <div class="progress vote-progress">
             <div class="progress-bar progress-bar-success" style="width: {{percent yes total}}%">
                 {{yes}} ({{percentRound yes total}}%)
