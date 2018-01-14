@@ -11,17 +11,13 @@ class VotingBaseSessionStage(SessionStage, metaclass=ABCMeta):
         self._doc = None
         self._votes = None
         self._private = True
+        self._threshold = "majority"
 
     def on_enter(self):
         self._doc = votes.find_or_create(self.proposal.id)
         self._votes = self._doc.votes
         self._private = self._doc.get("private", True)
-
-    def on_leave(self):
-        self._doc.private = self._private
-        if self._private:
-            self.__anonymize()
-        votes.save(self._doc)
+        self._threshold = self._doc.get("threshold", "majority")
 
     def _users_can_vote(self):
         """Return list of users can vote
@@ -38,11 +34,6 @@ class VotingBaseSessionStage(SessionStage, metaclass=ABCMeta):
         :return: Count of votes"""
         return len(list(filter(lambda x: self._votes[x]["vote"] == value, self._votes)))
 
-    def __anonymize(self):
-        """Removes any personal information form document"""
-        for row_id in self._votes:
-            if "user_id" in self._votes[row_id]:
-                del self._votes[row_id]["user_id"]
 
 
 class VotingSessionStage(VotingBaseSessionStage):
@@ -56,6 +47,14 @@ class VotingSessionStage(VotingBaseSessionStage):
         :param proposal: Proposal document"""
         super().__init__(session, proposal)
         self.__final = final
+
+    def on_leave(self):
+        self._doc.private = self._private
+        self._doc.threshold = self._threshold
+        if self._private:
+            self.__anonymize()
+        self.__fill_abstention()
+        votes.save(self._doc)
 
     def vote(self, user, value):
         """Commit a vote for the proposal.
@@ -73,7 +72,12 @@ class VotingSessionStage(VotingBaseSessionStage):
         return {"success": True, "value": value, "prev": prev_vote}
 
     def manage(self, data, user=None):
-        self._private = data.get("private", True)
+        cmd = data.get("cmd", None)
+
+        if cmd == "set_private":
+            self._private = data.get("value", True)
+        if cmd == "set_threshold":
+            self._threshold = data.get("value", "majority")
         self.changed.notify()
 
     @property
@@ -87,13 +91,27 @@ class VotingSessionStage(VotingBaseSessionStage):
             "total": t,
             "private": self._private,
             "type": "straw" if not self.__final else "final",
-            "quorum": self.session.quorum.value
+            "quorum": self.session.quorum.value,
+            "threshold": self._threshold
         }
+
+    def __anonymize(self):
+        """Removes any personal information form document"""
+        for row_id in self._votes:
+            if "user_id" in self._votes[row_id]:
+                del self._votes[row_id]["user_id"]
 
     @staticmethod
     def __user_id_hash(key):
         return hashlib.sha224(str(key).encode("utf-8")).hexdigest()
 
+    def __fill_abstention(self):
+        u = self._users_can_vote()
+        a = {user.id: self._votes.get(self.__user_id_hash(user.id), None) for user in u}
+        n = list(filter(lambda x: a[x] is None, a))  # filter out users with submitted vote
+        for uid in n: # list of user_ids with no submitted vote
+            user = users.get(uid)
+            self.vote(user, "undecided")  # vote as undecided
 
 class VotingResultsSessionStage(VotingBaseSessionStage):
     """The stage of voting for the document."""
@@ -114,13 +132,20 @@ class VotingResultsSessionStage(VotingBaseSessionStage):
         y = self._votes_by("yes")
         n = self._votes_by("no")
         u = self._votes_by("undecided")
-        t = y + n + u if can_vote_count == 0 else max(can_vote_count, y + n + u)
+        t = y + n + u # if can_vote_count == 0 else max(can_vote_count, y + n + u)
+        th = self._doc.threshold
+        passes = \
+            y > n if th == "majority" else \
+            y > t * 0.66 if th == "2/3" else \
+            y > t * .8 if th == "4/5" else \
+            y == t if th == "unanimous" else False
 
         # result
         return {
             "yes": y, "no": n, "undecided": u,
             "voted": y + n + u, "total": t,
-            "roles": self.__details()
+            "roles": self.__details(),
+            "threshold": th, "passes": passes
         }
 
     def __details(self):
