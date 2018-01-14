@@ -64,13 +64,6 @@ Handlebars.registerHelper('padTime', function(value) {
     return String("00" + value).slice(-2)
 });
 
-Handlebars.registerHelper('voteName', function(value) {
-    if (value == "yes") return "In Favor";
-    if (value == "no") return "Against";
-    if (value == "undecided") return "Abstention";
-});
-
-
 Handlebars.registerHelper({
     eq: function (v1, v2) {
         return v1 === v2;

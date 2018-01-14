@@ -3,32 +3,29 @@
     <div class="panel-heading">
         {{#if isFinalVote}}Final vote{{else}}Straw vote{{/if}}
 
-        {{#ifHas user.permissions "vote.manage" }}
+        {{#if canManage }}
         <div class="pull-right">
-            <label><input type="checkbox" id="vote-private" {{#if private}}checked{{/if}}> Secret ballot</label>
+            <label><input type="checkbox" id="vote-private" {{privateChecked}}> Secret ballot</label>
         </div>
-        {{/ifHas}}
+        {{/if}}
     </div>
 
     <div class="panel-body">
-        {{!-- Display "secret ballot" alert if it so and user has permission to vote--}}
-        {{#if (and private (has user.permissions "vote")) }}
+        {{#if showPrivateAlert }}
         <div class="alert alert-info" role="alert">This is a <strong>secret ballot</strong>.</div>
         {{/if}}
 
-
-        {{#if (eq voteStatus.success true) }}
+        {{#if isVoteSubmitted }}
         <div class="alert alert-success" role="alert">
-            {{#if (and voteStatus.prev (not (eq voteStatus.prev voteStatus.value))) }}
-                Your vote <strong>{{voteName voteStatus.prev}}</strong> has been changed to
-                    <strong>{{voteName voteStatus.value}}</strong>.
+            {{#if isVoteChanged }}
+                Your vote <strong>{{prevVote}}</strong> has been changed to <strong>{{vote}}</strong>.
             {{else}}
-                Your vote <strong>{{voteName voteStatus.value}}</strong> has been submitted.
+                Your vote <strong>{{vote}}</strong> has been submitted.
             {{/if}}
         </div>
         {{/if}}
 
-        {{#if (eq voteStatus.success false) }}
+        {{#if isVoteNotAccepted}}
         <div class="alert alert-danger" role="alert">Your vote is not accepted.</div>
         {{/if}}
 
@@ -42,7 +39,7 @@
             </div>
         </div>
 
-        {{#if (and (has user.permissions "vote") (not timeIsOver)) }}
+        {{#if canVote }}
         <br>
         <div id="vote-buttons" class="btn-group btn-group-justified" role="group">
             <a id="vote-yes" href="#" class="btn btn-success vote" data-vote="yes">
