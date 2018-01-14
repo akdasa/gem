@@ -11,6 +11,11 @@ function VotingStageController(session) {
     function register() {
         $("#vote-private").on("change", onSecretBallotCheckboxChanged)
         $(".vote").on("click", onVoteButtonClicked)
+        $(".selectpicker").selectpicker({
+            style: 'btn-info btn-xs',
+            size: 4, width: "100px"
+        })
+        $("#vote-threshold").on("changed.bs.select", onVoteThresholdChanged)
         session.timer.on(onTimerTick)
     }
 
@@ -34,7 +39,9 @@ function VotingStageController(session) {
             canManage: permissions.indexOf("vote.manage") != -1,
             privateChecked: state.private ? "checked" : "",
             showPrivateAlert: state.private && permissions.indexOf("vote") != -1,
-            noQuorum: state.type == "final" && state.can_vote < state.quorum
+            noQuorum: state.type == "final" && state.can_vote < state.quorum,
+            threshold: state.threshold,
+            selectedThreshold: function(val) { return val == state.threshold ? "selected" : ""}
         })
     }
 
@@ -72,6 +79,11 @@ function VotingStageController(session) {
         }
     }
 
+    function onVoteThresholdChanged(e) {
+        var threshold = $(e.currentTarget).val()
+        setVotingThreshold(threshold)
+    }
+
     // Actions
 
     function vote(value) {
@@ -79,7 +91,11 @@ function VotingStageController(session) {
     }
 
     function setVotingPrivacy(value) {
-        session.emit("manage", {private: value})
+        session.emit("manage", {cmd: "set_private", value: value})
+    }
+
+    function setVotingThreshold(value) {
+        session.emit("manage", {cmd: "set_threshold", value: value})
     }
 
     function voteViewName(value) {
