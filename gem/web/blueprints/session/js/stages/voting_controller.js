@@ -19,16 +19,29 @@ function VotingStageController(session) {
     }
 
     function view() {
+        var permissions = session.user.permissions
+
         return Object.assign(state, {
             voteStatus: voteStatus, timeIsOver,
-            quorum: session.quorum.getQuorum()
+            quorum: state.quorum,
+            isFinalVote: state.type == "final",
+            isVoteSubmitted: voteStatus.success == true,
+            isVoteNotAccepted: voteStatus.success == false,
+            isVoteChanged: voteStatus.prev && voteStatus.prev != voteStatus.value,
+            vote: voteViewName(voteStatus.value),
+            prevVote: voteViewName(voteStatus.prev),
+            canVote: !timeIsOver && permissions.indexOf("vote") != -1,
+            canManage: permissions.indexOf("vote.manage") != -1,
+            privateChecked: state.private ? "checked" : "",
+            showPrivateAlert: state.private && permissions.indexOf("vote") != -1,
+            noQuorum: state.type == "final" && state.can_vote < state.quorum
         })
     }
 
     // Private members
 
     var state = null
-    var voteStatus = null // user's vote status
+    var voteStatus = {success:undefined, prev:undefined, value:undefined} // user's vote status
     var timeIsOver = false
 
     // handlers
@@ -67,6 +80,13 @@ function VotingStageController(session) {
 
     function setVotingPrivacy(value) {
         session.emit("manage", {private: value})
+    }
+
+    function voteViewName(value) {
+        if (value == "yes") return "In Favor"
+        if (value == "no") return "Against"
+        if (value == "undecided") return "Abstention"
+        return value
     }
 
     return { register, unregister, view, setState }

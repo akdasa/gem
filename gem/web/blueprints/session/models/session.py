@@ -1,6 +1,7 @@
 from flask_socketio import emit
 
-from gem.db import sessions
+from gem.db import sessions, proposals
+from gem.web.app.flow import ProposalFlow
 from .chat import SessionChat
 from .quorum import SessionQuorum
 from .stages import SessionStages
@@ -41,6 +42,10 @@ class Session:
         return self.__users
 
     @property
+    def quorum(self):
+        return self.__quorum
+
+    @property
     def presence_roles(self):
         session = sessions.get(self.session_id)
         return session["permissions"]["presence"]
@@ -52,6 +57,11 @@ class Session:
 
     def close(self):
         session = sessions.get(self.session_id)
+        for proposal_id in session.proposals:
+            proposal = proposals.get(proposal_id)
+            ProposalFlow(proposal).move_next()
+            proposals.save(proposal)
+
         session.status = "closed"
         sessions.save(session)
 
@@ -59,7 +69,9 @@ class Session:
         if data["command"] == "set_quorum" and "codes" not in data:
             return self.__quorum.request_change(data["value"])
         if data["command"] == "set_quorum" and "codes" in data:
-            return self.__quorum.change(data["codes"])
+            result = self.__quorum.change(data["codes"])
+            self.stages.changed.notify(self.stages.current)
+            return result
 
     def notify(self, event, data, room=None):
         emit(event, data, room=room or self.__session_id)

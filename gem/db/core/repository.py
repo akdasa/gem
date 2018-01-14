@@ -4,10 +4,11 @@ from .cache import Cache
 
 
 class Repository:
-    def __init__(self, collection):
+    def __init__(self, collection, cls=Model):
         """Initializes new instance of the Repository class."""
         self._collection = collection
         self._cache = Cache()
+        self.__class = cls
 
     def count(self, criteria):
         """Returns count of object by specified criteria"""
@@ -74,6 +75,6 @@ class Repository:
         if data is None:
             return None
         elif type(data) is list:
-            return list(map(lambda x: Model(**x), data))
+            return list(map(lambda x: self.__class(**x), data))
         else:
-            return Model(**data)
+            return self.__class(**data)

@@ -48,13 +48,14 @@ class VotingBaseSessionStage(SessionStage, metaclass=ABCMeta):
 class VotingSessionStage(VotingBaseSessionStage):
     """The stage of voting for the document."""
 
-    def __init__(self, session, proposal):
+    def __init__(self, session, proposal, final=False):
         """Initializes new instance of the VotingSessionStage class.
         :type session: Session
         :type proposal: Proposal
         :param session: Session to which the stage belongs
         :param proposal: Proposal document"""
         super().__init__(session, proposal)
+        self.__final = final
 
     def vote(self, user, value):
         """Commit a vote for the proposal.
@@ -80,7 +81,14 @@ class VotingSessionStage(VotingBaseSessionStage):
         can_vote_count = len(self._users_can_vote())
         voted = len(self._votes)
         t = voted if can_vote_count == 0 else max(can_vote_count, voted)
-        return {"voted": voted, "total": t, "private": self._private}
+        return {
+            "can_vote": can_vote_count,
+            "voted": voted,
+            "total": t,
+            "private": self._private,
+            "type": "straw" if not self.__final else "final",
+            "quorum": self.session.quorum.value
+        }
 
     @staticmethod
     def __user_id_hash(key):

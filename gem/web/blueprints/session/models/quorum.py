@@ -10,6 +10,10 @@ class SessionQuorum:
         self.__new_value = None
         self.__codes = []
 
+    @property
+    def value(self):
+        return self.__value
+
     def request_change(self, value):
         self.__new_value = value
         users = self.__get_online_users_can_change()
