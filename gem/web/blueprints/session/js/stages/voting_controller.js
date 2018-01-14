@@ -23,7 +23,7 @@ function VotingStageController(session) {
         
         return Object.assign(state, {
             voteStatus: voteStatus, timeIsOver,
-            quorum: session.quorum.getQuorum(),
+            quorum: state.quorum,
             isFinalVote: state.type == "final",
             isVoteSubmitted: voteStatus.success == true,
             isVoteNotAccepted: voteStatus.success == false,
@@ -33,7 +33,8 @@ function VotingStageController(session) {
             canVote: !timeIsOver && permissions.indexOf("vote") != -1,
             canManage: permissions.indexOf("vote.manage") != -1,
             privateChecked: state.private ? "checked" : "",
-            showPrivateAlert: state.private && permissions.indexOf("vote") != -1
+            showPrivateAlert: state.private && permissions.indexOf("vote") != -1,
+            noQuorum: state.can_vote < state.quorum
         })
     }
 

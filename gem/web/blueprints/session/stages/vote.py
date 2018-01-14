@@ -82,10 +82,13 @@ class VotingSessionStage(VotingBaseSessionStage):
         voted = len(self._votes)
         t = voted if can_vote_count == 0 else max(can_vote_count, voted)
         return {
+            "can_vote": can_vote_count,
             "voted": voted,
             "total": t,
             "private": self._private,
-            "type": "straw" if not self.__final else "final"}
+            "type": "straw" if not self.__final else "final",
+            "quorum": self.session.quorum.value
+        }
 
     @staticmethod
     def __user_id_hash(key):

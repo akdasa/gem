@@ -42,6 +42,10 @@ class Session:
         return self.__users
 
     @property
+    def quorum(self):
+        return self.__quorum
+
+    @property
     def presence_roles(self):
         session = sessions.get(self.session_id)
         return session["permissions"]["presence"]
@@ -65,7 +69,9 @@ class Session:
         if data["command"] == "set_quorum" and "codes" not in data:
             return self.__quorum.request_change(data["value"])
         if data["command"] == "set_quorum" and "codes" in data:
-            return self.__quorum.change(data["codes"])
+            result = self.__quorum.change(data["codes"])
+            self.stages.changed.notify(self.stages.current)
+            return result
 
     def notify(self, event, data, room=None):
         emit(event, data, room=room or self.__session_id)
