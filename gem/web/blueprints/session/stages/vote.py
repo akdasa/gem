@@ -35,7 +35,6 @@ class VotingBaseSessionStage(SessionStage, metaclass=ABCMeta):
         return len(list(filter(lambda x: self._votes[x]["vote"] == value, self._votes)))
 
 
-
 class VotingSessionStage(VotingBaseSessionStage):
     """The stage of voting for the document."""
 
@@ -53,7 +52,6 @@ class VotingSessionStage(VotingBaseSessionStage):
         self._doc.threshold = self._threshold
         if self._private:
             self.__anonymize()
-        self.__fill_abstention()
         votes.save(self._doc)
 
     def vote(self, user, value):
@@ -113,6 +111,7 @@ class VotingSessionStage(VotingBaseSessionStage):
             user = users.get(uid)
             self.vote(user, "undecided")  # vote as undecided
 
+
 class VotingResultsSessionStage(VotingBaseSessionStage):
     """The stage of voting for the document."""
 
@@ -132,20 +131,21 @@ class VotingResultsSessionStage(VotingBaseSessionStage):
         y = self._votes_by("yes")
         n = self._votes_by("no")
         u = self._votes_by("undecided")
-        t = y + n + u # if can_vote_count == 0 else max(can_vote_count, y + n + u)
+        t = y + n + u  # if can_vote_count == 0 else max(can_vote_count, y + n + u)
         th = self._doc.threshold
-        passes = \
-            y > n if th == "majority" else \
-            y > t * 0.66 if th == "2/3" else \
-            y > t * .8 if th == "4/5" else \
-            y == t if th == "unanimous" else False
+        status = \
+            "tie" if y == n and th == "majority" else \
+            "pass" if y > n and th == "majority" else \
+            "pass" if y > t * 0.66 and th == "2/3" else \
+            "pass" if y > t * .8 and th == "4/5" else \
+            "pass" if y == t and th == "unanimous" else "fail"
 
         # result
         return {
             "yes": y, "no": n, "undecided": u,
             "voted": y + n + u, "total": t,
             "roles": self.__details(),
-            "threshold": th, "passes": passes
+            "threshold": th, "status": status
         }
 
     def __details(self):
