@@ -2,9 +2,15 @@
 <div class="panel panel-default">
     <div class="panel-heading">Ballot results</div>
     <div class="panel-body">
-        {{#if passes}}
+        {{#if isPasses}}
         <div class="alert alert-success" role="alert">Passes</div>
-        {{else}}
+        {{/if}}
+
+        {{#if isTied}}
+        <div class="alert alert-warning" role="alert">Tie</div>
+        {{/if}}
+
+        {{#if isFailed}}
         <div class="alert alert-danger" role="alert">Not passes</div>
         {{/if}}
 
