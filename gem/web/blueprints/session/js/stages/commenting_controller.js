@@ -55,7 +55,7 @@ function CommentingStageController(controller) {
         e.preventDefault();
         var buttonClicked = $(this)
         var content = $("#comment-message").val()
-        var type = $(buttonClicked).data("type")
+        var type = $("#comment-type option:selected").val()
         comment(content, type, commentQuote)
     }
 
