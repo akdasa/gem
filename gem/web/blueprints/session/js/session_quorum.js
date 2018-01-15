@@ -51,6 +51,11 @@ function QuorumController(session) {
     }
 
     function onQuorumChangeRequestResponse(response) {
+        if (!response.success) {
+            alerts.alert({title: "Unable to change Quorum", message: response.message})
+            return
+        }
+
         var names = response.users.join(", ")
         alerts.input({
             title: "Change Quorum",

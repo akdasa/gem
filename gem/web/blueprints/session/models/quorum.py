@@ -4,6 +4,8 @@ from gem.db import users
 
 
 class SessionQuorum:
+    __RESPONSIBLE_REQUIRED = 3
+
     def __init__(self, session):
         self.__session = session
         self.__value = 19
@@ -16,14 +18,25 @@ class SessionQuorum:
 
     def request_change(self, value):
         self.__new_value = value
-        users = self.__get_online_users_can_change()
-        self.__generate_codes(len(users))
+        responsible = self.__get_online_users_can_change()
+        responsible_online = len(responsible)
 
-        for idx, user in enumerate(users):
+        # check certain amount of people with quorum.change rights are present
+        if len(responsible) < self.__RESPONSIBLE_REQUIRED:
+            return {
+                "success": False,
+                "message": "{} persons required with Change Quorum rights. Only {} of them are online"
+                    .format(self.__RESPONSIBLE_REQUIRED, responsible_online)
+            }
+
+        # generate codes and send it to users
+        self.__generate_codes(len(responsible))
+        for idx, user in enumerate(responsible):
             code = self.__codes[idx]
             self.__session.notify("quorum_change_code", {"code": code}, room=str(user.id))
 
-        return {"users": self.__user_names(users)}
+        # notify requester
+        return {"success": True, "users": self.__user_names(responsible)}
 
     def change(self, codes):
         codes_match = sorted(self.__codes) == sorted(codes)
@@ -51,9 +64,8 @@ class SessionQuorum:
         online = {user_id: connections for user_id, connections in connections.items() if len(connections) > 0}
         online = list(map(lambda x: users.get(x), online.keys()))
 
-        # return list of users (max 3)
-        count_to_choose = min(3, len(online))
-        return sample(online, count_to_choose)
+        # return list of users
+        return online
 
     @staticmethod
     def __user_names(users):
