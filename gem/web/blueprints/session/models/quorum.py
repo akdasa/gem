@@ -45,12 +45,12 @@ class SessionQuorum:
             self.__value = self.__new_value
             return {"success": True, "message": "Quorum changed to {}".format(self.__value), "value": self.__value}
         else:
-            return {"success": False, "message": "Codes doesn't match"}
+            return {"success": False, "message": "Codes do not match"}
 
     def __generate_codes(self, count):
         self.__codes.clear()
         for i in range(0, count):
-            code = randint(100, 999)
+            code = randint(10, 99)
             self.__codes.append(code)
 
     def __get_online_users_can_change(self):
