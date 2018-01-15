@@ -1,11 +1,15 @@
 {% macro session_panel(session) -%}
     {% set is_active = (session.status == 'run') %}
     {% set is_closed = (session.status == 'closed') %}
-    <div class="panel panel-primary">
+    <div class="panel {% if is_active %}panel-success{% else %}panel-primary{%endif%}">
         <div class="panel-heading">
             <h3 class="panel-title" data-session-id="{{session._id}}">
-                {{ session.date }}: {{ session.title }}
-                {% if is_closed %} (Closed) {% endif %}
+                {{ session.date }}
+                {{session.time_start}}
+                {% if session.time_end %}
+                    - {{session.time_end}}
+                {% endif %}:
+                {{ session.title }}
 
                 {% if is_active and user_has_permission("session.join") %}
                 <a href="/session/{{session._id}}" class="btn btn-xs btn-default btn-join-session pull-right">Join</a>

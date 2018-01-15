@@ -25,7 +25,13 @@
         </center>
         {% else %}
             {% import "session_panel.html" as pnl %}
-            {% for session in sessions %}
+            <h3>Active Sessions</h3>
+            {% for session in active_sessions %}
+                {{ pnl.session_panel(session) }}
+            {% endfor %}
+
+            <h3>Upcoming Sessions</h3>
+            {% for session in upcoming_sessions %}
                 {{ pnl.session_panel(session) }}
             {% endfor %}
         {% endif %}
