@@ -11,13 +11,15 @@ class VotingBaseSessionStage(SessionStage, metaclass=ABCMeta):
         self._doc = None
         self._votes = None
         self._private = True
-        self._threshold = "majority"
+        self._type = None
+        self._threshold = None
 
     def on_enter(self):
         self._doc = votes.find_or_create(self.proposal.id)
         self._votes = self._doc.votes
         self._private = self._doc.get("private", True)
-        self._threshold = self._doc.get("threshold", "majority")
+        self._type = self._doc.get("type", None)
+        self._threshold = self._doc.get("threshold", None)
 
     def _users_can_vote(self):
         """Return list of users can vote
@@ -49,9 +51,13 @@ class VotingSessionStage(VotingBaseSessionStage):
 
     def on_leave(self):
         self._doc.private = self._private
-        self._doc.threshold = self._threshold
+        if self._threshold or self.__final:
+            self._doc.threshold = self._threshold or "majority"
         if self._private:
             self.__anonymize()
+        if self.__final:
+            self._doc.type = "final"
+            self.__fill_none()
         votes.save(self._doc)
 
     def vote(self, user, value):
@@ -103,13 +109,13 @@ class VotingSessionStage(VotingBaseSessionStage):
     def __user_id_hash(key):
         return hashlib.sha224(str(key).encode("utf-8")).hexdigest()
 
-    def __fill_abstention(self):
+    def __fill_none(self):
         u = self._users_can_vote()
         a = {user.id: self._votes.get(self.__user_id_hash(user.id), None) for user in u}
         n = list(filter(lambda x: a[x] is None, a))  # filter out users with submitted vote
         for uid in n: # list of user_ids with no submitted vote
             user = users.get(uid)
-            self.vote(user, "undecided")  # vote as undecided
+            self.vote(user, "none")  # vote as undecided
 
 
 class VotingResultsSessionStage(VotingBaseSessionStage):
@@ -125,14 +131,13 @@ class VotingResultsSessionStage(VotingBaseSessionStage):
 
     @property
     def view(self):
-        can_vote_count = len(self._users_can_vote())
-
         # calculate votes
         y = self._votes_by("yes")
         n = self._votes_by("no")
         u = self._votes_by("undecided")
-        t = y + n + u  # if can_vote_count == 0 else max(can_vote_count, y + n + u)
-        th = self._doc.threshold
+        z = self._votes_by("none")
+        t = y + n + u + z  # if can_vote_count == 0 else max(can_vote_count, y + n + u)
+        th = self._threshold
         status = \
             "tie" if y == n and th == "majority" else \
             "pass" if y > n and th == "majority" else \
@@ -142,10 +147,10 @@ class VotingResultsSessionStage(VotingBaseSessionStage):
 
         # result
         return {
-            "yes": y, "no": n, "undecided": u,
+            "yes": y, "no": n, "undecided": u, "non_vote": z,
             "voted": y + n + u, "total": t,
             "roles": self.__details(),
-            "threshold": th, "status": status
+            "threshold": th, "status": status, "type": self._type
         }
 
     def __details(self):

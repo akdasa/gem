@@ -131,4 +131,4 @@ class SessionController:
             disconnect_socket(cd.socket_id)
 
     def __open_session(self, session_id):
-        return Session(session_id, self)
+        return Session(session_id, self.__connections)

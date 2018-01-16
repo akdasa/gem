@@ -17,6 +17,8 @@ function VotingResultsStageController(session) {
             isPasses: state.status == "pass",
             isFailed: state.status == "fail",
             isTied: state.status == "tie"
+            isTied: state.status == "tie",
+            isFinalVote: state.type == "final",
         })
     }
 
