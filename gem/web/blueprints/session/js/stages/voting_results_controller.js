@@ -16,9 +16,8 @@ function VotingResultsStageController(session) {
         return Object.assign(state, {
             isPasses: state.status == "pass",
             isFailed: state.status == "fail",
-            isTied: state.status == "tie"
             isTied: state.status == "tie",
-            isFinalVote: state.type == "final",
+            isFinalVote: state.type == "final"
         })
     }
 
