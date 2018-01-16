@@ -59,6 +59,9 @@ class SessionStages:
         docs = proposals.get_list(session["proposals"])
 
         for idx, proposal in enumerate(docs):
+            if proposal.state == "done":
+                continue
+
             result.append(AcquaintanceSessionStage(self.__session, proposal))
 
             if proposal.state not in ["final_vote"]:
