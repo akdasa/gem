@@ -1,4 +1,4 @@
-from random import randint, sample
+from random import randint
 
 from gem.db import users
 
@@ -45,12 +45,12 @@ class SessionQuorum:
             self.__value = self.__new_value
             return {"success": True, "message": "Quorum changed to {}".format(self.__value), "value": self.__value}
         else:
-            return {"success": False, "message": "Codes doesn't match"}
+            return {"success": False, "message": "Codes do not match"}
 
     def __generate_codes(self, count):
         self.__codes.clear()
         for i in range(0, count):
-            code = randint(100, 999)
+            code = randint(10, 99)
             self.__codes.append(code)
 
     def __get_online_users_can_change(self):
@@ -58,7 +58,7 @@ class SessionQuorum:
         users_can_change = users.with_permission("quorum.change")
 
         # gets connections for users
-        connections = {str(user.id): self.__session.connections.find(user_id=str(user.id)) for user in users_can_change}
+        connections = {str(user.id): self.__session.connections.of_user(str(user.id)) for user in users_can_change}
 
         # get online users. filter out users with no connection
         online = {user_id: connections for user_id, connections in connections.items() if len(connections) > 0}

@@ -31,5 +31,9 @@ class Event:
         Notify subscribers
         :param args: Event arguments
         """
+        result = []
         for handler in self.handlers:
-            handler(*args)
+            value = handler(*args)
+            if value:
+                result.append(value)
+        return result
