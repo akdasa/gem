@@ -22,6 +22,7 @@ class ProposalsController(CrudController):
         model.key = data.get("key", None)
         model.title = data.get("title", None)
         model.content = data.get("content", None)
+        model.state = data.get("state", "new")
 
     @staticmethod
     def __search_view(x):

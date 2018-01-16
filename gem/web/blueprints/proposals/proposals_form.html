@@ -27,6 +27,21 @@
                 </div>
             </div>
 
+            <!-- State -->
+            <div class="form-group">
+                <label for="title" class="col-sm-2 control-label">State</label>
+                <div class="col-sm-10">
+                    <select name="state" class="selectpicker form-control" title="Choose a sate" {%if not allow_edit%}disabled{%endif%}>
+                        <option {%if model.state =='new'%}selected{%endif%} value="new">New</option>
+                        <option {%if model.state =='deputies_review'%}selected{%endif%} value="deputies_review">Deputies Review</option>
+                        <option {%if model.state =='straw_vote'%}selected{%endif%} value="straw_vote">Straw Vote</option>
+                        <option {%if model.state =='deputies_straw_vote_review'%}selected{%endif%} value="deputies_straw_vote_review">Deputies Straw Vote Review</option>
+                        <option {%if model.state =='final_vote'%}selected{%endif%} value="final_vote">Final Vote</option>
+                        <option {%if model.state =='done'%}selected{%endif%} value="done">Done</option>
+                    </select>
+                </div>
+            </div>
+
             <!-- Content -->
             <div class="form-group">
                 <label for="content" class="col-sm-2 control-label">Content</label>
