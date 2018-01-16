@@ -110,7 +110,7 @@ class SessionController:
         # disconnect all active clients
         active = self.__connections.of_session(cd.session_id)
         for acd in active:
-            if acd.socket_id != cd.socket_id:
+            if acd.socket_id == cd.socket_id:
                 continue
             acd.session.notify("kick", {"message": "Session is closed", "title": "Closed"}, room=acd.socket_id)
 
