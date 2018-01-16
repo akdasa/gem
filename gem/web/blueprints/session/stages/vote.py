@@ -13,9 +13,10 @@ class VotingBaseSessionStage(SessionStage, metaclass=ABCMeta):
         self._private = True
         self._type = None
         self._threshold = None
+        self._stage = proposal.state
 
     def on_enter(self):
-        self._doc = votes.find_or_create(self.proposal.id)
+        self._doc = votes.find_or_create(self.proposal.id, self._stage)
         self._votes = self._doc.votes
         self._private = self._doc.get("private", True)
         self._type = self._doc.get("type", None)
