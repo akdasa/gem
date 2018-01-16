@@ -1,4 +1,4 @@
-from random import randint, sample
+from random import randint
 
 from gem.db import users
 
@@ -58,7 +58,7 @@ class SessionQuorum:
         users_can_change = users.with_permission("quorum.change")
 
         # gets connections for users
-        connections = {str(user.id): self.__session.connections.find(user_id=str(user.id)) for user in users_can_change}
+        connections = {str(user.id): self.__session.connections.of_user(str(user.id)) for user in users_can_change}
 
         # get online users. filter out users with no connection
         online = {user_id: connections for user_id, connections in connections.items() if len(connections) > 0}

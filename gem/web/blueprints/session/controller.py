@@ -3,6 +3,7 @@ from flask import render_template
 from gem.db import sessions, proposals
 from gem.web.app.auth import access_denied
 from gem.web.app.sockets import disconnect_socket
+from .models.session import Session
 from .connections import Connections
 
 
@@ -12,6 +13,7 @@ class SessionController:
     def __init__(self):
         """Initializes new instance of the SessionController class."""
         self.__connections = Connections()
+        self.__connections.open_session.subscribe(self.__open_session)
 
     # Pages ------------------------------------------------------------------------------------------------------------
 
@@ -57,14 +59,14 @@ class SessionController:
         :param socket_id: SocketIO Id
         :param user: User
         :param data: Request data"""
-        cd = self.__connections.find(socket_id=socket_id)
+        cd = self.__connections.of_socket(socket_id)
         cd.session.chat.say(cd.user, data.get("msg", None))
 
     def change_stage(self, socket_id, data):
         """On next stage command received.
         :param socket_id: SocketIO Id
         :param data: Data"""
-        cd = self.__connections.find(socket_id=socket_id)
+        cd = self.__connections.of_socket(socket_id)
         direction = data.get("value", 0)
         return cd.session.stages.change(direction)
 
@@ -72,7 +74,7 @@ class SessionController:
         """On vote command received.
         :param socket_id: SocketIO Id
         :param data: Data"""
-        cd = self.__connections.find(socket_id=socket_id)
+        cd = self.__connections.of_socket(socket_id)
         vote_value = data.get("value", None)
         return cd.session.stages.current.vote(cd.user, vote_value)
 
@@ -81,7 +83,7 @@ class SessionController:
         :param socket_id: SocketIO Id
         :param user: User
         :param data: Data"""
-        cd = self.__connections.find(socket_id=socket_id)
+        cd = self.__connections.of_socket(socket_id)
         content = data.get("content", None)
         kind = data.get("type", None)
         quote = data.get("quote", None)
@@ -89,21 +91,29 @@ class SessionController:
 
     def set_timer(self, socket_id, data):
         minutes = data.get("interval", 1)
-        cd = self.__connections.find(socket_id=socket_id)
+        cd = self.__connections.of_socket(socket_id)
         return cd.session.notify("timer", {"interval": minutes})
 
     def manage(self, socket_id, data):
-        cd = self.__connections.find(socket_id=socket_id)
+        cd = self.__connections.of_socket(socket_id)
         return cd.session.stages.current.manage(data, user=cd.user)
 
     def manage_session(self, socket_id, data):
-        cd = self.__connections.find(socket_id=socket_id)
+        cd = self.__connections.of_socket(socket_id)
         return cd.session.manage(data, cd.user)
 
     def close(self, socket_id):
         """On close stage command received.
         :param socket_id: SocketIO Id"""
-        cd = self.__connections.find(socket_id=socket_id)
+        cd = self.__connections.of_socket(socket_id)
+
+        # disconnect all active clients
+        active = self.__connections.of_session(cd.session_id)
+        for acd in active:
+            if acd.socket_id != cd.socket_id:
+                continue
+            acd.session.notify("kick", {"message": "Session is closed", "title": "Closed"}, room=acd.socket_id)
+
         return cd.session.close()
 
     def disconnect(self, socket_id):
@@ -115,7 +125,10 @@ class SessionController:
         user_id = data.get("user", None)  # user id to kick
         reason = data.get("reason", None) # reason
 
-        cds = self.__connections.find(user_id=user_id)
+        cds = self.__connections.of_user(user_id)
         for cd in cds:
             cd.session.notify("kick", {"message": reason}, room=cd.socket_id)
             disconnect_socket(cd.socket_id)
+
+    def __open_session(self, session_id):
+        return Session(session_id, self)

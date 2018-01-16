@@ -22,9 +22,9 @@ function createSessionController(sessionKey, sessionData) {
     function onKick(data) {
         me.socket.disconnect()
         Alerts().alert({
-            title: "You have been removed from the session",
-            message: data.message},
-            function () { window.location = "/" })
+            title: data.title || "You have been removed from the session",
+            message: data.message
+        }, function () { window.location = "/" })
     }
 
     function onConnected(socket) {
