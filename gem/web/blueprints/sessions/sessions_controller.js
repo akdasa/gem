@@ -14,7 +14,6 @@ function createSessionsController() {
     }
 
     me.onSessionStatusChangedResponse = function(data) {
-        console.log(data);
     }
 
     me.setProposals = function(value) {
