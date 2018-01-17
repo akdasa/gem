@@ -5,6 +5,7 @@ from gem.channel import init
 from gem.db import users as users_db
 from gem.web.app.auth import User, has_permission, access_denied
 from gem.web.app.json_encoder import GemJsonEncoder
+from gem.web.blueprints.admin import admin
 from gem.web.blueprints.proposals import proposals
 from gem.web.blueprints.sessions import sessions
 from gem.web.blueprints.users import users
@@ -35,6 +36,7 @@ app.register_blueprint(account, url_prefix="/account")
 app.register_blueprint(session, url_prefix="/session")
 app.register_blueprint(laws, url_prefix="/laws")
 app.register_blueprint(search, url_prefix="/search")
+app.register_blueprint(admin, url_prefix="/admin")
 
 login_manager.init_app(app)
 login_manager.login_view = "account.login"

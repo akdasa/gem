@@ -41,6 +41,10 @@
                 <li class="{%if active_page=='sessions'%}active{%endif%}"><a href="/sessions">Sessions</a></li>
                 {% endif %}
 
+                {% if user_has_permission("admin") %}
+                <li class="{%if active_page=='admin'%}active{%endif%}"><a href="/admin">Admin</a></li>
+                {% endif %}
+
                 <li class="{%if active_page=='search'%}active{%endif%} hidden-lg hidden-md"><a href="/search">Search</a></li>
             </ul>
 

@@ -1,3 +1,4 @@
+from gem.db.articles import ArticlesRepository
 from gem.db.comments import CommentsRepository
 from gem.db.proposals import ProposalsRepository
 from gem.db.sessions import SessionsRepository
@@ -13,3 +14,4 @@ votes = VotesRepository()
 comments = CommentsRepository()
 roles = RolesRepository()
 laws = LawsRepository()
+articles = ArticlesRepository()
