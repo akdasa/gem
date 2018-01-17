@@ -10,17 +10,17 @@
                     - {{session.time_end}}
                 {% endif %}:
                 {{ session.title }}
-
-                {% if is_active and user_has_permission("session.join") %}
-                <a href="/session/{{session._id}}" class="btn btn-xs btn-default btn-join-session pull-right">Join</a>
-                {% endif %}
             </h3>
         </div>
 
-        {%if session.agenda %}
         <div class="panel-body">
-            {{ session.agenda }}
+            <p>{{ session.agenda }}</p>
+
+            {% if is_active and user_has_permission("session.join") %}
+            <center>
+                <a href="/session/{{session._id}}" class="btn btn-default btn-join-session">Join</a>
+            </center>
+            {% endif %}
         </div>
-        {%endif%}
     </div>
 {% endmacro %}

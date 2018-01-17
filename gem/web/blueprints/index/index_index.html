@@ -22,28 +22,31 @@
                     <button id="signin" class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
                 </form>
             </div>
-        </center>
-        {% else %}
-            {% import "session_panel.html" as pnl %}
-            {% if active_sessions %}
-                <h3>Active Sessions</h3>
-                {% for session in active_sessions %}
-                    {{ pnl.session_panel(session) }}
-                {% endfor %}
-            {% endif %}
-
-            {% if upcoming_sessions %}
-                <h3>Upcoming Sessions</h3>
-                {% for session in upcoming_sessions %}
-                    {{ pnl.session_panel(session) }}
-                {% endfor %}
-            {% endif %}
         {% endif %}
+        </center>
     </div>
 </div>
 {% endblock %}
 
+
 {% block body %}
+<div>
+    {% import "session_panel.html" as pnl %}
+    {% if active_sessions %}
+        <h3>Active Session</h3>
+        {% for session in active_sessions %}
+            {{ pnl.session_panel(session) }}
+        {% endfor %}
+    {% endif %}
+
+    {% if upcoming_sessions %}
+        <h3>Upcoming Sessions</h3>
+        {% for session in upcoming_sessions %}
+            {{ pnl.session_panel(session) }}
+        {% endfor %}
+    {% endif %}
+</div>
+
 <div class="row">
     <div class="col-md-4">
         <h2>Vote</h2>
