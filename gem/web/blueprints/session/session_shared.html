@@ -1,19 +1,21 @@
 {% macro view() %}
 <script id="stage-template" type="text/x-handlebars-template">
     {% raw %}
+    {{> (stageType) }}
+    {% endraw %}
+</script>
 
-    {{# if proposal }}
+<script id="stage-proposal-template" type="text/x-handlebars-template">
+    {% raw %}
+    {{#if id}}
     <div class="panel panel-default">
-        <div class="panel-heading">Current proposal (Stage: {{progress.index}}/{{progress.total}})</div>
-        <!-- todo {{#if (ne stage.type 'acquaintance')}}proposal-block{{/if}} -->
+        <div class="panel-heading">Proposal</div>
         <div class="panel-body" id="proposal-content">
-            <h1>{{ proposal.title }}</h1>
-            <p>{{{ proposal.content }}}</p>
+            <h1>{{ title }}</h1>
+            <p>{{{ content }}}</p>
         </div>
     </div>
     {{/if}}
-
-    {{> (stageType) }}
     {% endraw %}
 </script>
 

@@ -1,23 +1,18 @@
 /* Stage Controller
  *
  * param session: Session
- * param node: Node to render session view
- */
-function StageController(session, node) {
+ * param proposalNode: Node to render proposal
+ * param widgetsNode: Node to render session stage widgets */
+function StageController(session, proposalNode, widgetsNode) {
 
     function processMessage(data) {
         var proposalId = data.proposal_id
         var type = data.stage.type
         var nextStage = getControllers(proposalId)[type] // controller for next stage
         var isStageChanged = (nextStage != currentStage)
-
-        if (isStageChanged) {
-            onStageChanged(currentStage, nextStage)
-        }
+        var isProposalChanged = (data.proposal_id != (currentStage && currentStage.view().proposal_id))
 
         if (nextStage) {
-            currentStage = nextStage
-
             // extend data with additional info
             Object.assign(data, {
                 stageType: function() { return data.stage.type },
@@ -29,19 +24,38 @@ function StageController(session, node) {
             if (nextStage.setState) {
                 nextStage.setState(data)
             }
+
+            if (isStageChanged) {
+                onStageChanged(currentStage, nextStage)
+            }
+            if (isProposalChanged) {
+                onProposalChanged(nextStage.view().proposal)
+            }
+            currentStage = nextStage
         }
 
         // state is changes, so render it
         render()
+
+        if (data.stage.type != "acquaintance") {
+            $(".panel-body", proposalNode).addClass("proposal-block")
+        } else {
+            $(".panel-body", proposalNode).removeClass("proposal-block")
+        }
     }
 
     // renders current stage
     function render() {
         if (!currentStage) return;
 
-        // render and register handlers
-        node.html(template(currentStage.view()))
+        widgetsNode.html(template(currentStage.view()))
         if (currentStage.register) currentStage.register()
+    }
+
+    // Renders specified proposal
+    function renderProposal(proposal) {
+        var template = proposalTemplate(proposal)
+        proposalNode.html(template)
     }
 
     // Event handlers
@@ -61,9 +75,14 @@ function StageController(session, node) {
         }
     }
 
+    function onProposalChanged(proposal) {
+        renderProposal(proposal)
+    }
+
     // Private members
 
     var currentStage = null
+    var proposalTemplate = Handlebars.compile($("#stage-proposal-template").html())
     var template = Handlebars.compile($("#stage-template").html())
     var proposals = JSON.parse($("#proposals").html())
     var controllers = {} // map of controllers keyed by proposalId

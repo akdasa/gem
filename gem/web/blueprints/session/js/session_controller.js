@@ -8,7 +8,7 @@ function createSessionController(sessionKey, sessionData) {
     me.chat = createChatController(me)
     me.timer = createTimerController(me)
     me.manage = createManageController(me)
-    me.stage = StageController(me, $("#stage"))
+    me.stage = StageController(me, $("#stage-proposal"), $("#stage-widget"))
     me.quorum = QuorumController(me)
 
     // info line
