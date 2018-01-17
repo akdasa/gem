@@ -10,7 +10,7 @@ class ProposalFlow:
 
     def start(self):
         state = self.__proposal.state
-        if state == "new":
+        if state == "new" or state is None:
             self.__proposal.state = "deputies_review"
 
     def move_next(self):
