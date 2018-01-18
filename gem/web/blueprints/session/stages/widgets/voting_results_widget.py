@@ -11,6 +11,7 @@ class VotingResultsWidget:
         self.__private = None
         self.__type = None
         self.__threshold = None
+        self.update()
 
     def update(self):
         # todo Do not create
