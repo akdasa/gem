@@ -18,12 +18,14 @@ function AcquaintanceStageController(session) {
     }
 
     function view() {
-        return Object.assign(state, {
-            "comments": {
-                "comments": state.comments,
-                "roles": roles
-            }
-        })
+        return {
+            comments: {
+                comments: state.comments,
+                roles: roles
+            },
+            voting: state.voting,
+            stageType: state.stageType
+        }
     }
 
     // Private members

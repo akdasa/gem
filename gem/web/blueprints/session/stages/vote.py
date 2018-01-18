@@ -118,6 +118,9 @@ class VotingResultsSessionStage(SessionStage):
         super().__init__(session, proposal)
         self.__widget = VotingResultsWidget(proposal.id, proposal.state)
 
+    def on_enter(self):
+        self.__widget.update()
+
     @property
     def view(self):
         return self.__widget.view()
