@@ -112,7 +112,7 @@ function StageController(session, proposalNode, widgetsNode) {
     function createControllers() {
         return {
             "agenda": SimpleStageController(session),
-            "acquaintance": SimpleStageController(session),
+            "acquaintance": AcquaintanceStageController(session),
             "closed": SimpleStageController(session),
             "voting": VotingStageController(session),
             "votingresults": VotingResultsStageController(session),

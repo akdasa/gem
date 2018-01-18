@@ -26,6 +26,12 @@
     </script>
 {% endfor %}
 
+{% for widget in ['voting_results', 'comments'] %}
+    <script id="widget-{{widget}}" type="text/x-handlebars-template">
+        {% include "views/widgets/" + widget + "_widget.html" %}
+    </script>
+{% endfor %}
+
 <script id="session-users-line" type="text/x-handlebars-template">
     {%raw%}
     <li>

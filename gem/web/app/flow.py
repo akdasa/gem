@@ -29,3 +29,19 @@ class ProposalFlow:
 
         elif state == "final_vote":
             self.__proposal.state = "done"
+
+    def get_previous_stage(self):
+        if self.__proposal.state in ["new", "deputies_review"]:
+            return "new"
+
+        if self.__proposal.state == "straw_vote":
+            return "deputies_review"
+
+        if self.__proposal.state == "deputies_straw_vote_review":
+            return "straw_vote"
+
+        if self.__proposal.state == "final_vote":
+            return "deputies_straw_vote_review"
+
+        if self.__proposal.state == "done":
+            return "final_vote"
