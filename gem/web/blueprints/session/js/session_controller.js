@@ -100,4 +100,6 @@ $(document).ready(function() {
     Handlebars.registerPartial('commenting', $("#stage-commenting").html())
     Handlebars.registerPartial('discussion', $("#stage-discussion").html())
     Handlebars.registerPartial('closed', $("#stage-closed").html())
+
+    Handlebars.registerPartial('votingResults', $("#widget-voting_results").html())
 })

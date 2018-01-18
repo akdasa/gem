@@ -1,11 +1,12 @@
 {% raw %}
+{{> votingResults voting }}
+
 <div class="panel panel-default">
     <div class="panel-heading">
         Comments
     </div>
 
     <div class="panel-body">
-    <div id="comment-list">
     {{#each comments}}
         <div class="media" data-name="{{user}}" data-role="{{role}}" data-type="{{type}}">
             <div class="media-left media-top">
@@ -20,6 +21,6 @@
         </div>
     {{/each}}
     </div>
-    </div>
 </div>
+
 {% endraw %}
