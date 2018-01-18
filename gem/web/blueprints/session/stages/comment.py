@@ -1,5 +1,6 @@
-from gem.db import comments, users, roles
+from gem.db import comments, roles
 from .stage import SessionStage
+from .widgets import CommentsWidget
 
 
 class CommentingSessionStage(SessionStage):
@@ -10,6 +11,7 @@ class CommentingSessionStage(SessionStage):
         self.__private = True  # show comments on users' pages
         self.__stage = proposal.state
         self.__roles_can_comment = []
+        self.__widget = CommentsWidget(proposal.id, self.__stage)
 
     def on_enter(self):
         roles_doc = roles.all()
@@ -28,6 +30,7 @@ class CommentingSessionStage(SessionStage):
         :param quote: Quote
         :return: true on success"""
         comments.create(self.proposal.id, user.id, message, kind, self.__stage, quote)
+        self.__widget.update()
         self.changed.notify()
         return True
 
@@ -37,20 +40,9 @@ class CommentingSessionStage(SessionStage):
 
     @property
     def view(self):
-        docs = comments.of(self.proposal.id, self.__stage)
         return {
-            "comments": list(map(self.__map, docs)),
+            "comments": self.__widget.view(),
             "private": self.__private,
             "roles": self.__roles_can_comment
         }
 
-    @staticmethod
-    def __map(x):
-        user = users.get(x.user_id)
-        return {
-            "content": x.content,
-            "type": x.type,
-            "quote": x.quote,
-            "user": user.name,
-            "role": user.role
-        }
