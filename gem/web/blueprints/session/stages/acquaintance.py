@@ -5,6 +5,7 @@ from .widgets import CommentsWidget, VotingResultsWidget
 
 class AcquaintanceSessionStage(SessionStage):
     """The stage of acquaintance with the proposal."""
+
     def __init__(self, session, proposal):
         super().__init__(session, proposal)
         previous_stage = ProposalFlow(proposal).get_previous_stage()

@@ -24,7 +24,7 @@
     </script>
 {% endfor %}
 
-{% for widget in ['voting_results'] %}
+{% for widget in ['voting_results', 'comments'] %}
     <script id="widget-{{widget}}" type="text/x-handlebars-template">
         {% include "views/widgets/" + widget + "_widget.html" %}
     </script>
