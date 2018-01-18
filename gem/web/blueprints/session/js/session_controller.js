@@ -85,7 +85,7 @@ function createSessionController(sessionKey, sessionData) {
 
 
 $(document).ready(function() {
-    var host = "http://" + document.domain + ":" + location.port
+    var host = "//" + document.domain + ":" + location.port
     var sessionKey = $("#session-key").text().trim()
     var sessionData = JSON.parse($("#session-data").text())
     var controller = createSessionController(sessionKey, sessionData)

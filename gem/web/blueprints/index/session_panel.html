@@ -18,7 +18,9 @@
 
             {% if is_active and user_has_permission("session.join") %}
             <center>
-                <a href="/session/{{session._id}}" class="btn btn-default btn-join-session">Join</a>
+                <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                    <a href="/session/{{session._id}}" class="btn btn-lg btn-warning btn-join-session">Join</a>
+                </div>
             </center>
             {% endif %}
         </div>
