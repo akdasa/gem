@@ -7,3 +7,4 @@ pymongo
 inflection
 eventlet
 pdfkit
+python-dateutil

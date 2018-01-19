@@ -2,6 +2,7 @@ from flask import Blueprint, request
 from flask_login import login_required, current_user
 
 from gem.channel.channel import get
+from gem.web.app.printer.comments import print_comments
 from .controller import SessionController
 
 session = Blueprint("session", __name__, template_folder=".")
@@ -81,3 +82,10 @@ def on_manage_session(data):
 @login_required
 def on_kick(data):
     return controller.kick(request.sid, data)
+
+
+@channel.on("print")
+@login_required
+def on_print(data):
+    path_to_file = print_comments(current_user, {})
+    return {"path": path_to_file}

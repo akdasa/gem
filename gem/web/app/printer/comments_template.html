@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Comments</title>
+</head>
+<body>
+    {{requester.name}}
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Content</th>
+                <th>Type</th>
+                <th>Timestamp</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {% for row in rows %}
+            <tr>
+                <td>{{row.user.name}}</td>
+                <td>{{row.user.role}}</td>
+                <td>{{row.content}}</td>
+                <td>{{row.type}}</td>
+                <td>{{row.timestamp}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>
