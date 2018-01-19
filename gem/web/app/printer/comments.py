@@ -1,6 +1,9 @@
-import pdfkit
-import dateutil.parser
 import configparser
+import os
+import uuid
+
+import dateutil.parser
+import pdfkit
 from jinja2 import Template
 
 from gem.db import comments, users
@@ -8,15 +11,19 @@ from gem.db import comments, users
 
 def print_comments(requester, criteria):
     conf = __config()
-    path_to_printed = conf.get("[printer]", "path", fallback="temp/printed")
+    zoom = conf.get("printer", "zoom", fallback=6)
+    file_name = str(uuid.uuid4()) + ".pdf"
+    cp = conf.get("printer", "path", fallback="files")
+    path_to_printed = os.path.join(cp, file_name)
 
     p = "./gem/web/app/printer/"
     template_file = open(p + "comments_template.html", "r").read()
     template = Template(template_file)
     rows = map(__map, comments.find(criteria))
     html = template.render(requester=requester, rows=rows)
-    pdfkit.from_string(html, path_to_printed + "/1.pdf", options={"zoom": 6})
-    return path_to_printed + "/1.pdf"
+    pdfkit.from_string(html, path_to_printed, options={"zoom": zoom})
+
+    return {"success": True, "path": file_name}
 
 
 def __map(r):
@@ -25,7 +32,8 @@ def __map(r):
         r.timestamp = dateutil.parser.parse(r.timestamp).strftime("%H:%M:%S")
     return r
 
+
 def __config():
     config = configparser.ConfigParser()
-    config.read("config.ini")
+    r = config.read("config.ini")
     return config

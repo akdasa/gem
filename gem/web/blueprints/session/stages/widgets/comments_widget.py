@@ -15,7 +15,10 @@ class CommentsWidget:
         self.__comments = list(map(lambda x: self.__map(x), data))
 
     def view(self):
-        return self.__comments
+        return {
+            "list": self.__comments,
+            "stage": self.__stage
+        }
 
     @staticmethod
     def __map(x):

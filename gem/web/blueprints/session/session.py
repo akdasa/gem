@@ -1,3 +1,4 @@
+from bson import ObjectId
 from flask import Blueprint, request
 from flask_login import login_required, current_user
 
@@ -87,5 +88,7 @@ def on_kick(data):
 @channel.on("print")
 @login_required
 def on_print(data):
-    path_to_file = print_comments(current_user, {})
-    return {"path": path_to_file}
+    crt = data["criteria"]
+    if "proposal_id" in crt:
+        crt["proposal_id"] = ObjectId(crt["proposal_id"])
+    return print_comments(current_user, crt)
