@@ -25,5 +25,6 @@ class CommentsWidget:
             "type": x.type,
             "quote": x.quote,
             "user": user.name,
+            "timestamp": x.get("timestamp", None),
             "role": user.role
         }

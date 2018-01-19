@@ -64,6 +64,13 @@ Handlebars.registerHelper('padTime', function(value) {
     return String("00" + value).slice(-2)
 });
 
+Handlebars.registerHelper('time', function(value) {
+    var d = new Date(value)
+    return d.getHours() + ":" +
+        String("00" + d.getMinutes()).slice(-2) + ":" +
+        String("00" + d.getSeconds()).slice(-2)
+});
+
 Handlebars.registerHelper({
     eq: function (v1, v2) {
         return v1 === v2;
