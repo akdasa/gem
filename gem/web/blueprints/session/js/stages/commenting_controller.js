@@ -24,8 +24,8 @@ function CommentingStageController(session) {
             privateCheckedState: state.private ? "checked" : "",
             showComments: !state.private || permissions.indexOf("comment.manage") != -1,
             showAddComment: permissions.indexOf("comment") != -1,
-            showAddCommentLink: permissions.indexOf("comment") != -1 && !state.private
-            showFilter: true,
+            showAddCommentLink: permissions.indexOf("comment") != -1 && !state.private,
+            showFilter: true
         })
     }
 
