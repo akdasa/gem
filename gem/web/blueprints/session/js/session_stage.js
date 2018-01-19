@@ -92,7 +92,7 @@ function StageController(session, proposalNode, widgetsNode) {
     // Private members
 
     var currentStage = null
-    var proposalTemplate = Handlebars.compile($("#stage-proposal-template").html())
+    var proposalTemplate = Handlebars.compile("{{> proposal}}")
     var widgetTemplate = Handlebars.compile("{{> stage_template }}")
     var proposals = JSON.parse($("#proposals").html())
     var controllers = {} // map of controllers keyed by proposalId
