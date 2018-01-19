@@ -10,7 +10,7 @@ function AcquaintanceStageController(session) {
         // get unique roles
         roles = state.comments.map(function(obj) { return obj.role })
         roles = roles.filter(function(v, i) { return roles.indexOf(v) == i })
-    }
+   }
 
     function register() {
         $(".selectpicker").selectpicker()
@@ -24,7 +24,8 @@ function AcquaintanceStageController(session) {
                 roles: roles
             },
             voting: state.voting,
-            stageType: state.stageType
+            stageType: state.stageType,
+            proposal_id: state.proposal_id
         }
     }
 

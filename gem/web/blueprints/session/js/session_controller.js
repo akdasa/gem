@@ -93,14 +93,9 @@ $(document).ready(function() {
 
     controller.connect(host)
 
-    Handlebars.registerPartial('agenda', $("#stage-agenda").html())
-    Handlebars.registerPartial('acquaintance', $("#stage-acquaintance").html())
-    Handlebars.registerPartial('voting', $("#stage-voting").html())
-    Handlebars.registerPartial('votingresults', $("#stage-voting_results").html())
-    Handlebars.registerPartial('commenting', $("#stage-commenting").html())
-    Handlebars.registerPartial('discussion', $("#stage-discussion").html())
-    Handlebars.registerPartial('closed', $("#stage-closed").html())
-
-    Handlebars.registerPartial('votingResults', $("#widget-voting_results").html())
-    Handlebars.registerPartial('comments', $("#widget-comments").html())
+    $(".template").each(function (n) {
+        var name = $(this).data("name")
+        var html = $(this).html()
+        Handlebars.registerPartial(name, html)
+    })
 })

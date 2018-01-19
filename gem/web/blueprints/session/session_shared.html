@@ -19,18 +19,26 @@
     {% endraw %}
 </script>
 
+{% set widgets = [
+    "stages/acquaintance",
+    "stages/agenda",
+    "stages/closed",
+    "stages/commenting",
+    "stages/discussion",
+    "stages/voting",
+    "stages/voting_results",
+    "widgets/comments",
+    "widgets/voting_results"
+] %}
 
-{% for stage in ['acquaintance', 'agenda', 'closed', 'commenting', 'discussion', 'voting', 'voting_results'] %}
-    <script id="stage-{{stage}}" type="text/x-handlebars-template">
-        {% include "views/session_stage_" + stage + ".html" %}
+
+
+{% for widget in widgets %}
+    <script id="widget-{{widget}}" type="text/x-handlebars-template" class="template" data-name="{{widget}}">
+        {% include "views/" + widget + ".html" %}
     </script>
 {% endfor %}
 
-{% for widget in ['voting_results', 'comments'] %}
-    <script id="widget-{{widget}}" type="text/x-handlebars-template">
-        {% include "views/widgets/" + widget + "_widget.html" %}
-    </script>
-{% endfor %}
 
 <script id="session-users-line" type="text/x-handlebars-template">
     {%raw%}

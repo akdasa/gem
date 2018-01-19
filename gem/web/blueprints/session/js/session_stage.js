@@ -17,7 +17,7 @@ function StageController(session, proposalNode, widgetsNode) {
         if (nextStage) {
             // extend data with additional info
             Object.assign(data, {
-                stageType: function() { return data.stage.type },
+                stageType: function() { return "stages/" + data.stage.type },
                 proposal: data.proposal_id ? proposals[data.proposal_id] : null,
                 user: session.user
             })
@@ -32,7 +32,8 @@ function StageController(session, proposalNode, widgetsNode) {
             }
 
             if (isProposalChanged) {
-                onProposalChanged(nextStage.view().proposal)
+                var proposal = data.proposal_id ? proposals[data.proposal_id] : null
+                onProposalChanged(proposal)
             }
             currentStage = nextStage
         }
