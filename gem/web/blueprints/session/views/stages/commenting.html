@@ -8,16 +8,13 @@
 {{/if}}
 {{/ifHas}}
 
-{{!-- Hide the entire block if comments are private,
-      but show it for user with 'comment.manage' permission --}}
 
-{{#if (or (not private) (has user.permissions "comment.manage"))}}
-{{>comments}}
+{{#if showComments}}
+    {{>comments}}
 {{/if}}
 
-
-{{#ifHas user.permissions "comment"}}
+{{#if showAddComment}}
     {{> add_comment}}
-{{/ifHas}}
+{{/if}}
 
 {%endraw%}

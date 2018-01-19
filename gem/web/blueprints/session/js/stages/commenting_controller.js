@@ -22,7 +22,9 @@ function CommentingStageController(session) {
         return Object.assign(state, {
             manageable: permissions.indexOf("comment.manage") != -1,
             privateCheckedState: state.private ? "checked" : "",
-            filter: true
+            filter: true,
+            showComments: !state.private || permissions.indexOf("comment.manage") != -1,
+            showAddComment: permissions.indexOf("comment") != -1
         })
     }
 
