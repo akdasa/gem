@@ -1,5 +1,3 @@
-{% macro view() %}
-
 {% set widgets = [
     { "path": "stages/template",        "name": "stage_template" },
     { "path": "stages/acquaintance",    "name": "stage_acquaintance" },
@@ -17,10 +15,10 @@
 ] %}
 
 {% for widget in widgets %}
-    <script id="widget-{{widget}}" type="text/x-handlebars-template" class="template" data-name="{{widget['name']}}">
-        {% include "views/" + widget["path"] + ".html" %}
-    </script>
+<script id="widget-{{widget}}"
+        type="text/x-handlebars-template"
+        class="template"
+        data-name="{{widget['name']}}">
+    {% include "views/" + widget["path"] + ".html" %}
+</script>
 {% endfor %}
-
-
-{% endmacro %}

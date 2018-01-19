@@ -3,15 +3,11 @@
 
 {% block body %}
 <div id="connection-lost" class="alert alert-danger hidden" role="alert">Connection lost.</div>
-
 <link rel="stylesheet" href="/static/app/session.css">
-
-{% import "session_view.html" as v %}
-{% import "session_shared.html" as s %}
-
 <script src="/static/app/session.js"></script>
+{% include "session_widgets.html" %}
+{% include "session_view.html" %}
 
-{{ v.view() }}
 
 <script id="session-key" type="text">
 {{session._id}}
@@ -24,68 +20,8 @@
 <script id="proposals" type="application/json">
 {{proposals|tojson}}
 </script>
-
-{{ s.view() }}
-
 {% endblock %}
 
-
 {% block footer %}
-    <footer class="footer">
-        <div id="footer-info" class="row info-line hidden">
-
-        </div>
-
-        {% if user_has_permission("session.manage") %}
-        <div class="row">
-            <a href="#" class="btn btn-default change-stage" data-value="-1">
-                Previous <span id="state-prev"></span>
-            </a>
-            <a href="#" class="btn btn-primary change-stage" data-value="1">
-                Next <span id="state-next"></span>
-            </a>
-            <a href="#" class="btn btn-danger run-close">Close</a>
-
-            <div class="btn-group dropup">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="false">
-                    Timer <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a href="#" class="timer-set" data-value="1">1m timer</a></li>
-                    <li><a href="#" class="timer-set" data-value="2">2m timer</a></li>
-                    <li><a href="#" class="timer-set" data-value="5">5m timer</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#" class="timer-set" data-value="+1">+1 minute</a></li>
-                    <li><a href="#" class="timer-set" data-value="+5">+5 minutes</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="#" class="timer-set" data-value="custom">Custom</a></li>
-                    <li><a href="#" class="timer-set" data-value="0">Stop</a></li>
-                </ul>
-            </div>
-
-            <div class="btn-group dropup">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="false">
-                    Options <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    {% if user_has_permission("quorum.request_change") %}
-                    <li><a href="#" id="session-quorum-set" data-value="1">Set Quorum</a></li>
-                    {% endif %}
-                </ul>
-            </div>
-        </div>
-        {% endif %}
-    </footer>
-
-    <div class="hidden" id="timer-custom">
-        <form action="" class="form">
-            <div class="form-group">
-                <label>Time in minutes<br>
-                <small>(Start with the '+' sign to add time to the current timer)</small></label>
-                <input type="text" placeholder="Minutes" class="form-control" id="timer-custom-value" required />
-            </div>
-        </form>
-    </div>
+{% include "session_footer.html" %}
 {% endblock %}
