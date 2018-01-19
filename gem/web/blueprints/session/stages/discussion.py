@@ -30,7 +30,8 @@ class DiscussionSessionStage(SessionStage):
             self.__accept = data.get("value", True)
             self.changed.notify()
         if cmd == "remove":
-            self.__remove(data.get("user_id", None))
+            user_id = data.get("user_id", None)
+            self.__remove(user_id)
 
     def __raise_hand(self, user):
         """User raises a hand.
@@ -42,7 +43,7 @@ class DiscussionSessionStage(SessionStage):
             return
 
         self.__order += 1
-        self.__queue[user.id] = ({
+        self.__queue[str(user.id)] = ({
             "id": user.id,
             "name": user.name,
             "role": user.role,
@@ -56,9 +57,9 @@ class DiscussionSessionStage(SessionStage):
         if not self.__is_raised_hand(user):
             return
 
-        if self.__speaking and self.__speaking["id"] == user.id:
+        if self.__speaking and self.__speaking["id"] == str(user.id):
             self.__speaking = None
-        del self.__queue[user.id]
+        del self.__queue[str(user.id)]
         self.changed.notify()
 
     def __give_voice(self, user_id):
@@ -89,4 +90,4 @@ class DiscussionSessionStage(SessionStage):
         }
 
     def __is_raised_hand(self, user):
-        return user.id in self.__queue
+        return str(user.id) in self.__queue

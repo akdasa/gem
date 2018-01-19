@@ -1,4 +1,4 @@
-function CommentingStageController(controller) {
+function CommentingStageController(session) {
     var commentQuote = null
     var state = null
 
@@ -19,7 +19,16 @@ function CommentingStageController(controller) {
     }
 
     function view() {
-        return state
+        var permissions = session.user.permissions
+
+        return Object.assign(state, {
+            manageable: permissions.indexOf("comment.manage") != -1,
+            privateCheckedState: state.private ? "checked" : "",
+            showComments: !state.private || permissions.indexOf("comment.manage") != -1,
+            showAddComment: permissions.indexOf("comment") != -1,
+            showAddCommentLink: permissions.indexOf("comment") != -1 && !state.private,
+            showFilter: true
+        })
     }
 
     // UI Event handlers
@@ -57,7 +66,7 @@ function CommentingStageController(controller) {
         e.preventDefault();
         var buttonClicked = $(this)
         var content = $("#comment-message").val()
-        var type = $(buttonClicked).data("type")
+        var type = $("#comment-type option:selected").val()
         comment(content, type, commentQuote)
     }
 
@@ -77,11 +86,11 @@ function CommentingStageController(controller) {
     // Actions
 
     function comment(content, type, quote) {
-        controller.socket.emit("comment", {content, type, quote}, onCommentSubmittedResponse)
+        session.socket.emit("comment", {content, type, quote}, onCommentSubmittedResponse)
     }
 
     function setCommentingPrivacy(value) {
-        controller.socket.emit("manage", {private: value})
+        session.socket.emit("manage", {private: value})
     }
 
     function hideAllComments() {

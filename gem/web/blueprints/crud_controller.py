@@ -7,7 +7,7 @@ from gem.web.app.auth import has_permission, access_denied
 
 
 class CrudController:
-    def __init__(self, repository, namespace=None, columns=None, row_class=None, script=None):
+    def __init__(self, repository, namespace=None, columns=None, row_class=None, script=None, permission=None):
         self._repository = repository
         self._columns = columns or []
         self._namespace = namespace
@@ -15,6 +15,7 @@ class CrudController:
         self._actions = []
         self._row_class = row_class or self.__row_class
         self._js = script or []
+        self.__override_permission = permission
 
         if namespace:
             self._permission = namespace
@@ -86,6 +87,9 @@ class CrudController:
 
     def _has_permission(self, kind):
         # No permission specified, so everything is allowed
+        if self.__override_permission and self.__override_permission in self._permission:
+            return True
+
         if not self._permission:
             return True
         else:

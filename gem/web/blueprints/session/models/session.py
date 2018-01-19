@@ -1,7 +1,9 @@
 from flask_socketio import emit
 
-from gem.db import sessions
+from gem.db import sessions, proposals
+from gem.web.app.flow import ProposalFlow
 from .chat import SessionChat
+from .quorum import SessionQuorum
 from .stages import SessionStages
 from .users import SessionUsers
 
@@ -9,13 +11,15 @@ from .users import SessionUsers
 class Session:
     """Represents Session."""
 
-    def __init__(self, session_id):
+    def __init__(self, session_id, connections):
         """Initializes new instance of the Session class.
         :param session_id: Session Id"""
         self.__session_id = session_id
         self.__stages = SessionStages(self)
         self.__users = SessionUsers(self)
         self.__chat = SessionChat(self)
+        self.__quorum = SessionQuorum(self)
+        self.connections = connections
 
         # subscribe for aspects' events
         self.__users.changed.subscribe(self.__on_user_state_changed)
@@ -38,6 +42,10 @@ class Session:
         return self.__users
 
     @property
+    def quorum(self):
+        return self.__quorum
+
+    @property
     def presence_roles(self):
         session = sessions.get(self.session_id)
         return session["permissions"]["presence"]
@@ -49,8 +57,21 @@ class Session:
 
     def close(self):
         session = sessions.get(self.session_id)
+        for proposal_id in session.proposals:
+            proposal = proposals.get(proposal_id)
+            ProposalFlow(proposal).move_next()
+            proposals.save(proposal)
+
         session.status = "closed"
         sessions.save(session)
+
+    def manage(self, data, user):
+        if data["command"] == "set_quorum" and "codes" not in data:
+            return self.__quorum.request_change(data["value"])
+        if data["command"] == "set_quorum" and "codes" in data:
+            result = self.__quorum.change(data["codes"])
+            self.stages.changed.notify(self.stages.current)
+            return result
 
     def notify(self, event, data, room=None):
         emit(event, data, room=room or self.__session_id)

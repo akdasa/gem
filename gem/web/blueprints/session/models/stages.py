@@ -59,16 +59,21 @@ class SessionStages:
         docs = proposals.get_list(session["proposals"])
 
         for idx, proposal in enumerate(docs):
-            stages = [
-                AcquaintanceSessionStage(self.__session, proposal),
-                DiscussionSessionStage(self.__session, proposal),
-                CommentingSessionStage(self.__session, proposal),
-                VotingSessionStage(self.__session, proposal),
-                VotingResultsSessionStage(self.__session, proposal)]
+            if proposal.state == "done":
+                continue
 
-            for stage in stages:
-                stage.changed.subscribe(self.__on_stage_changed)
-                result.append(stage)
+            result.append(AcquaintanceSessionStage(self.__session, proposal))
+
+            if proposal.state not in ["final_vote"]:
+                result.append(DiscussionSessionStage(self.__session, proposal))
+                result.append(CommentingSessionStage(self.__session, proposal))
+
+            if proposal.state not in ["deputies_straw_vote_review"]:
+                result.append(VotingSessionStage(self.__session, proposal, final=proposal.state == "final_vote"))
+                result.append(VotingResultsSessionStage(self.__session, proposal))
+
+        for stage in result:
+            stage.changed.subscribe(self.__on_stage_changed)
 
         result.append(ClosedSessionStage(self.__session))
         result.insert(0, AgendaSessionStage(self.__session, result))

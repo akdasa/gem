@@ -25,10 +25,10 @@ function InfoLineController(session, node) {
 
     // internal members
 
-    var endTime = undefined
-    var sessionTitle = undefined
-    var users = undefined
-    var template = Handlebars.compile(node.html())
+    var endTime = new Date()
+    var sessionTitle = ""
+    var users = []
+    var template = Handlebars.compile("{{> info_line }}")
     var timer = setInterval(update, 1000)
 
     // renders info line

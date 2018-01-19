@@ -1,7 +1,21 @@
 {%raw%}
 <div class="panel panel-default">
-    <div class="panel-heading">Votes ({{voted}} of {{total}})</div>
+    <div class="panel-heading">Vote results</div>
     <div class="panel-body">
+        {{#if isFinalVote}}
+            {{#if isPasses}}
+            <div class="alert alert-success" role="alert"><center><h2>Passes</h2></center></div>
+            {{/if}}
+
+            {{#if isTied}}
+            <div class="alert alert-warning" role="alert"><center><h2>Tie</h2></center></div>
+            {{/if}}
+
+            {{#if isFailed}}
+            <div class="alert alert-danger" role="alert"><center><h2>Not passes</h2></center></div>
+            {{/if}}
+        {{/if}}
+
         <div class="progress vote-progress">
             <div class="progress-bar progress-bar-success" style="width: {{percent yes total}}%">
                 {{yes}} ({{percentRound yes total}}%)
@@ -30,8 +44,18 @@
             <th>Total</th>
             <th>{{yes}} ({{percentRound yes total}}%)</th>
             <th>{{no}} ({{percentRound no total}}%)</th>
-            <th>{{undecided}} ({{percentRound undecided total}}%)</th>
+            <th>
+                {{undecided}} ({{percentRound undecided total}}%)
+            </th>
         </tr>
+        {{#if non_vote}}
+        <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th>{{non_vote}} ({{percentRound non_vote total}}%)</th>
+        </tr>
+        {{/if}}
         </tfoot>
 
 

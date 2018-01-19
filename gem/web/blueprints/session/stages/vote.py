@@ -1,60 +1,45 @@
 import hashlib
-from abc import ABCMeta
 
 from gem.db import votes, users
 from .stage import SessionStage
+from .widgets import VotingResultsWidget
 
 
-class VotingBaseSessionStage(SessionStage, metaclass=ABCMeta):
-    def __init__(self, session, proposal):
-        super().__init__(session, proposal)
-        self._doc = None
-        self._votes = None
-        self._private = True
-
-    def on_enter(self):
-        self._doc = votes.find_or_create(self.proposal.id)
-        self._votes = self._doc.votes
-        self._private = self._doc.get("private", True)
-
-    def on_leave(self):
-        self._doc.private = self._private
-        if self._private:
-            self.__anonymize()
-        votes.save(self._doc)
-
-    def _users_can_vote(self):
-        """Return list of users can vote
-        :rtype: list
-        :return: List of users can vote"""
-        all_users = self.session.users.all
-        return list(filter(lambda x: x.has_permission("vote"), all_users))
-
-    def _votes_by(self, value):
-        """Returns count of votes for specific value
-        :type value: str
-        :rtype: int
-        :param value: Vote type
-        :return: Count of votes"""
-        return len(list(filter(lambda x: self._votes[x]["vote"] == value, self._votes)))
-
-    def __anonymize(self):
-        """Removes any personal information form document"""
-        for row_id in self._votes:
-            if "user_id" in self._votes[row_id]:
-                del self._votes[row_id]["user_id"]
-
-
-class VotingSessionStage(VotingBaseSessionStage):
+class VotingSessionStage(SessionStage):
     """The stage of voting for the document."""
 
-    def __init__(self, session, proposal):
+    def __init__(self, session, proposal, final=False):
         """Initializes new instance of the VotingSessionStage class.
         :type session: Session
         :type proposal: Proposal
         :param session: Session to which the stage belongs
         :param proposal: Proposal document"""
         super().__init__(session, proposal)
+        self.__doc = None
+        self.__votes = None
+        self.__private = True
+        self.__type = None
+        self.__threshold = None
+        self.__stage = proposal.state
+        self.__final = final
+
+    def on_enter(self):
+        self.__doc = votes.find_or_create(self.proposal.id, self.__stage)
+        self.__votes = self.__doc.votes
+        self.__private = self.__doc.get("private", True)
+        self.__type = self.__doc.get("type", None)
+        self.__threshold = self.__doc.get("threshold", None)
+
+    def on_leave(self):
+        self.__doc.private = self.__private
+        if self.__threshold or self.__final:
+            self.__doc.threshold = self.__threshold or "majority"
+        if self.__private:
+            self.__anonymize()
+        if self.__final:
+            self.__doc.type = "final"
+            self.__fill_none()
+        votes.save(self.__doc)
 
     def vote(self, user, value):
         """Commit a vote for the proposal.
@@ -63,31 +48,65 @@ class VotingSessionStage(VotingBaseSessionStage):
         :return: True on success"""
         user_id = self.__user_id_hash(user.id)
 
-        prev = self._votes.get(user_id, None)
+        prev = self.__votes.get(user_id, None)
         prev_vote = prev["vote"] if prev else None
 
-        self._votes[user_id] = {"vote": value, "role": user.role}
-        self._votes[user_id]["user_id"] = user.id
+        self.__votes[user_id] = {"vote": value, "role": user.role}
+        self.__votes[user_id]["user_id"] = user.id
         self.changed.notify()
         return {"success": True, "value": value, "prev": prev_vote}
 
     def manage(self, data, user=None):
-        self._private = data.get("private", True)
+        cmd = data.get("cmd", None)
+
+        if cmd == "set_private":
+            self.__private = data.get("value", True)
+        if cmd == "set_threshold":
+            self.__threshold = data.get("value", "majority")
         self.changed.notify()
 
     @property
     def view(self):
         can_vote_count = len(self._users_can_vote())
-        voted = len(self._votes)
+        voted = len(self.__votes)
         t = voted if can_vote_count == 0 else max(can_vote_count, voted)
-        return {"voted": voted, "total": t, "private": self._private}
+        return {
+            "can_vote": can_vote_count,
+            "voted": voted,
+            "total": t,
+            "private": self.__private,
+            "type": "straw" if not self.__final else "final",
+            "quorum": self.session.quorum.value,
+            "threshold": self.__threshold
+        }
+
+    def __anonymize(self):
+        """Removes any personal information form document"""
+        for row_id in self.__votes:
+            if "user_id" in self.__votes[row_id]:
+                del self.__votes[row_id]["user_id"]
 
     @staticmethod
     def __user_id_hash(key):
         return hashlib.sha224(str(key).encode("utf-8")).hexdigest()
 
+    def _users_can_vote(self):
+        """Return list of users can vote
+        :rtype: list
+        :return: List of users can vote"""
+        all_users = self.session.users.all
+        return list(filter(lambda x: x.has_permission("vote"), all_users))
 
-class VotingResultsSessionStage(VotingBaseSessionStage):
+    def __fill_none(self):
+        u = self._users_can_vote()
+        a = {user.id: self.__votes.get(self.__user_id_hash(user.id), None) for user in u}
+        n = list(filter(lambda x: a[x] is None, a))  # filter out users with submitted vote
+        for uid in n: # list of user_ids with no submitted vote
+            user = users.get(uid)
+            self.vote(user, "none")  # vote as undecided
+
+
+class VotingResultsSessionStage(SessionStage):
     """The stage of voting for the document."""
 
     def __init__(self, session, proposal):
@@ -97,45 +116,11 @@ class VotingResultsSessionStage(VotingBaseSessionStage):
         :param session: Session to which the stage belongs
         :param proposal: Proposal document"""
         super().__init__(session, proposal)
+        self.__widget = VotingResultsWidget(proposal.id, proposal.state)
+
+    def on_enter(self):
+        self.__widget.update()
 
     @property
     def view(self):
-        can_vote_count = len(self._users_can_vote())
-
-        # calculate votes
-        y = self._votes_by("yes")
-        n = self._votes_by("no")
-        u = self._votes_by("undecided")
-        t = y + n + u if can_vote_count == 0 else max(can_vote_count, y + n + u)
-
-        # result
-        return {
-            "yes": y, "no": n, "undecided": u,
-            "voted": y + n + u, "total": t,
-            "roles": self.__details()
-        }
-
-    def __details(self):
-        result = {}
-        for row_id in self._votes:
-            value = self._votes[row_id]
-            user_id = value.get("user_id", None)
-            user = users.get(user_id) if not self._private else None
-            vote = value["vote"]
-            user_name = user.name if user else value.get("name", None)
-            role = user.role if user else value.get("role", None)
-
-            # add empty data for new role
-            if role not in result:
-                result[role] = {
-                    "yes": 0, "no": 0, "undecided": 0,
-                    "who": {"yes": [], "no": [], "undecided": []}
-                }
-
-            # count vote and append person into "who" section
-            if vote in ["yes", "no", "undecided"]:
-                result[role][vote] += 1
-                if not self._doc.private:
-                    result[role]["who"][vote].append(user_name)
-
-        return result
+        return self.__widget.view()

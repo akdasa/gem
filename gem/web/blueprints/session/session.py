@@ -2,7 +2,6 @@ from flask import Blueprint, request
 from flask_login import login_required, current_user
 
 from gem.channel.channel import get
-from gem.web.app.printer.comments import print_comments
 from .controller import SessionController
 
 session = Blueprint("session", __name__, template_folder=".")
@@ -21,13 +20,13 @@ def index(session_id):
 @channel.on("join")
 @login_required
 def on_join_message(data):
-    return controller.join(request.sid, current_user, data)
+    return controller.join(request.sid, current_user.id, data)
 
 
 @channel.on("chat")
 @login_required
 def on_chat_message(data):
-    return controller.chat(request.sid, current_user, data)
+    return controller.chat(request.sid, data)
 
 
 @channel.on("change_stage")
@@ -45,13 +44,13 @@ def on_close_message():
 @channel.on("vote")
 @login_required
 def on_vote_message(data):
-    return controller.vote(request.sid, current_user, data)
+    return controller.vote(request.sid, data)
 
 
 @channel.on("comment")
 @login_required
 def on_comment_message(data):
-    return controller.comment(request.sid, current_user, data)
+    return controller.comment(request.sid, data)
 
 
 @channel.on("disconnect")
@@ -69,17 +68,16 @@ def on_timer(data):
 @channel.on("manage")
 @login_required
 def on_manage(data):
-    return controller.manage(request.sid, current_user, data)
+    return controller.manage(request.sid, data)
+
+
+@channel.on("manage_session")
+@login_required
+def on_manage_session(data):
+    return controller.manage_session(request.sid, data)
 
 
 @channel.on("kick")
 @login_required
 def on_kick(data):
-    return controller.kick(request.sid, current_user, data)
-
-
-@channel.on("print")
-@login_required
-def on_print(data):
-    path_to_file = print_comments(data)
-    return {"path": path_to_file}
+    return controller.kick(request.sid, data)

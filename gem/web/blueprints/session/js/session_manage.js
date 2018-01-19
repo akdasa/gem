@@ -29,6 +29,11 @@ function createManageController(controller) {
         }
     })
 
+    $("#session-quorum-set").on("click", function(e) {
+        e.preventDefault()
+        controller.quorum.requestChange()
+    })
+
 
     function onChangeStageResponse(data) {
         if (data.next.title != data.current.title) {
@@ -41,7 +46,7 @@ function createManageController(controller) {
     }
 
     function onCloseSessionResponse(data) {
-        alerts.alert("Closed", "Session is closed. You will be redirected to the dashboard page.", function () {
+        alerts.alert({title: "Closed", message: "Session is closed. You will be redirected to the dashboard page."}, function () {
             window.location = "/account"
         })
     }

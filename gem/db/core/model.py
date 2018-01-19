@@ -8,7 +8,3 @@ class Model(Munch):
     @property
     def id(self):
         return self.get("_id")
-
-
-class Proposal(Model):
-    pass

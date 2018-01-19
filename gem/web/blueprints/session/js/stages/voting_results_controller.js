@@ -13,7 +13,12 @@ function VotingResultsStageController(session) {
     }
 
     function view() {
-        return state
+        return Object.assign(state, {
+            isPasses: state.status == "pass",
+            isFailed: state.status == "fail",
+            isTied: state.status == "tie",
+            isFinalVote: state.type == "final"
+        })
     }
 
     var state = null

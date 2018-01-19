@@ -1,0 +1,74 @@
+{%raw%}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        {{#if isFinalVote}}Final vote{{else}}Straw vote{{/if}}
+
+        <div class="pull-right">
+        {{#if canManage}}
+            {{#if isFinalVote}}
+            <select id="vote-threshold" class="selectpicker">
+                <option value="majority" {{selectedThreshold 'majority'}}>Majority</option>
+                <option value="2/3" {{selectedThreshold '2/3'}}>2/3</option>
+                <option value="4/5" {{selectedThreshold '4/5'}}>4/5</option>
+                <option value="unanimous" {{selectedThreshold 'unanimous'}}>Unanimous</option>
+            </select>
+            {{/if}}
+            <label><input type="checkbox" id="vote-private" {{privateChecked}}> Secret ballot</label>
+        {{else}}
+            {{#if isFinalVote}}
+            Threshold: {{threshold}}
+            {{/if}}
+        {{/if}}
+        </div>
+    </div>
+
+    <div class="panel-body">
+        {{#if noQuorum}}
+            <div class="alert alert-danger" role="alert">Quorum is not met. {{can_vote}} of {{quorum}}</div>
+        {{else}}
+            {{#if showPrivateAlert }}
+            <div class="alert alert-info" role="alert">This is a <strong>secret ballot</strong>.</div>
+            {{/if}}
+
+            {{#if isVoteSubmitted }}
+            <div class="alert alert-success" role="alert">
+                {{#if isVoteChanged }}
+                    Your vote <strong>{{prevVote}}</strong> has been changed to <strong>{{vote}}</strong>.
+                {{else}}
+                    Your vote <strong>{{vote}}</strong> has been submitted.
+                {{/if}}
+            </div>
+            {{/if}}
+
+            {{#if isVoteNotAccepted}}
+            <div class="alert alert-danger" role="alert">Your vote is not accepted.</div>
+            {{/if}}
+
+            {{#if timeIsOver }}
+            <div class="alert alert-danger" role="alert">Time is over.</div>
+            {{/if}}
+
+            <div class="progress vote-progress">
+                <div class="progress-bar" role="progressbar" style="width: {{percentRound voted total}}%">
+                    {{percentRound voted total}}% ({{voted}} of {{total}})
+                </div>
+            </div>
+
+            {{#if canVote }}
+            <br>
+            <div id="vote-buttons" class="btn-group btn-group-justified" role="group">
+                <a id="vote-yes" href="#" class="btn btn-success vote" data-vote="yes">
+                    <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> In Favor
+                </a>
+                <a id="vote-no" href="#" class="btn btn-danger vote" data-vote="no">
+                    <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> Against
+                </a>
+                <a id="vote-undecided" href="#" class="btn btn-warning vote" data-vote="undecided">
+                    <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span> Abstention
+                </a>
+            </div>
+            {{/if}}
+        {{/if}}
+    </div>
+</div>
+{%endraw%}

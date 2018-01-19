@@ -8,7 +8,8 @@ function createSessionController(sessionKey, sessionData) {
     me.chat = createChatController(me)
     me.timer = createTimerController(me)
     me.manage = createManageController(me)
-    me.stage = StageController(me, $("#stage"))
+    me.stage = StageController(me, $("#stage-proposal"), $("#stage-widget"))
+    me.quorum = QuorumController(me)
 
     // info line
     me.infoLine = InfoLineController(me, $("#footer-info"))
@@ -20,12 +21,15 @@ function createSessionController(sessionKey, sessionData) {
 
     function onKick(data) {
         me.socket.disconnect()
-        Alerts().alert("You have been removed from the session", data.message, function () { window.location = "/" })
+        Alerts().alert({
+            title: data.title || "You have been removed from the session",
+            message: data.message
+        }, function () { window.location = "/" })
     }
 
     function onConnected(socket) {
         $("#connection-lost").addClass("hidden")
-        me.socket.emit("join", { room: sessionKey })
+        me.socket.emit("join", { "session": sessionKey }, onJoinResponse)
     }
 
     function onDisconnected(socket) {
@@ -34,6 +38,15 @@ function createSessionController(sessionKey, sessionData) {
 
     function onReconnected(socket) {
         $("#connection-lost").addClass("hidden")
+    }
+
+    function onJoinResponse(response) {
+        if (response.success != true) {
+            Alerts().alert({
+                title: "Error",
+                message:"You are not connected to the session" },
+                function () { window.location = "/" })
+        }
     }
 
     function connect(uri) {
@@ -53,6 +66,7 @@ function createSessionController(sessionKey, sessionData) {
             me.infoLine.setUsers(data)
             me.users.setUsers(data)
         })
+        me.socket.on("quorum_change_code", me.quorum.showQuorumChangeCode)
         me.socket.on("timer", me.timer.processMessage)
     }
 
@@ -71,7 +85,7 @@ function createSessionController(sessionKey, sessionData) {
 
 
 $(document).ready(function() {
-    var host = "http://" + document.domain + ":" + location.port
+    var host = "//" + document.domain + ":" + location.port
     var sessionKey = $("#session-key").text().trim()
     var sessionData = JSON.parse($("#session-data").text())
     var controller = createSessionController(sessionKey, sessionData)
@@ -79,11 +93,9 @@ $(document).ready(function() {
 
     controller.connect(host)
 
-    Handlebars.registerPartial('agenda', $("#stage-agenda").html())
-    Handlebars.registerPartial('acquaintance', $("#stage-acquaintance").html())
-    Handlebars.registerPartial('voting', $("#stage-voting").html())
-    Handlebars.registerPartial('votingresults', $("#stage-voting_results").html())
-    Handlebars.registerPartial('commenting', $("#stage-commenting").html())
-    Handlebars.registerPartial('discussion', $("#stage-discussion").html())
-    Handlebars.registerPartial('closed', $("#stage-closed").html())
+    $(".template").each(function (n) {
+        var name = $(this).data("name")
+        var html = $(this).html()
+        Handlebars.registerPartial(name, html)
+    })
 })
