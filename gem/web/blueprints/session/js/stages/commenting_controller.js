@@ -10,22 +10,30 @@ function CommentingStageController(session) {
         $(".selectpicker").selectpicker()
         $("#comment-filter-type").on("changed.bs.select", onFilterChanged)
         $("#comment-filter-role").on("changed.bs.select", onFilterChanged)
+
+        $("#comment-print").on("click", onPrintClicked)
     }
 
     function setState(value) {
         state = value
+        console.log(value)
     }
 
     function view() {
         var permissions = session.user.permissions
 
-        return Object.assign(state, {
-            manageable: permissions.indexOf("comment.manage") != -1,
-            privateCheckedState: state.private ? "checked" : "",
+        return Object.assign({}, state, {
             showComments: !state.private || permissions.indexOf("comment.manage") != -1,
             showAddComment: permissions.indexOf("comment") != -1,
             showAddCommentLink: permissions.indexOf("comment") != -1 && !state.private,
-            showFilter: true
+            comments: {
+                showFilter: true,
+                showPrint: true,
+                manageable: permissions.indexOf("comment.manage") != -1,
+                privateCheckedState: state.private ? "checked" : "",
+                comments: state.comments.list,
+                roles: state.roles
+            }
         })
     }
 
@@ -72,6 +80,27 @@ function CommentingStageController(session) {
         var flash = $("#comment-submitted")
         flash.removeClass("hidden")
         setTimeout(function() { flash.alert("close") }, 5000)
+    }
+
+    function onPrintClicked(e) {
+        e.preventDefault()
+
+        var alert = Alerts().alert({
+            title:"Printing",
+            message:"We are printing your document. Please wait a moment."
+        })
+
+        var commentsCriteria = { proposal_id: state.proposal_id, stage: state.comments.stage }
+        var data = {type:"comments", "criteria": commentsCriteria}
+
+        controller.emit("print", data, function(data) {
+            if (data.success) {
+                $.fileDownload("/files/" + data.path)
+                alert.close()
+            } else {
+                Alerts().alert({title: "Error", message: data.message})
+            }
+        })
     }
 
     // Actions

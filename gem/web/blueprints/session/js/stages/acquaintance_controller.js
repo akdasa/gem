@@ -8,7 +8,7 @@ function AcquaintanceStageController(session) {
         state = value
 
         // get unique roles
-        roles = state.comments.map(function(obj) { return obj.role })
+        roles = state.comments.list.map(function(obj) { return obj.role })
         roles = roles.filter(function(v, i) { return roles.indexOf(v) == i })
    }
 
@@ -20,7 +20,7 @@ function AcquaintanceStageController(session) {
     function view() {
         return {
             comments: {
-                comments: state.comments,
+                comments: state.comments.list,
                 roles: roles
             },
             voting: state.voting,

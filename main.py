@@ -1,4 +1,5 @@
-from flask import Flask, redirect, request, flash
+import os
+from flask import Flask, redirect, request, flash, current_app, send_from_directory, make_response, Response
 from flask_login import LoginManager, current_user
 
 from gem.channel import init
@@ -44,6 +45,12 @@ login_manager.login_message_category = "info"
 
 if __name__ == "__main__":
     channel.run(app)
+
+
+@app.route('/files/<path:filename>', methods=['GET', 'POST'])
+def download(filename):
+    uploads = os.path.join(current_app.root_path, "files")
+    return send_from_directory(directory=uploads, filename=filename, as_attachment=True)
 
 
 @app.before_request
