@@ -28,7 +28,7 @@ function InfoLineController(session, node) {
     var endTime = new Date()
     var sessionTitle = ""
     var users = []
-    var template = Handlebars.compile(node.html())
+    var template = Handlebars.compile("{{> info_line }}")
     var timer = setInterval(update, 1000)
 
     // renders info line

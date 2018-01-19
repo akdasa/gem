@@ -17,7 +17,7 @@ function StageController(session, proposalNode, widgetsNode) {
         if (nextStage) {
             // extend data with additional info
             Object.assign(data, {
-                stageType: function() { return "stages/" + data.stage.type },
+                stageType: function() { return "stage_" + data.stage.type },
                 proposal: data.proposal_id ? proposals[data.proposal_id] : null,
                 user: session.user
             })
@@ -93,7 +93,7 @@ function StageController(session, proposalNode, widgetsNode) {
 
     var currentStage = null
     var proposalTemplate = Handlebars.compile($("#stage-proposal-template").html())
-    var widgetTemplate = Handlebars.compile($("#stage-template").html())
+    var widgetTemplate = Handlebars.compile("{{> stage_template }}")
     var proposals = JSON.parse($("#proposals").html())
     var controllers = {} // map of controllers keyed by proposalId
 

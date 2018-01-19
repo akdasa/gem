@@ -1,56 +1,26 @@
 {% macro view() %}
-<script id="stage-template" type="text/x-handlebars-template">
-    {% raw %}
-    {{> (stageType) }}
-    {% endraw %}
-</script>
-
-<script id="stage-proposal-template" type="text/x-handlebars-template">
-    {% raw %}
-    {{#if id}}
-    <div class="panel panel-default">
-        <div class="panel-heading">Proposal</div>
-        <div class="panel-body" id="proposal-content">
-            <h1>{{ title }}</h1>
-            <p>{{{ content }}}</p>
-        </div>
-    </div>
-    {{/if}}
-    {% endraw %}
-</script>
 
 {% set widgets = [
-    "stages/acquaintance",
-    "stages/agenda",
-    "stages/closed",
-    "stages/commenting",
-    "stages/discussion",
-    "stages/voting",
-    "stages/voting_results",
-    "widgets/comments",
-    "widgets/voting_results"
+    { "path": "stages/template",        "name": "stage_template" },
+    { "path": "stages/acquaintance",    "name": "stage_acquaintance" },
+    { "path": "stages/agenda",          "name": "stage_agenda" },
+    { "path": "stages/closed",          "name": "stage_closed" },
+    { "path": "stages/commenting",      "name": "stage_commenting" },
+    { "path": "stages/discussion",      "name": "stage_discussion" },
+    { "path": "stages/voting",          "name": "stage_voting" },
+    { "path": "stages/voting_results",  "name": "stage_votingresults" },
+    { "path": "widgets/comments",       "name": "comments" },
+    { "path": "widgets/voting_results", "name": "voting_results" },
+    { "path": "widgets/info_line",      "name": "info_line" },
+    { "path": "widgets/user_line",      "name": "user_line" },
+    { "path": "widgets/proposal",       "name": "proposal" }
 ] %}
 
-
-
 {% for widget in widgets %}
-    <script id="widget-{{widget}}" type="text/x-handlebars-template" class="template" data-name="{{widget}}">
-        {% include "views/" + widget + ".html" %}
+    <script id="widget-{{widget}}" type="text/x-handlebars-template" class="template" data-name="{{widget['name']}}">
+        {% include "views/" + widget["path"] + ".html" %}
     </script>
 {% endfor %}
 
-
-<script id="session-users-line" type="text/x-handlebars-template">
-    {%raw%}
-    <li>
-        {{name}} <small>{{role}}</small> {{user}}
-        {{#ifHas @user.permissions "session.manage"}}
-        <a href='#'>
-            <span class='glyphicon glyphicon-remove kick' data-user-id='{{id}}'></span>
-        </a>
-        {{/ifHas}}
-    </li>
-    {%endraw%}
-</script>
 
 {% endmacro %}
