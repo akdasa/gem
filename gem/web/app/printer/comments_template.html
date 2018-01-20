@@ -37,11 +37,25 @@
         h1 {
             font-family: arial;
         }
+
+        .logo {
+            max-height: 35px;
+        }
+
+        hr {
+            border-top: 1px dashed #8c8b8b;
+        }
     </style>
 </head>
 <body>
     <div>
-        <center>{{requester.name}}</center>
+        <center>
+            <img src="{{path}}/logo.svg" class="logo">
+            <br>
+            {{requester.name}}
+        </center>
+        <hr>
+
         <h1>
             PMIs for "{{proposal.title}}"
         </h1>
