@@ -108,3 +108,4 @@ selenium-screenshot-*.png
 
 gem/web/static/app
 gem/web/static/app/*
+files/

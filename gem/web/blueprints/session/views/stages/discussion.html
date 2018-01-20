@@ -5,7 +5,7 @@
 
         {{#ifHas user.permissions "discussion.manage" }}
         <div class="pull-right">
-            <label><input type="checkbox" id="discussion-accept" {{#if accept}}checked{{/if}}> Accept new applications</label>
+            <label><input type="checkbox" id="discussion-accept" {{#if accept}}checked{{/if}}> Accept new requests</label>
         </div>
         {{/ifHas}}
     </div>
@@ -22,7 +22,7 @@
             {{else}}
                 {{#if queue}}
                 {{else}}
-                    <center><p>No one wants to say something.</p></center>
+                    <center><p>No request for the floor.</p></center>
                 {{/if}}
             {{/if}}
         </div>

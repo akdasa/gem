@@ -1,0 +1,2 @@
+from .comments_widget import CommentsWidget
+from .voting_results_widget import VotingResultsWidget

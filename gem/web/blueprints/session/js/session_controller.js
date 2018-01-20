@@ -8,7 +8,7 @@ function createSessionController(sessionKey, sessionData) {
     me.chat = createChatController(me)
     me.timer = createTimerController(me)
     me.manage = createManageController(me)
-    me.stage = StageController(me, $("#stage"))
+    me.stage = StageController(me, $("#stage-proposal"), $("#stage-widget"))
     me.quorum = QuorumController(me)
 
     // info line
@@ -85,7 +85,7 @@ function createSessionController(sessionKey, sessionData) {
 
 
 $(document).ready(function() {
-    var host = "http://" + document.domain + ":" + location.port
+    var host = "//" + document.domain + ":" + location.port
     var sessionKey = $("#session-key").text().trim()
     var sessionData = JSON.parse($("#session-data").text())
     var controller = createSessionController(sessionKey, sessionData)
@@ -93,11 +93,9 @@ $(document).ready(function() {
 
     controller.connect(host)
 
-    Handlebars.registerPartial('agenda', $("#stage-agenda").html())
-    Handlebars.registerPartial('acquaintance', $("#stage-acquaintance").html())
-    Handlebars.registerPartial('voting', $("#stage-voting").html())
-    Handlebars.registerPartial('votingresults', $("#stage-voting_results").html())
-    Handlebars.registerPartial('commenting', $("#stage-commenting").html())
-    Handlebars.registerPartial('discussion', $("#stage-discussion").html())
-    Handlebars.registerPartial('closed', $("#stage-closed").html())
+    $(".template").each(function (n) {
+        var name = $(this).data("name")
+        var html = $(this).html()
+        Handlebars.registerPartial(name, html)
+    })
 })

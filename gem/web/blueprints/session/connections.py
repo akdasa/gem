@@ -75,7 +75,6 @@ class Connections:
         # Create new session controller if not exist
         if session_id not in self.__sessions:
             session = self.__open_session.notify(session_id)
-            print(session)
             if len(session) <= 0:
                 raise Exception("No session object created by open_session event handler")
             self.__sessions[session_id] = session[0]

@@ -3,7 +3,7 @@
 function Alerts() {
 
     function red_alert(options, action) {
-        $.alert({
+        return $.alert({
             title: options.title || "Alert",
             content: options.message || "",
             type: "red",
@@ -18,7 +18,7 @@ function Alerts() {
 
     function input(options, action) {
         // title, message, placeholder, action
-        $.confirm({
+        return $.confirm({
             title: options.title,
             type: "red",
             content: (options.message || "") +

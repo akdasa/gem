@@ -4,16 +4,20 @@
         {{#if isFinalVote}}Final vote{{else}}Straw vote{{/if}}
 
         <div class="pull-right">
-        {{#if canManage }}
+        {{#if canManage}}
+            {{#if isFinalVote}}
             <select id="vote-threshold" class="selectpicker">
                 <option value="majority" {{selectedThreshold 'majority'}}>Majority</option>
                 <option value="2/3" {{selectedThreshold '2/3'}}>2/3</option>
                 <option value="4/5" {{selectedThreshold '4/5'}}>4/5</option>
                 <option value="unanimous" {{selectedThreshold 'unanimous'}}>Unanimous</option>
             </select>
+            {{/if}}
             <label><input type="checkbox" id="vote-private" {{privateChecked}}> Secret ballot</label>
         {{else}}
+            {{#if isFinalVote}}
             Threshold: {{threshold}}
+            {{/if}}
         {{/if}}
         </div>
     </div>

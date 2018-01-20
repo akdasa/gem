@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Comments</title>
+
+    <style>
+        table {
+            border-collapse:collapse;
+            width: 100%;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 8px;
+            vertical-align: top;
+        }
+
+        tr:nth-child(even){background-color: #f2f2f2}
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        blockquote {
+            padding: 5px 10px;
+            margin: 0 0 5px;
+            border-left: 5px solid #dbe0e1;
+            font-style: italic;
+        }
+
+        .role {
+            color: gray;
+        }
+
+        h1 {
+            font-family: arial;
+        }
+
+        .logo {
+            max-height: 35px;
+        }
+
+        hr {
+            border-top: 1px dashed #8c8b8b;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <center>
+            <img src="{{path}}/logo.svg" class="logo"><br>
+            {{requester.name}}, {{requester.role}}<br>
+            <small>{{now}}</small>
+        </center>
+        <hr>
+
+        <h1>
+            PMIs for "{{proposal.title}}"
+        </h1>
+    </div>
+
+    <table>
+            <tr>
+                <th style="min-width:100px">Name</th>
+                <th>Content</th>
+                <th>Type</th>
+                <th>Time</th>
+            </tr>
+
+        <tbody>
+        {% for row in rows %}
+            <tr>
+                <td>
+                    {{row.user.name}}<br>
+                    <small class="role">{{row.user.role}}</small>
+                </td>
+                <td>
+                    {%if row.quote%}
+                    <blockquote>{{row.quote}}</blockquote>
+                    {%endif%}
+                    {{row.content}}
+                </td>
+                <td>{{row.type}}</td>
+                <td>{{row.timestamp}}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>

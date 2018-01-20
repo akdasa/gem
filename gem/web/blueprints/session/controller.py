@@ -36,7 +36,7 @@ class SessionController:
         # fetch additional data
         proposal_docs = proposals.find({"_id": {"$in": session_doc.proposals}})
         proposal_map = {
-            str(proposal.id): {"title": proposal.title, "content": proposal.content} for proposal in proposal_docs
+            str(proposal.id): {"title": proposal.title, "content": proposal.content, "id": proposal.id} for proposal in proposal_docs
         }
 
         return render_template("session_index.html", session=session_doc, proposals=proposal_map)
@@ -110,7 +110,7 @@ class SessionController:
         # disconnect all active clients
         active = self.__connections.of_session(cd.session_id)
         for acd in active:
-            if acd.socket_id != cd.socket_id:
+            if acd.socket_id == cd.socket_id:
                 continue
             acd.session.notify("kick", {"message": "Session is closed", "title": "Closed"}, room=acd.socket_id)
 
@@ -131,4 +131,4 @@ class SessionController:
             disconnect_socket(cd.socket_id)
 
     def __open_session(self, session_id):
-        return Session(session_id, self)
+        return Session(session_id, self.__connections)

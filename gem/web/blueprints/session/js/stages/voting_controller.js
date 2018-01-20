@@ -66,16 +66,16 @@ function VotingStageController(session) {
 
     function onVoteResponse(response) {
         voteStatus = response
-        session.stage.render()
+        session.stage.requestRender()
     }
 
     function onTimerTick(value) {
         if (value <= 0 && !timeIsOver) {
             timeIsOver = true
-            session.stage.render()
+            session.stage.requestRender()
         } else if (value > 0 && timeIsOver) {
             timeIsOver = false
-            session.stage.render()
+            session.stage.requestRender()
         }
     }
 

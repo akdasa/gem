@@ -2,9 +2,8 @@
  *
  * param session: session controller
  * param container: container to display the list of users
- * param userLineTemplate: template of user line
  */
-function UsersPanelController(session, container, userLineTemplate) {
+function UsersPanelController(session, container) {
 
     $(document).on("click", ".kick", onKickButtonClicked)
 
@@ -25,7 +24,7 @@ function UsersPanelController(session, container, userLineTemplate) {
     // Private members
 
     var users    = []
-    var template = Handlebars.compile(userLineTemplate)
+    var template = Handlebars.compile("{{> user_line }}")
     var alerts   = Alerts()
 
 
