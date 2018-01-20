@@ -6,7 +6,7 @@ import dateutil.parser
 import pdfkit
 from jinja2 import Template
 
-from gem.db import comments, users
+from gem.db import comments, users, proposals
 
 
 def print_comments(requester, criteria):
@@ -16,11 +16,15 @@ def print_comments(requester, criteria):
     cp = conf.get("printer", "path", fallback="files")
     path_to_printed = os.path.join(cp, file_name)
 
+    proposal = None
+    if "proposal_id" in criteria:
+        proposal = proposals.get(criteria["proposal_id"])
+
     p = "./gem/web/app/printer/"
     template_file = open(p + "comments_template.html", "r").read()
     template = Template(template_file)
-    rows = map(__map, comments.find(criteria))
-    html = template.render(requester=requester, rows=rows)
+    rows = sorted(list(map(__map, comments.find(criteria))), key=lambda x: x.get("timestamp", ""))
+    html = template.render(requester=requester, rows=rows, proposal=proposal)
     pdfkit.from_string(html, path_to_printed, options={"zoom": zoom})
 
     return {"success": True, "path": file_name}
