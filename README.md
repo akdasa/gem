@@ -25,6 +25,11 @@ Edit config.ini
 host = mongodb_host
 port = 27017
 name = gem
+
+
+[printer]
+path = files
+zoom = 4
 ```
 
 # Development
