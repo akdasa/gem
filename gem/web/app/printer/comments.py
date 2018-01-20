@@ -1,4 +1,5 @@
 import configparser
+import datetime
 import os
 import uuid
 
@@ -20,13 +21,15 @@ def print_comments(requester, criteria):
     if "proposal_id" in criteria:
         proposal = proposals.get(criteria["proposal_id"])
 
+    now = datetime.datetime.now().strftime("%d-%b-%Y %H:%M")
+
     path = os.path.abspath("gem/web/app/printer/")
 
     p = "./gem/web/app/printer/"
     template_file = open(p + "comments_template.html", "r").read()
     template = Template(template_file)
     rows = sorted(list(map(__map, comments.find(criteria))), key=lambda x: x.get("timestamp", ""))
-    html = template.render(requester=requester, rows=rows, proposal=proposal, path=path)
+    html = template.render(requester=requester, rows=rows, proposal=proposal, path=path, now=now)
     pdfkit.from_string(html, path_to_printed, options={"zoom": zoom})
 
     return {"success": True, "path": file_name}

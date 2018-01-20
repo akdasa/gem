@@ -50,9 +50,9 @@
 <body>
     <div>
         <center>
-            <img src="{{path}}/logo.svg" class="logo">
-            <br>
-            {{requester.name}}
+            <img src="{{path}}/logo.svg" class="logo"><br>
+            {{requester.name}}, {{requester.role}}<br>
+            <small>{{now}}</small>
         </center>
         <hr>
 
@@ -62,14 +62,12 @@
     </div>
 
     <table>
-        <thead>
             <tr>
                 <th style="min-width:100px">Name</th>
                 <th>Content</th>
                 <th>Type</th>
                 <th>Time</th>
             </tr>
-        </thead>
 
         <tbody>
         {% for row in rows %}
