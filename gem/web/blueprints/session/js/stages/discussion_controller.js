@@ -12,6 +12,9 @@ function DiscussionStageController(controller) {
 
     function setState(value) {
         state = value
+
+        if (!value.speaking)
+            controller.timer.stop()
     }
 
     function view() {
@@ -52,7 +55,7 @@ function DiscussionStageController(controller) {
     }
 
     function giveVoice(userId) {
-        controller.socket.emit("manage", {command: "give_voice", user_id: userId})
+        controller.socket.emit("manage", {command: "give_voice", user_id: userId}, onGiveVoiceResponse)
     }
 
     function remove(userId) {
@@ -65,6 +68,13 @@ function DiscussionStageController(controller) {
 
     function withdrawHand() {
         controller.socket.emit("manage", { command: "withdraw_hand" })
+    }
+
+    //
+
+    function onGiveVoiceResponse(response) {
+        var timerValue = controller.timers.get("discussion")
+        controller.timer.start(timerValue)
     }
 
     return { register, view, setState }

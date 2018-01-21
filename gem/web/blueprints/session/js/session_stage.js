@@ -81,7 +81,7 @@ function StageController(session, proposalNode, widgetsNode) {
 
         // call "enter" handler for next stage
         if (next && next.enter) {
-            nextStage.enter()
+            next.enter()
         }
     }
 

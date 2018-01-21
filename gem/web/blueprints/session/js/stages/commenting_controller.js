@@ -38,6 +38,11 @@ function CommentingStageController(session) {
         })
     }
 
+    function enter() {
+        var timerValue = session.timers.get("commenting")
+        session.timer.start(timerValue)
+    }
+
     // UI Event handlers
 
     // "Secret ballot" checkbox clicked
@@ -86,5 +91,5 @@ function CommentingStageController(session) {
         $("#quotation").attr("hidden", value ? null : "hidden")
     }
 
-    return { register, view, setState }
+    return { register, view, setState, enter }
 }
