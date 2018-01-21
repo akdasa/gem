@@ -56,7 +56,7 @@
 
         <div id="comment-list">
         {{#each comments}}
-            {{#if visible}}
+            {{#if (ne visible false) }}
             <div class="media">
                 <div class="media-left media-top">
                     <span class="glyphicon {{thumbsIcon type}}" aria-hidden="true"></span>
