@@ -28,9 +28,9 @@ function TimersConfigWidget() {
     var dialogView = Handlebars.compile("{{> timers_config }}")
     var alerts = Alerts()
     var timers = {
-        voting:     { name: "Voting", value: 1, def: 1 },
-        commenting: { name: "Commenting", value: 2, def: 2 },
-        discussion: { name: "Discussion", value: 3, def: 3 }
+        voting:     { name: "Voting (min)", value: 1, def: 1 },
+        commenting: { name: "Commenting (min)", value: 2, def: 2 },
+        discussion: { name: "Discussion (min)", value: 3, def: 3 }
     }
 
     function onSetTimerClicked() {
