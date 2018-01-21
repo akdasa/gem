@@ -3,6 +3,7 @@ function CommentsWidget(options) {
     function setComments(value, source) {
         comments = value
 
+        summaryWidget.setComments(value)
         printDocumentWidget = PrintDocumentWidget({
             type: "comments", args: source
         })
@@ -28,6 +29,7 @@ function CommentsWidget(options) {
         return {
             filter: filterWidget.view(),
             print: printDocumentWidget.view(),
+            summary: summaryWidget.view(),
             showFilter, showPrint, manageable, comments,
             privateCheckedState: private ? "checked" : ""
         }
@@ -40,6 +42,7 @@ function CommentsWidget(options) {
 
     // Private members
 
+    var summaryWidget = CommentsSummaryWidget()
     var filterWidget = CommentsFilterWidget({
         onFilterChanged: onFilterChanged
     })
