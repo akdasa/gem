@@ -23,6 +23,11 @@ function VotingStageController(session) {
         session.timer.off(onTimerTick)
     }
 
+    function enter() {
+        var timerValue = session.timers.get("voting")
+        session.timer.start(timerValue)
+    }
+
     function view() {
         var permissions = session.user.permissions
 
@@ -105,5 +110,5 @@ function VotingStageController(session) {
         return value
     }
 
-    return { register, unregister, view, setState }
+    return { register, unregister, view, setState, enter }
 }

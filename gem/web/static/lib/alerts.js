@@ -41,5 +41,24 @@ function Alerts() {
         })
     }
 
-    return {alert:red_alert, input}
+    function dialog(options) {
+        return $.confirm({
+            title: options.title,
+            type: "red",
+            content: options.view,
+            columnClass: "s",
+            buttons: {
+                formSubmit: {
+                    text: "Ok",
+                    btnClass: "btn-danger",
+                    action: function () {
+                        if (options.action) options.action(this)
+                    }
+                },
+                cancel: function () {}
+            }
+        })
+    }
+
+    return { alert:red_alert, input, dialog }
 }

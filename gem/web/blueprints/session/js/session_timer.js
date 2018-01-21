@@ -19,6 +19,11 @@ function createTimerController(controller) {
         countdownTo(new Date(end))
     }
 
+    function start(minutes) {
+        var end = new Date().getTime() + (minutes * 60000)
+        countdownTo(new Date(end))
+    }
+
     function countdownTo(date) {
         // timer was started previously.
         // stop it before start new one
@@ -100,5 +105,5 @@ function createTimerController(controller) {
         }
     }
 
-    return { processMessage, countdownTo, stop, on, off }
+    return { processMessage, countdownTo, stop, on, off, start }
 }

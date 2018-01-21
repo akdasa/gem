@@ -1,0 +1,17 @@
+{% raw %}
+<form class="form form-horizontal">
+{{# each timers }}
+    <div class="form-group">
+        <label for="{{@key}}" class="col-sm-5 control-label">{{ this.name }}</label>
+        <div class="col-sm-7">
+            <input id="{{@key}}"
+                   name="{{@key}}"
+                   class="form-control"
+                   placeholder="Minutes"
+                   value="{{ ../value @key }}"
+                   autocomplete="off">
+        </div>
+    </div>
+{{/each}}
+</form>
+{% endraw %}
