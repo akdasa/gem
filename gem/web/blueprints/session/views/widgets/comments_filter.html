@@ -1,0 +1,37 @@
+{% raw %}
+<form id="comment-filter" class="form-horizontal well well-sm">
+    <div class="form-group">
+        <label for="comment-filter-type" class="col-sm-2 control-label">Types:</label>
+        <div class="col-sm-10">
+            <select id="comment-filter-type" class="selectpicker form-control" data-actions-box="true" multiple>
+                <option value="plus" {{typeSelected "plus"}}>Plus</option>
+                <option value="minus" {{typeSelected "minus"}}>Minus</option>
+                <option value="info" {{typeSelected "info"}}>Info</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="comment-filter-role" class="col-sm-2 control-label">Roles:</label>
+        <div class="col-sm-10">
+            <select id="comment-filter-role" class="selectpicker form-control" data-actions-box="true" multiple>
+                {{#each roles}}
+                <option value="{{@this}}" {{../roleSelected @this}}>{{@this}}</option>
+                {{/each}}
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="comment-filter-role" class="col-sm-2 control-label">Sort:</label>
+        <div class="col-sm-10">
+            <select id="comment-sort" class="selectpicker form-control" data-actions-box="true">
+                <option value="user" {{sortSelected "user"}}>Name</option>
+                <option value="role" {{sortSelected "role"}}>Role</option>
+                <option value="type" {{sortSelected "type"}}>Type</option>
+                <option value="timestamp" {{sortSelected "timestamp"}}>Time</option>
+            </select>
+        </div>
+    </div>
+</form>
+{% endraw %}

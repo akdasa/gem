@@ -88,7 +88,7 @@ def on_kick(data):
 @channel.on("print")
 @login_required
 def on_print(data):
-    crt = data["criteria"]
+    crt = data["args"]
     if "proposal_id" in crt:
         crt["proposal_id"] = ObjectId(crt["proposal_id"])
     return print_comments(current_user, crt)

@@ -40,3 +40,7 @@ Array.prototype.remove = function() {
     }
     return this;
 };
+
+Array.prototype.contains = function(value) {
+    return this.indexOf(value) >= 0
+};
