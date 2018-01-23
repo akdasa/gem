@@ -47,7 +47,7 @@ function createManageController(controller) {
 
     function onCloseSessionResponse(data) {
         alerts.alert({title: "Closed", message: "Session is closed. You will be redirected to the dashboard page."}, function () {
-            window.location = "/account"
+            window.location = "/"
         })
     }
 
@@ -62,7 +62,9 @@ function createManageController(controller) {
     }
 
     function setCountdownTimer(minutes) {
-        controller.socket.emit("timer", { interval: minutes })
+        if (controller.user.permissions.contains("session.manage")) {
+            controller.socket.emit("timer", { interval: minutes })
+        }
     }
 
     function promptCustomTimer() {
@@ -102,5 +104,5 @@ function createManageController(controller) {
     }
 
 
-    return {}
+    return { setCountdownTimer }
 }

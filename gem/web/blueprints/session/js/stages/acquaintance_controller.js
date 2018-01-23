@@ -5,12 +5,16 @@
 function AcquaintanceStageController(session) {
 
     function setState(value) {
+        var isPresenter = session.user.permissions.contains("presenter")
+
         state = value
 
         commentsWidget.setComments(value.comments.list, {
             proposal_id: value.proposal_id,
             stage: value.comments.stage
         })
+        commentsWidget.setFilterVisibility(!isPresenter)
+        commentsWidget.setPrintButtonVisibility(!isPresenter)
     }
 
     function register() {

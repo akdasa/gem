@@ -36,6 +36,7 @@ class RolesController(CrudController):
             {"name": "discussion.manage", "desc": "Manage discussion: give/withdraw a voice."},
             {"name": "quorum.request_change", "desc": "Request quorum change"},
             {"name": "quorum.change", "desc": "Change quorum value"},
+            {"name": "presenter", "desc": "Presenter"},
             {"name": "admin", "desc": "Admin"}]
 
     def _update_model(self, model, data):
@@ -56,6 +57,6 @@ class RolesController(CrudController):
                 {"name": "Vote", "roles": self._permissions[22:24]},
                 {"name": "Comment", "roles": self._permissions[24:26]},
                 {"name": "Discussion", "roles": self._permissions[26:28]},
-                {"name": "Misc", "roles": self._permissions[28:31]}
+                {"name": "Misc", "roles": self._permissions[28:32]}
             ]
         }

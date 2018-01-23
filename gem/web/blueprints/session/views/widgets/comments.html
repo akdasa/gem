@@ -1,21 +1,25 @@
 {%raw%}
 <div class="panel panel-default">
     <div class="panel-heading">
-        Comments
-
-        {{#if manageable}}
-        <div class="pull-right">
-            <label><input id="comment-private" type="checkbox" {{privateCheckedState}}> Private</label>
-        </div>
-        {{/if}}
-
-        {{#if showPrint}}
-            {{> print_document print }}
-        {{/if}}
+        <h3 class="panel-title">Comments</h3>
     </div>
 
 
     <div class="panel-body">
+        {{#if (and manageable showPrint) }}
+        <div class="well well-sm">
+            {{#if manageable}}
+            <div class="pull-right">
+                <label><input id="comment-private" type="checkbox" {{privateCheckedState}}> Private</label>
+            </div>
+            {{/if}}
+
+            {{#if showPrint}}
+                {{> print_document print }}
+            {{/if}}
+        </div>
+        {{/if}}
+
         {{#if showFilter }}
             {{> comments_filter filter }}
         {{/if}}

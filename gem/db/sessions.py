@@ -24,4 +24,7 @@ class SessionsRepository(Repository):
             "status": {
                 "$ne": "closed"
             }
-        }).sort([("date", pymongo.ASCENDING)])
+        }).sort([
+            ("date", pymongo.ASCENDING),
+            ("time_start", pymongo.ASCENDING)
+        ])

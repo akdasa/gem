@@ -24,7 +24,7 @@ class LoginController:
                 u = User(user)
                 login_user(u, remember=remember)
                 flash("You have successfully logged in", category="success")
-                return redirect("/account")
+                return redirect("/")
             else:
                 flash("User with specified login/password pair not found", category="danger")
                 return render_template("login.html")

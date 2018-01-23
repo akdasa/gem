@@ -22,7 +22,7 @@ function TimersConfigWidget() {
     }
 
     function get(name) {
-        return timers[name].value
+        return name in timers ? timers[name].value : null
     }
 
     var dialogView = Handlebars.compile("{{> timers_config }}")

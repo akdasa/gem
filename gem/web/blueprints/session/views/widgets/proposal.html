@@ -1,11 +1,19 @@
 {% raw %}
 {{#if id}}
-<div class="panel panel-default">
-    <div class="panel-heading">Proposal</div>
-    <div class="panel-body" id="proposal-content">
+    {{#if short}}
         <h1>{{ title }}</h1>
         <p>{{{ content }}}</p>
-    </div>
-</div>
+    {{else}}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Proposal</h3>
+            </div>
+
+            <div class="panel-body" id="proposal-content">
+                <h1>{{ title }}</h1>
+                <p>{{{ content }}}</p>
+            </div>
+        </div>
+    {{/if}}
 {{/if}}
 {% endraw %}
