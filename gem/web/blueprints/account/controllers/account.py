@@ -21,14 +21,14 @@ class AccountController():
             if is_all_filled and is_unique:
                 users.save(d)
                 flash("Your account was successfully updated", category="success")
-                return redirect("/account")
+                return redirect("/")
             else:
                 error = \
                     "User with same login or name already exist" if not is_unique else \
                     "Not all required fields are filled in" if not is_all_filled else \
                     "God does not deign"
                 flash("Your account was not updated: {}".format(error), category="danger")
-                return redirect("/account")
+                return redirect("/")
 
     @staticmethod
     def __is_user_unique(user):
