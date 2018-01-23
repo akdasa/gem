@@ -18,6 +18,8 @@ function CommentingStageController(session) {
     }
 
     function setState(value) {
+        var isPresenter = session.user.permissions.contains("presenter")
+
         state = value
         commentsWidget.setComments(value.comments.list, {
             proposal_id: value.proposal_id,
@@ -25,6 +27,8 @@ function CommentingStageController(session) {
         })
         commentsWidget.setPrivate(state.private)
         commentsWidget.setManageable(session.user.permissions.contains("comment.manage"))
+        commentsWidget.setFilterVisibility(!isPresenter)
+        commentsWidget.setPrintButtonVisibility(!isPresenter)
     }
 
     function view() {

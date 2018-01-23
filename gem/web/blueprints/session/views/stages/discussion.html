@@ -1,15 +1,20 @@
 {%raw%}
 <div class="panel panel-default">
     <div class="panel-heading">
-        Discussion
-
-        {{#ifHas user.permissions "discussion.manage" }}
-        <div class="pull-right">
-            <label><input type="checkbox" id="discussion-accept" {{#if accept}}checked{{/if}}> Accept new requests</label>
-        </div>
-        {{/ifHas}}
+        <h3 class="panel-title">Discussion</h3>
     </div>
     <div class="panel-body">
+        {{#ifHas user.permissions "discussion.manage" }}
+        <div class="well well-sm">
+            <div>
+                <label>
+                    <input type="checkbox" id="discussion-accept" {{#if accept}}checked{{/if}}>
+                    Accept new request
+                </label>
+            </div>
+        </div>
+        {{/ifHas}}
+
         {{#if (and (not accept) (not (has user.permissions "discussion.manage"))) }}
         <div class="alert alert-danger" role="alert">
             New applications are no longer accepted.

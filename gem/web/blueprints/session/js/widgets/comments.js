@@ -21,8 +21,12 @@ function CommentsWidget(options) {
         private = value
     }
 
-    function showFilter(value) {
+    function setFilterVisibility(value) {
         showFilter = value
+    }
+
+    function setPrintButtonVisibility(value) {
+        showPrint = value
     }
 
     function view() {
@@ -101,5 +105,5 @@ function CommentsWidget(options) {
         comments = comments.sort(func)
     }
 
-    return { view, setComments, setPrivate, setManageable, showFilter, register }
+    return { view, setComments, setPrivate, setManageable, setFilterVisibility, setPrintButtonVisibility, register }
 }

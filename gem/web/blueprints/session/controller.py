@@ -39,7 +39,10 @@ class SessionController:
             str(proposal.id): {"title": proposal.title, "content": proposal.content, "id": proposal.id} for proposal in proposal_docs
         }
 
-        return render_template("session_index.html", session=session_doc, proposals=proposal_map)
+        # view
+        template = "session_presenter.html" if user.has_permission("presenter") else "session_index.html"
+
+        return render_template(template, session=session_doc, proposals=proposal_map)
 
     # Messages ---------------------------------------------------------------------------------------------------------
 
