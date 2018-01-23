@@ -25,7 +25,7 @@ function VotingStageController(session) {
 
     function enter() {
         var timerValue = session.timers.get("voting")
-        session.timer.start(timerValue)
+        controller.manage.setCountdownTimer(timerValue)
     }
 
     function view() {

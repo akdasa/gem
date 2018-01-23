@@ -74,7 +74,7 @@ function DiscussionStageController(controller) {
 
     function onGiveVoiceResponse(response) {
         var timerValue = controller.timers.get("discussion")
-        controller.timer.start(timerValue)
+        controller.manage.setCountdownTimer(timerValue)
     }
 
     return { register, view, setState }
