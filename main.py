@@ -14,6 +14,7 @@ from gem.web.blueprints.roles import roles
 from gem.web.blueprints.index import index
 from gem.web.blueprints.laws import laws
 from gem.web.blueprints.search import search
+from gem.web.blueprints.offices.bar import bar
 
 
 app = Flask(__name__,
@@ -38,6 +39,7 @@ app.register_blueprint(session, url_prefix="/session")
 app.register_blueprint(laws, url_prefix="/laws")
 app.register_blueprint(search, url_prefix="/search")
 app.register_blueprint(admin, url_prefix="/admin")
+app.register_blueprint(bar, url_prefix="/offices/bar")
 
 login_manager.init_app(app)
 login_manager.login_view = "account.login"

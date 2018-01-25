@@ -33,7 +33,12 @@ function Alerts() {
                     btnClass: "btn-danger",
                     action: function () {
                         var msg = this.$content.find("#msg").val();
-                        if (action) action(msg)
+                        if (action) {
+                            if (options.data)
+                                action(msg, options.data)
+                            else
+                                action(msg)
+                        }
                     }
                 },
                 cancel: function () {}
