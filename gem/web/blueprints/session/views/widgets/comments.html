@@ -33,12 +33,18 @@
                 </div>
 
                 <div class="media-body">
+                    {{#if user}}
                     <h4 class="media-heading">
                         {{user}} <small>{{role}}</small>
                         {{#if timestamp}}
                         <span class="pull-right"><small>{{>timestamp timestamp}}</small></span>
                         {{/if}}
                     </h4>
+                    {{else}}
+                        {{#if timestamp}}
+                        <span class="pull-right"><small>{{>timestamp timestamp}}</small></span>
+                        {{/if}}
+                    {{/if}}
 
                     {{#if quote}}<blockquote>{{quote}}</blockquote>{{/if}}
                     {{content}}

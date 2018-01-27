@@ -7,8 +7,9 @@ function CommentsWidget(options) {
         printDocumentWidget = PrintDocumentWidget({
             type: "comments", args: source
         })
-        var roles = extractRolesFromComments(comments)
-        filterWidget.setRoles(roles)
+
+        possibleRoles = extractRolesFromComments(comments)
+        filterWidget.setRoles(possibleRoles)
         if (lastFilter)
             updateComments(lastFilter)
     }
@@ -58,13 +59,14 @@ function CommentsWidget(options) {
     var manageable = false
     var private = true
     var lastFilter = null
+    var possibleRoles = []
 
 
     // Returns list of unique roles present in comments
     // param comments: list of comments to extract roles from
     function extractRolesFromComments(comments) {
         var roles = comments.map(function(obj) { return obj.role })
-        return roles.filter(function(v, i) { return roles.indexOf(v) == i })
+        return roles.filter(function(v, i) { return roles.indexOf(v) == i && v != null})
     }
 
     function onFilterChanged(filter) {
@@ -76,10 +78,8 @@ function CommentsWidget(options) {
     }
 
     function updateComments(filter) {
-        console.log(filter)
-
         showComments(function(x) {
-            return filter.types.contains(x.type) && filter.roles.contains(x.role)
+            return filter.types.contains(x.type) && (filter.roles.contains(x.role) || possibleRoles.length <= 0)
         })
 
         sortComments(function (a, b) {

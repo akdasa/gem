@@ -6,10 +6,10 @@ from .widgets import CommentsWidget, VotingResultsWidget
 class AcquaintanceSessionStage(SessionStage):
     """The stage of acquaintance with the proposal."""
 
-    def __init__(self, session, proposal):
+    def __init__(self, session, proposal, anonymous_comments=False):
         super().__init__(session, proposal)
         previous_stage = ProposalFlow(proposal).get_previous_stage()
-        self.__comments = CommentsWidget(proposal.id, previous_stage)
+        self.__comments = CommentsWidget(proposal.id, previous_stage, anonymous_comments)
         self.__vote_results = VotingResultsWidget(proposal.id, previous_stage)
 
     def on_enter(self):
