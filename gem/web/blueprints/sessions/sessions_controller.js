@@ -24,14 +24,21 @@ function createSessionsController() {
         var ids = Object.keys(me.proposals);
         var html = me.proposalsTemplate({
             proposals: controller.proposals,
-            empty: "No proposals added to session"});
+            empty: "No proposals added to session",
+            showDelete: true
+        })
 
         $("#proposals").html(html);
         $("#proposals-ids").val(ids);
+        $(".session-remove-proposal").on("click", function (e) {
+            var key = $(this).data("key");
+            controller.removeProposal(key)
+        })
+        $('[data-toggle="tooltip"]').tooltip()
     }
 
     me.appendProposalToSession = function(proposalKey, proposalTitle) {
-        me.proposals[proposalKey] = {title: proposalTitle}
+        me.proposals[proposalKey] = {title: proposalTitle, "_id": proposalKey}
         me.refreshProposalsList()
         me.closeAddProposalDialog()
     }
@@ -55,6 +62,13 @@ function createSessionsController() {
         $("#proposal-search").val("");
         $("#proposal-search-result").empty();
         $("#proposal-add-modal").modal("hide");
+    }
+
+    me.removeProposal = function(proposalKey) {
+        if (proposalKey in me.proposals) {
+            delete me.proposals[proposalKey]
+        }
+        me.refreshProposalsList()
     }
 
 

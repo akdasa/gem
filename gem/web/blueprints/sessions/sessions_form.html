@@ -159,7 +159,15 @@
 <script id="entry-template" type="text/x-handlebars-template">
     {% raw %}
     {{#each proposals}}
-        <a href="#" class="list-group-item" data-key="{{key}}">{{title}}</a>
+        <a href="#" class="list-group-item" data-key="{{key}}">
+            {{title}}
+            {{#if ../showDelete }}
+            <span class="pull-right glyphicon glyphicon-trash session-remove-proposal"
+                  aria-hidden="true" data-toggle="tooltip"
+                  data-placement="left" title="Remove from session"
+                  data-key="{{_id}}"></span>
+            {{/if}}
+        </a>
     {{else}}
         <a href="#" class="list-group-item list-group-item-danger">{{empty}}</a>
     {{/each}}
