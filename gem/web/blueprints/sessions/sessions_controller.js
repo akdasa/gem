@@ -22,7 +22,7 @@ function createSessionsController() {
 
     me.refreshProposalsList = function() {
         var ids = me.proposals.map(function (i) { return i["_id"] });
-        
+
         var html = me.proposalsTemplate({
             proposals: controller.proposals,
             empty: "No proposals added to session",

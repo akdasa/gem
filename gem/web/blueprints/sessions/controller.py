@@ -54,9 +54,6 @@ class SessionsController(CrudController):
             d = proposals.find({"_id": {"$in": model.get("proposals", [])}})
             rp = {str(key["_id"]): key for key in d}
             result_proposals = list(map(lambda x: rp.get(str(x), None), model.get("proposals", [])))
-            print("D", d)
-            print("RP", rp)
-            print("Result Proposals", result_proposals)
 
         role_docs = roles.all()
         result_roles = map(lambda x: x["name"], role_docs)
