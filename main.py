@@ -40,7 +40,7 @@ app.register_blueprint(search, url_prefix="/search")
 app.register_blueprint(admin, url_prefix="/admin")
 
 login_manager.init_app(app)
-login_manager.login_view = "account.login"
+login_manager.login_view = "index.index_index"
 login_manager.login_message_category = "info"
 
 if __name__ == "__main__":

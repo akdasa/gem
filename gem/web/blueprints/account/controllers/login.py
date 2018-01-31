@@ -7,10 +7,7 @@ from gem.web.app.auth import User
 
 class LoginController:
     def login(self):
-        if request.method == "GET":
-            return render_template("login.html")
-
-        elif request.method == "POST":
+        if request.method == "POST":
             data = request.form
             lgn = data.get("login", None)
             password = data.get("password", None)
@@ -27,7 +24,7 @@ class LoginController:
                 return redirect("/")
             else:
                 flash("User with specified login/password pair not found", category="danger")
-                return render_template("login.html")
+                return redirect("/")
 
     def logout(self):
         logout_user()

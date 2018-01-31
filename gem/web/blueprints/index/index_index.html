@@ -12,6 +12,8 @@
         {% if not current_user.is_authenticated %}
             <div class="well">
                 <form class="form-signin" action="/account/login" method="post">
+                    {% include "flash.html" %}
+
                     <label for="login" class="sr-only">Login or name</label>
                     <input id="login" name="login" class="form-control" placeholder="Login or name" autocomplete="off" autofocus>
                     <label for="password" class="sr-only">Password</label>
