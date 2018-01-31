@@ -13,7 +13,7 @@
             <div class="well">
                 <form class="form-signin" action="/account/login" method="post">
                     <label for="login" class="sr-only">Login or name</label>
-                    <input id="login" name="login" class="form-control" placeholder="Login or name" autofocus>
+                    <input id="login" name="login" class="form-control" placeholder="Login or name" autocomplete="off" autofocus>
                     <label for="password" class="sr-only">Password</label>
                     <input type="password" id="password" name="password" class="form-control" placeholder="Password">
                     <div class="checkbox">
@@ -26,6 +26,17 @@
         </center>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        var names = JSON.parse($("#names").html())
+        $("#login").autocomplete({source: names})
+    })
+</script>
+
+<script id="names">
+    {{ names|tojson }}
+</script>
 {% endblock %}
 
 
