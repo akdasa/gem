@@ -1,27 +1,16 @@
 from flask import render_template
 
+from gem.db import orders, services, users
 
-_services = [
-    {"id": "apple", "name": "apple juice"},
-    {"id": "orange", "name": "orange juice"}
-]
-_orders = [
-
-]
 
 class OfficeController:
     def __init__(self, name):
         self._name = name
-        self._services = self.__load_services(name)
-
-    def _find_service(self, id):
-        result = list(filter(lambda x: x.get("id") == id, _services))
-        return result[0] if len(result) >= 1 else None
 
     def _view(self):
         return {
             "office_id": self._name,
-            "services": self._services
+            "services": self.__load_services(self._name)
         }
 
     @staticmethod
@@ -29,7 +18,7 @@ class OfficeController:
         """Returns list of services provided by office
         :param name:
         :return: List of services"""
-        return _services
+        return services.of(name)
 
 
 class OfficeReceptionController(OfficeController):
@@ -43,14 +32,7 @@ class OfficeReceptionController(OfficeController):
     def order(self, data, user):
         service_id = data.get("id", None)
         comment = data.get("commentary", None)
-        service = self._find_service(service_id)
-
-        _orders.append({
-            "service": service.get("name"),
-            "user": user.name,
-            "comment": comment,
-            "id": service_id
-        })
+        orders.create(self._name, user.id, service_id, comment)
         return {"success": True}
 
 
@@ -68,8 +50,17 @@ class OfficeAdminController(OfficeController):
         return render_template(self._configure_template, **self._view())
 
     def add_service(self, name):
-        _services.append({"id": 123, "name": name})
+        services.create(self._name, name)
         return {"success": True}
 
     def __orders_view(self):
-        return _orders
+        return list(map(self.__map, orders.of(self._name)))
+
+    def __map(self, order):
+        user = users.get(order.user_id)
+        service = services.get(order.service_id)
+        return {
+            "service": service.name,
+            "comment": order.message,
+            "user": user.name
+        }

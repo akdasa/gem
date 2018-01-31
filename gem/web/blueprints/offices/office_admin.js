@@ -4,6 +4,7 @@ function OfficeAdminController(options) {
 
     function register() {
         $("#office-admin-service-add").on("click", onAddServiceClicked)
+        $("#office-admin-order-remove").on("click", onRemoveOrderClicked)
     }
 
     //
@@ -21,6 +22,13 @@ function OfficeAdminController(options) {
             message: "Service name",
             title: "Add Service"},
             addService)
+    }
+
+    function onRemoveOrderClicked(e) {
+        e.preventDefault()
+        var orderId = $(this).data("order-id")
+        var url = "/offices/" + officeId + "/admin/configure"
+        ajax_post(url, { "command": "remove_order", orderId })
     }
 
     function onAddServiceResponse(response) {
