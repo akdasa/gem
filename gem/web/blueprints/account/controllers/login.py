@@ -11,15 +11,13 @@ class LoginController:
             data = request.form
             lgn = data.get("login", None)
             password = data.get("password", None)
-            remember = data.get("remember-me", False) == "on"
-            # user = users.find_one({"login": lgn, "password": password})
 
             user = users.find_one(
                 {"$and": [{"password": password}, {"$or": [{"login": lgn}, {"name": lgn}]}]})
 
             if user:
                 u = User(user)
-                login_user(u, remember=remember)
+                login_user(u, remember=True)
                 flash("You have successfully logged in", category="success")
                 return redirect("/")
             else:

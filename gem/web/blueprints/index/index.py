@@ -33,4 +33,4 @@ def __active_sessions_for_user(user):
 
 def __get_names():
     all_users = users.all()
-    return list(map(lambda x: x.name, all_users))
+    return sorted(list(map(lambda x: x.name, all_users)))

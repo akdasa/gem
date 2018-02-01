@@ -48,17 +48,15 @@ class SessionsController(CrudController):
         }
 
     def _extend(self, model):
-        result_proposals = {}
+        result_proposals = []
 
         if model:
-            d = proposals.find({"_id": {"$in": model.get("proposals", [])}})
-            rp = {str(key["_id"]): key for key in d}
-            result_proposals = list(map(lambda x: rp.get(str(x), None), model.get("proposals", [])))
+            result_proposals = proposals.find({"_id": {"$in": model.get("proposals", [])}})
 
         role_docs = roles.all()
         result_roles = map(lambda x: x["name"], role_docs)
 
-        return {"proposals_objects": result_proposals, "roles": list(result_roles)}
+        return {"proposals_objects": list(result_proposals), "roles": list(result_roles)}
 
     @staticmethod
     def __row_class(model):
