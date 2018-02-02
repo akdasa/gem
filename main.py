@@ -20,7 +20,7 @@ from gem.web.blueprints.users import users
 
 config = configparser.ConfigParser()
 config.read("config.ini")
-allow_empty_password = config.getboolean("users", "allow_empty_passwords", fallback=False)
+allow_empty_password_login = config.getboolean("users", "allow_empty_password_login", fallback=False)
 
 
 app = Flask(__name__,
@@ -71,7 +71,7 @@ def before_request():
     if current_user.suspended and request.path not in ["/account/logout"]:
         return access_denied("Your account has been suspended. Reason: " + current_user.suspend_reason)
 
-    if not allow_empty_password:
+    if not allow_empty_password_login:
         if not current_user.password and request.path not in ["/account/setup", "/account/logout"]:
             return redirect("/account/setup")
 
