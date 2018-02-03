@@ -21,6 +21,9 @@ function AcquaintanceStageController(session) {
         commentsWidget.setVisibility(showDetailWidgets)
         commentsWidget.setFilterVisibility(!isPresenter)
         commentsWidget.setPrintButtonVisibility(!isPresenter)
+        commentsWidget.getPrintCommentsWidget().setOptions({
+            anonymous: value.comments.stage == "deputies_review"
+        })
     }
 
     function register() {

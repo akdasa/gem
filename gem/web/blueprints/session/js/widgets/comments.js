@@ -4,9 +4,8 @@ function CommentsWidget(options) {
         comments = value
 
         summaryWidget.setComments(value)
-        printDocumentWidget = PrintDocumentWidget({
-            type: "comments", args: source
-        })
+        printDocumentWidget.setType("comments")
+        printDocumentWidget.setArgs(source)
 
         possibleRoles = extractRolesFromComments(comments)
         filterWidget.setRoles(possibleRoles)
@@ -34,6 +33,10 @@ function CommentsWidget(options) {
         showPrint = value
     }
 
+    function getPrintCommentsWidget() {
+        return printDocumentWidget
+    }
+
     function view() {
         return {
             filter: filterWidget.view(),
@@ -52,10 +55,10 @@ function CommentsWidget(options) {
     // Private members
 
     var summaryWidget = CommentsSummaryWidget()
+    var printDocumentWidget = PrintDocumentWidget()
     var filterWidget = CommentsFilterWidget({
         onFilterChanged: onFilterChanged
     })
-    var printDocumentWidget = null
 
     var comments = []
     var showFilter = true
@@ -112,6 +115,6 @@ function CommentsWidget(options) {
 
     return {
         view, setComments, setPrivate, setManageable, setFilterVisibility,
-        setPrintButtonVisibility, register, setVisibility
+        setPrintButtonVisibility, register, setVisibility, getPrintCommentsWidget
     }
 }

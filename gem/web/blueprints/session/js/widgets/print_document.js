@@ -1,9 +1,23 @@
-function PrintDocumentWidget(options) {
+function PrintDocumentWidget() {
+
+    function setType(value) {
+        type = value
+    }
+
+    function setArgs(value) {
+        args = value
+    }
+
+    function setOptions(value) {
+        options = value
+        console.log(value)
+    }
 
     function view() {
         return {
-            type: options.type,
-            args: JSON.stringify(options.args)
+            type: type,
+            args: JSON.stringify(args),
+            options: JSON.stringify(options)
         }
     }
 
@@ -19,11 +33,8 @@ function PrintDocumentWidget(options) {
             message:"We are printing your document. Please wait a moment."
         })
 
-        console.log($(this).data("args"))
-
         var data = {
-            type: $(this).data("type"),
-            args: $(this).data("args")
+            type, args, options
         }
 
         controller.emit("print", data, function(data) {
@@ -36,5 +47,9 @@ function PrintDocumentWidget(options) {
         })
     }
 
-    return { view, register }
+    var type
+    var args
+    var options
+
+    return { view, register, setType, setArgs, setOptions }
 }
