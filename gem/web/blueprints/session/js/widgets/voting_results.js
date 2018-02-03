@@ -7,7 +7,6 @@ function VotingResultsWidget() {
     // Sets results of ballot to display
     // param value: results of ballot
     function setResults(value) {
-        console.log(value)
         state = value
     }
 
