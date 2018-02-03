@@ -36,7 +36,7 @@ class SessionController:
         # fetch additional data
         proposal_docs = proposals.find({"_id": {"$in": session_doc.proposals}})
         proposal_map = {
-            str(proposal.id): {"title": proposal.title, "content": proposal.content, "id": proposal.id} for proposal in proposal_docs
+            str(proposal.id): {"title": proposal.title, "content": proposal.content, "id": proposal.id, "state": proposal.state} for proposal in proposal_docs
         }
 
         # view

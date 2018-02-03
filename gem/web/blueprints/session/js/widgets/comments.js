@@ -22,6 +22,10 @@ function CommentsWidget(options) {
         private = value
     }
 
+    function setVisibility(value) {
+        showWidget = value
+    }
+
     function setFilterVisibility(value) {
         showFilter = value
     }
@@ -35,7 +39,7 @@ function CommentsWidget(options) {
             filter: filterWidget.view(),
             print: printDocumentWidget.view(),
             summary: summaryWidget.view(),
-            showFilter, showPrint, manageable, comments,
+            showFilter, showPrint, manageable, comments, showWidget,
             privateCheckedState: private ? "checked" : ""
         }
     }
@@ -60,6 +64,7 @@ function CommentsWidget(options) {
     var private = true
     var lastFilter = null
     var possibleRoles = []
+    var showWidget = true
 
 
     // Returns list of unique roles present in comments
@@ -105,5 +110,8 @@ function CommentsWidget(options) {
         comments = comments.sort(func)
     }
 
-    return { view, setComments, setPrivate, setManageable, setFilterVisibility, setPrintButtonVisibility, register }
+    return {
+        view, setComments, setPrivate, setManageable, setFilterVisibility,
+        setPrintButtonVisibility, register, setVisibility
+    }
 }

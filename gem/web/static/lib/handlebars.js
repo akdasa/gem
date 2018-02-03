@@ -100,3 +100,7 @@ Handlebars.registerHelper({
         return !v1;
     }
 });
+
+Handlebars.registerHelper('json', function(context) {
+    return JSON.stringify(context);
+});
