@@ -51,7 +51,8 @@ class SessionsController(CrudController):
         result_proposals = []
 
         if model:
-            result_proposals = proposals.find({"_id": {"$in": model.get("proposals", [])}})
+            for pid in model.get("proposals", []):  # proposal order is important
+                result_proposals.append(proposals.get(pid))
 
         role_docs = roles.all()
         result_roles = map(lambda x: x["name"], role_docs)
