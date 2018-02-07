@@ -45,6 +45,17 @@
                 <li class="{%if active_page=='admin'%}active{%endif%}"><a href="/admin">Admin</a></li>
                 {% endif %}
 
+                <li class="dropdown {%if active_page=='bar'%}active{%endif%}">
+                    <a href="/offices/bar" class="dropdown-toggle" data-toggle="dropdown">
+                        Bar <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/offices/bar"><i class="glyphicon glyphicon-inbox"></i> Make an order</a></li>
+                        <li><a href="/offices/bar/admin/orders"><i class="glyphicon glyphicon-cog"></i> Reception</a></li>
+                        <li><a href="/offices/bar/admin/configure"><i class="glyphicon glyphicon-cog"></i> Preferences</a></li>
+                    </ul>
+                </li>
+
                 <li class="{%if active_page=='search'%}active{%endif%} hidden-lg hidden-md"><a href="/search">Search</a></li>
             </ul>
 
