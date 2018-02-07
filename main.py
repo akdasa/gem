@@ -1,20 +1,27 @@
+import configparser
 import os
-from flask import Flask, redirect, request, flash, current_app, send_from_directory, make_response, Response
+
+from flask import Flask, request, current_app, send_from_directory
 from flask_login import LoginManager, current_user
+from werkzeug.utils import redirect
 
 from gem.channel import init
 from gem.db import users as users_db
 from gem.web.app.auth import User, has_permission, access_denied
 from gem.web.app.json_encoder import GemJsonEncoder
 from gem.web.blueprints.admin import admin
-from gem.web.blueprints.proposals import proposals
-from gem.web.blueprints.sessions import sessions
-from gem.web.blueprints.users import users
-from gem.web.blueprints.roles import roles
 from gem.web.blueprints.index import index
 from gem.web.blueprints.laws import laws
+from gem.web.blueprints.proposals import proposals
+from gem.web.blueprints.roles import roles
 from gem.web.blueprints.search import search
 from gem.web.blueprints.offices.bar import bar
+from gem.web.blueprints.sessions import sessions
+from gem.web.blueprints.users import users
+
+config = configparser.ConfigParser()
+config.read("config.ini")
+allow_empty_password_login = config.getboolean("users", "allow_empty_password_login", fallback=False)
 
 
 app = Flask(__name__,
@@ -42,7 +49,7 @@ app.register_blueprint(admin, url_prefix="/admin")
 app.register_blueprint(bar, url_prefix="/offices/bar")
 
 login_manager.init_app(app)
-login_manager.login_view = "account.login"
+login_manager.login_view = "index.index_index"
 login_manager.login_message_category = "info"
 
 if __name__ == "__main__":
@@ -66,8 +73,9 @@ def before_request():
     if current_user.suspended and request.path not in ["/account/logout"]:
         return access_denied("Your account has been suspended. Reason: " + current_user.suspend_reason)
 
-    if not current_user.password and request.path not in ["/account/setup", "/account/logout"]:
-        return redirect("/account/setup")
+    if not allow_empty_password_login:
+        if not current_user.password and request.path not in ["/account/setup", "/account/logout"]:
+            return redirect("/account/setup")
 
 
 @app.add_template_global

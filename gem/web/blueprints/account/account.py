@@ -25,7 +25,7 @@ def edit():
     return AccountController().edit()
 
 
-@account.route("/login", methods=['GET', 'POST'])
+@account.route("/login", methods=['POST'])
 def login():
     return LoginController().login()
 

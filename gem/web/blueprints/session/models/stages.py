@@ -62,7 +62,8 @@ class SessionStages:
             if proposal.state == "done":
                 continue
 
-            result.append(AcquaintanceSessionStage(self.__session, proposal))
+            result.append(AcquaintanceSessionStage(self.__session, proposal,
+                                                   anonymous_comments=proposal.state in ["straw_vote"]))
 
             if proposal.state not in ["final_vote"]:
                 result.append(DiscussionSessionStage(self.__session, proposal))

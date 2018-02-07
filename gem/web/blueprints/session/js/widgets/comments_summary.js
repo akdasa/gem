@@ -1,7 +1,9 @@
 function CommentsSummaryWidget() {
 
     function setComments(list) {
-        roles = groupBy(list, "role")
+        roles = list.filter(function (v, i) { return v.role != null } )
+
+        roles = groupBy(roles, "role")
         types = groupBy(list, "type")
         total = list.length
     }

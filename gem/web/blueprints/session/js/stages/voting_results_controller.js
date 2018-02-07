@@ -10,18 +10,17 @@ function VotingResultsStageController(session) {
 
     function setState(value) {
         state = value
+        votingResultsWidget.setResults(value)
     }
 
     function view() {
-        return Object.assign(state, {
-            isPasses: state.status == "pass",
-            isFailed: state.status == "fail",
-            isTied: state.status == "tie",
-            isFinalVote: state.type == "final"
+        return Object.assign({}, state, {
+            voting: votingResultsWidget.view()
         })
     }
 
-    var state = null
+    var state
+    var votingResultsWidget = VotingResultsWidget()
 
     return { view, setState, register }
 }

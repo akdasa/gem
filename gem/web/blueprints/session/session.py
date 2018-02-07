@@ -89,6 +89,7 @@ def on_kick(data):
 @login_required
 def on_print(data):
     crt = data["args"]
+    opts = data.get("options", None)
     if "proposal_id" in crt:
         crt["proposal_id"] = ObjectId(crt["proposal_id"])
-    return print_comments(current_user, crt)
+    return print_comments(current_user, crt, opts)

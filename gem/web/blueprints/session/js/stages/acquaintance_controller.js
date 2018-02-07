@@ -6,6 +6,7 @@ function AcquaintanceStageController(session) {
 
     function setState(value) {
         var isPresenter = session.user.permissions.contains("presenter")
+        var isDeputiesReviewStage = value.proposal.state == "deputies_review"
 
         state = value
 
@@ -13,8 +14,16 @@ function AcquaintanceStageController(session) {
             proposal_id: value.proposal_id,
             stage: value.comments.stage
         })
+        votingResultsWidgets.setResults(state.voting)
+
+        var showDetailWidgets = !(isPresenter || isDeputiesReviewStage)
+        votingResultsWidgets.setVisibility(showDetailWidgets)
+        commentsWidget.setVisibility(showDetailWidgets)
         commentsWidget.setFilterVisibility(!isPresenter)
         commentsWidget.setPrintButtonVisibility(!isPresenter)
+        commentsWidget.getPrintCommentsWidget().setOptions({
+            anonymous: value.comments.stage == "deputies_review"
+        })
     }
 
     function register() {
@@ -26,8 +35,7 @@ function AcquaintanceStageController(session) {
     function view() {
         return {
             comments: commentsWidget.view(),
-
-            voting: state.voting,
+            voting: votingResultsWidgets.view(),
             stageType: state.stageType,
             proposal_id: state.proposal_id
         }
@@ -39,6 +47,7 @@ function AcquaintanceStageController(session) {
     var commentsWidget = CommentsWidget({
         onFilterChanged: onCommentsWidgetFilterChanged
     })
+    var votingResultsWidgets = VotingResultsWidget()
 
     function onCommentsWidgetFilterChanged(filter) {
         session.stage.requestRender()

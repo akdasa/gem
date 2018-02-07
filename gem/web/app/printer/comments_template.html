@@ -62,20 +62,24 @@
     </div>
 
     <table>
-            <tr>
-                <th style="min-width:100px">Name</th>
-                <th>Comment</th>
-                <th>Type</th>
-                <th>Time</th>
-            </tr>
+        <tr>
+            {% if not anonymous %}
+            <th style="min-width:100px">Name</th>
+            {% endif %}
+            <th>Comment</th>
+            <th>Type</th>
+            <th>Time</th>
+        </tr>
 
         <tbody>
         {% for row in rows %}
             <tr>
+                {% if not anonymous %}
                 <td>
                     {{row.user.name}}<br>
                     <small class="role">{{row.user.role}}</small>
                 </td>
+                {% endif %}
                 <td>
                     {%if row.quote%}
                     <blockquote>{{row.quote}}</blockquote>

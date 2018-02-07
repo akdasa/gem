@@ -1,4 +1,5 @@
 {%raw%}
+{{#if showWidget}}
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3 class="panel-title">Comments</h3>
@@ -6,7 +7,7 @@
 
 
     <div class="panel-body">
-        {{#if (and manageable showPrint) }}
+        {{#if (or manageable showPrint) }}
         <div class="well well-sm">
             {{#if manageable}}
             <div class="pull-right">
@@ -33,12 +34,18 @@
                 </div>
 
                 <div class="media-body">
+                    {{#if user}}
                     <h4 class="media-heading">
                         {{user}} <small>{{role}}</small>
                         {{#if timestamp}}
                         <span class="pull-right"><small>{{>timestamp timestamp}}</small></span>
                         {{/if}}
                     </h4>
+                    {{else}}
+                        {{#if timestamp}}
+                        <span class="pull-right"><small>{{>timestamp timestamp}}</small></span>
+                        {{/if}}
+                    {{/if}}
 
                     {{#if quote}}<blockquote>{{quote}}</blockquote>{{/if}}
                     {{content}}
@@ -55,4 +62,5 @@
         {{> comments_summary summary }}
     </div>
 </div>
+{{/if}}
 {%endraw%}
