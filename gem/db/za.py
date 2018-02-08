@@ -1,4 +1,4 @@
-from gem.db.core.repository import Repository
+from .core import Repository
 from gem.db.config import za
 
 
@@ -8,6 +8,11 @@ class ZaRepository(Repository):
     def __init__(self):
         super().__init__(za)
 
+    def create(self, zone, user, content=None):
+        return self._collection.insert_one({
+            "zone": zone,
+            "user": user
+        })
 #    def with_permission(self, permission):
 #        # todo not effective
 #        from gem.db import roles
