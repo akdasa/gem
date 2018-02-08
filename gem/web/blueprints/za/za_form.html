@@ -1,0 +1,40 @@
+{% macro form(model, action='', allow_edit=true) -%}
+<form action="{{ action }}" method="post" class="form-horizontal">
+    <!-- Zone -->
+    <div class="form-group">
+        <label for="name" class="col-sm-2 control-label">Zone</label>
+        <div class="col-sm-10">
+            <input name="name"
+                   class="form-control"
+                   placeholder="Zone"
+                   value="{{ model.zone }}"
+                   autocomplete="off"
+                   {%if not allow_edit%}readonly{%endif%}>
+        </div>
+    </div>
+
+    <!-- User -->
+    <div class="form-group">
+        <label for="name" class="col-sm-2 control-label">User</label>
+        <div class="col-sm-10">
+            <input name="user"
+                   class="form-control"
+                   placeholder="User"
+                   value="{{ model.user }}"
+                   autocomplete="off"
+                   {%if not allow_edit%}readonly{%endif%}>
+        </div>
+    </div>
+
+    <!-- Submit -->
+    {% if allow_edit %}
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <input id="submit"
+                   type="submit"
+                   class="form-control btn btn-primary">
+        </div>
+    </div>
+    {% endif %}
+</form>
+{%- endmacro %}

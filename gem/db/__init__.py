@@ -6,6 +6,7 @@ from gem.db.users import UsersRepository
 from gem.db.votes import VotesRepository
 from gem.db.roles import RolesRepository
 from gem.db.laws import LawsRepository
+from gem.db.za import ZaRepository
 
 proposals = ProposalsRepository()
 users = UsersRepository()
@@ -15,3 +16,4 @@ comments = CommentsRepository()
 roles = RolesRepository()
 laws = LawsRepository()
 articles = ArticlesRepository()
+za = ZaRepository()
