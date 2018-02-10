@@ -68,6 +68,14 @@ function createTimerController(controller) {
             panel.removeClass("panel-danger")
         }
     }
+    function showPanel1(value, danger) {
+        panel.toggle(value)
+        if (danger) {
+            panel.addClass("panel-warning")
+        } else {
+            panel.removeClass("panel-warning")
+        }
+    }
 
     // Renders panel
     function render() {
@@ -90,13 +98,23 @@ function createTimerController(controller) {
                     minutes + ":" + seconds
 
         if (distance < 0) {
-            clearInterval(timer)
-            document.getElementById("timer").innerHTML = "00:00"
-            end = null
+	    distance = now-end
+	    showPanel(true,true)				
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000)
+
+            minutes = String("00" + minutes).slice(-2)
+            seconds = String("00" + seconds).slice(-2)
+            document.getElementById("timer").innerHTML =
+            hours ? "-"+ hours + "h " + minutes + ":" + seconds :
+                    "-"+ minutes + ":" + seconds     
+            //document.getElementById("timer").innerHTML = "00:00"
+            //end = null
         }
 
-        if (distance < 1000 * 45) {
-            showPanel(true, true)
+        if (distance < 1000 * 30) {
+            showPanel1(true, true)
         }
     }
 
