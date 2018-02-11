@@ -2,6 +2,7 @@ from bson import ObjectId
 from flask import jsonify
 from flask_login import login_required
 
+from gem.channel.channel import get
 from gem.db import roles, proposals, sessions
 from gem.web.app.flow import ProposalFlow
 from gem.web.blueprints.crud_controller import CrudController
@@ -28,6 +29,11 @@ class SessionsController(CrudController):
             s.status = status
             self._repository.save(s)
             self.__update_proposals_state(s)
+
+            # hotfix for presentation
+            get().emit("global_control", {"go_to": "/session/" +str(key)})
+
+
             return jsonify({"success": True})
         else:
             return jsonify({"success": False})

@@ -3,7 +3,7 @@ import configparser
 from flask import flash, redirect, render_template, request
 from flask_login import logout_user, login_user
 
-from gem.db import users
+from gem.db import users, sessions
 from gem.web.app.auth import User
 
 
@@ -28,6 +28,12 @@ class LoginController:
                 u = User(user)
                 login_user(u, remember=True)
                 flash("You have successfully logged in", category="success")
+
+                # hotfix for presentation
+                session = sessions.find_one({"status": "run"})
+                if session:
+                    return redirect("/session/" + str(session.get("_id")))
+
                 return redirect("/")
             else:
                 flash("User with specified login/password pair not found", category="danger")

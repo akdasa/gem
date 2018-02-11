@@ -54,5 +54,18 @@
         </div>
 
         {% block footer %}{% endblock %}
+
+        <script>
+            // hotfix for presentation
+            $(document).ready(function() {
+                var host = "//" + document.domain + ":" + location.port;
+                var socket = io.connect(host);
+                socket.on("global_control", function(data) {
+                    if (data.go_to) {
+                        window.location = data.go_to;
+                    }
+                });
+            });
+        </script>
     </body>
 </html>
