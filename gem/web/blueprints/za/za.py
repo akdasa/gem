@@ -1,4 +1,7 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, render_template, flash, redirect
+from flask_login import current_user
+
+from gem.db import users
 
 from gem.web.blueprints.za.controller import ZaController
 
@@ -19,3 +22,7 @@ def create():
 @za.route("/<string:key>", methods=["GET", "POST", "DELETE"])
 def update(key):
     return controller.update(request, key)
+
+@za.route("/display")
+def display():
+    return controller.display()
