@@ -39,7 +39,7 @@ class RolesController(CrudController):
             {"name": "za.create", "desc": "Create new za"},  # 31
             {"name": "za.read", "desc": "Read za"},
             {"name": "za.update", "desc": "Update existing za"},
-            {"name": "za.delete", "desc": "Delete za"}]
+            {"name": "za.delete", "desc": "Delete za"},
             {"name": "presenter", "desc": "Presenter"},
             {"name": "admin", "desc": "Admin"}]
 
@@ -61,8 +61,8 @@ class RolesController(CrudController):
                 {"name": "Vote", "roles": self._permissions[22:24]},
                 {"name": "Comment", "roles": self._permissions[24:26]},
                 {"name": "Discussion", "roles": self._permissions[26:28]},
-                {"name": "Misc", "roles": self._permissions[28:31]},
-                {"name": "ZA", "roles": self._permissions[31:35]}
-                {"name": "Misc", "roles": self._permissions[36:38]}
+                {"name": "Misc", "roles": self._permissions[28:30]},
+                {"name": "ZA", "roles": self._permissions[30:34]},
+                {"name": "Misc", "roles": self._permissions[34:36]}
             ]
         }

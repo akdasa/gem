@@ -84,33 +84,16 @@ function createTimerController(controller) {
         for (c in callbacks) {
             callbacks[c](distance)
         }
-
-        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
-        var seconds = Math.floor((distance % (1000 * 60)) / 1000)
-
-        minutes = String("00" + minutes).slice(-2)
-        seconds = String("00" + seconds).slice(-2)
-
-        // Display the result in the element with id="demo"
-        document.getElementById("timer").innerHTML =
-            hours ? hours + "h " + minutes + ":" + seconds :
-                    minutes + ":" + seconds
+        var diff = timeDiff(now, end);
 
         if (distance < 0) {
-	    distance = now-end
-	    showPanel(true,true)				
-            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
-            var seconds = Math.floor((distance % (1000 * 60)) / 1000)
+	        showPanel(true, true)
+        }
 
-            minutes = String("00" + minutes).slice(-2)
-            seconds = String("00" + seconds).slice(-2)
-            document.getElementById("timer").innerHTML =
-            hours ? "-"+ hours + "h " + minutes + ":" + seconds :
-                    "-"+ minutes + ":" + seconds     
-            //document.getElementById("timer").innerHTML = "00:00"
-            //end = null
+        if (diff.negative) {
+            document.getElementById("timer").innerHTML = "- " + diff.minutes + ":" + diff.seconds;
+        } else {
+            document.getElementById("timer").innerHTML = diff.minutes + ":" + diff.seconds;
         }
 
         if (distance < 1000 * 30) {
