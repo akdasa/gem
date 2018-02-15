@@ -14,7 +14,10 @@ function InfoLineController(session, node) {
     // sets list of users online
     // param users: list of users
     function setUsers(list) {
-        users = list
+        users = list.filter(function(u) {
+            var exclude = (u.role == "Presenter")
+            return !exclude
+        })
     }
 
     // sets title

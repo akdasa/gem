@@ -1,33 +1,43 @@
+import configparser
+
 from flask import flash, redirect, render_template, request
 from flask_login import logout_user, login_user
 
-from gem.db import users
+from gem.db import users, sessions
 from gem.web.app.auth import User
 
 
 class LoginController:
     def login(self):
-        if request.method == "GET":
-            return render_template("login.html")
+        config = configparser.ConfigParser()
+        config.read("config.ini")
+        allow_empty_password_login = config.getboolean("users", "allow_empty_password_login", fallback=False)
 
-        elif request.method == "POST":
+        if request.method == "POST":
             data = request.form
             lgn = data.get("login", None)
             password = data.get("password", None)
-            remember = data.get("remember-me", False) == "on"
-            # user = users.find_one({"login": lgn, "password": password})
 
-            user = users.find_one(
-                {"$and": [{"password": password}, {"$or": [{"login": lgn}, {"name": lgn}]}]})
+            if not allow_empty_password_login:
+                user = users.find_one(
+                    {"$and": [{"password": password}, {"$or": [{"login": lgn}, {"name": lgn}]}]})
+            else:
+                user = users.find_one({"$or": [{"login": lgn}, {"name": lgn}]})
 
             if user:
                 u = User(user)
-                login_user(u, remember=remember)
+                login_user(u, remember=True)
                 flash("You have successfully logged in", category="success")
-                return redirect("/account")
+
+                # hotfix for presentation
+                session = sessions.find_one({"status": "run"})
+                if session:
+                    return redirect("/session/" + str(session.get("_id")))
+
+                return redirect("/")
             else:
                 flash("User with specified login/password pair not found", category="danger")
-                return render_template("login.html")
+                return redirect("/")
 
     def logout(self):
         logout_user()

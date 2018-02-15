@@ -13,6 +13,7 @@
         <link rel="stylesheet" href="/static/vendor/datatables/datatables.min.css">
         <link rel="stylesheet" href="/static/vendor/summernote/summernote.css">
         <link rel="stylesheet" href="/static/vendor/jquery-confirm/jquery-confirm.min.css">
+        <link rel="stylesheet" href="/static/vendor/jquery.flexselect/flexselect.css">
 
         <link rel="stylesheet" href="/static/main.css">
         <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
@@ -33,6 +34,9 @@
         <script type="text/javascript" src="/static/vendor/summernote/summernote.js"></script>
         <script type="text/javascript" src="/static/vendor/jquery-confirm/jquery-confirm.min.js"></script>
         <script type="text/javascript" src="/static/vendor/jquery-filedownload/jquery.fileDownload.js"></script>
+        <script type="text/javascript" src="/static/vendor/jquery-ui/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="/static/vendor/jquery.flexselect/liquidmetal.js"></script>
+        <script type="text/javascript" src="/static/vendor/jquery.flexselect/jquery.flexselect.js"></script>
         <script type="text/javascript" src="/static/lib/ajax.js"></script>
         <script type="text/javascript" src="/static/lib/handlebars.js"></script>
         <script type="text/javascript" src="/static/lib/alerts.js"></script>
@@ -50,5 +54,18 @@
         </div>
 
         {% block footer %}{% endblock %}
+
+        <script>
+            // hotfix for presentation
+            $(document).ready(function() {
+                var host = "//" + document.domain + ":" + location.port;
+                var socket = io.connect(host);
+                socket.on("global_control", function(data) {
+                    if (data.go_to) {
+                        window.location = data.go_to;
+                    }
+                });
+            });
+        </script>
     </body>
 </html>

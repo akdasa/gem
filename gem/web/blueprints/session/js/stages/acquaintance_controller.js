@@ -5,25 +5,37 @@
 function AcquaintanceStageController(session) {
 
     function setState(value) {
+        var isPresenter = session.user.permissions.contains("presenter")
+        var isDeputiesReviewStage = value.proposal.state == "deputies_review"
+
         state = value
 
-        // get unique roles
-        roles = state.comments.list.map(function(obj) { return obj.role })
-        roles = roles.filter(function(v, i) { return roles.indexOf(v) == i })
-   }
+        commentsWidget.setComments(value.comments.list, {
+            proposal_id: value.proposal_id,
+            stage: value.comments.stage
+        })
+        votingResultsWidgets.setResults(state.voting)
+
+        var showDetailWidgets = !(isPresenter || isDeputiesReviewStage)
+        votingResultsWidgets.setVisibility(showDetailWidgets)
+        commentsWidget.setVisibility(showDetailWidgets)
+        commentsWidget.setFilterVisibility(!isPresenter)
+        commentsWidget.setPrintButtonVisibility(!isPresenter)
+        commentsWidget.getPrintCommentsWidget().setOptions({
+            anonymous: value.comments.stage == "deputies_review"
+        })
+    }
 
     function register() {
         $(".selectpicker").selectpicker()
         $(".vote-details").popover({ trigger: "hover" })
+        commentsWidget.register()
     }
 
     function view() {
         return {
-            comments: {
-                comments: state.comments.list,
-                roles: roles
-            },
-            voting: state.voting,
+            comments: commentsWidget.view(),
+            voting: votingResultsWidgets.view(),
             stageType: state.stageType,
             proposal_id: state.proposal_id
         }
@@ -32,7 +44,14 @@ function AcquaintanceStageController(session) {
     // Private members
 
     var state = null
-    var roles = []
+    var commentsWidget = CommentsWidget({
+        onFilterChanged: onCommentsWidgetFilterChanged
+    })
+    var votingResultsWidgets = VotingResultsWidget()
+
+    function onCommentsWidgetFilterChanged(filter) {
+        session.stage.requestRender()
+    }
 
     return { view, setState, register }
 }

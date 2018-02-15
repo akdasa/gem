@@ -1,0 +1,10 @@
+{%raw%}
+<span class="label label-info">Total: {{total}}</span>
+{{#each roles}}
+<span class="label label-success">{{@key}}: {{len @this}}</span>
+{{/each}}
+
+{{#each types}}
+<span class="label label-primary">{{../rename @key}}: {{len @this}}</span>
+{{/each}}
+{%endraw%}

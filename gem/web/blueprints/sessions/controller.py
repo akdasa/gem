@@ -2,6 +2,7 @@ from bson import ObjectId
 from flask import jsonify
 from flask_login import login_required
 
+from gem.channel.channel import get
 from gem.db import roles, proposals, sessions
 from gem.web.app.flow import ProposalFlow
 from gem.web.blueprints.crud_controller import CrudController
@@ -28,6 +29,11 @@ class SessionsController(CrudController):
             s.status = status
             self._repository.save(s)
             self.__update_proposals_state(s)
+
+            # hotfix for presentation
+            get().emit("global_control", {"go_to": "/session/" +str(key)})
+
+
             return jsonify({"success": True})
         else:
             return jsonify({"success": False})
@@ -48,16 +54,16 @@ class SessionsController(CrudController):
         }
 
     def _extend(self, model):
-        result_proposals = {}
+        result_proposals = []
 
         if model:
-            d = proposals.find({"_id": {"$in": model.get("proposals", [])}})
-            result_proposals = {str(key["_id"]): key for key in d}
+            for pid in model.get("proposals", []):  # proposal order is important
+                result_proposals.append(proposals.get(pid))
 
         role_docs = roles.all()
         result_roles = map(lambda x: x["name"], role_docs)
 
-        return {"proposals_objects": result_proposals, "roles": list(result_roles)}
+        return {"proposals_objects": list(result_proposals), "roles": list(result_roles)}
 
     @staticmethod
     def __row_class(model):

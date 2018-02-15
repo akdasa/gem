@@ -1,0 +1,58 @@
+{% extends "app.html" %}
+{% set active_page = "session" %}
+
+{% block body %}
+<style>
+    body {
+        font-size: 20px;
+    }
+
+    h3.panel-title {
+        font-size: 30px;
+        text-align: center;
+    }
+
+
+    #timer-panel {
+        padding: 10px;
+        background-color: #ecf0f1;
+    }
+
+    #timer {
+        font-size: 70px !important;
+    }
+
+</style>
+
+<div id="connection-lost" class="alert alert-danger hidden" role="alert">Connection lost.</div>
+<link rel="stylesheet" href="/static/app/session.css">
+<script src="/static/app/session.js"></script>
+{% include "session_widgets.html" %}
+<div id="footer-info" class="row info-line hidden"></div>
+<br>
+
+<div class="row">
+    <div class="col-md-12">
+        <div id="timer-panel" hidden>
+            <div id="timer">00:00</div>
+        </div>
+        <br>
+        <div id="stage">
+            <div id="stage-proposal"></div>
+            <div id="stage-widget"></div>
+        </div>
+    </div>
+</div>
+
+<script id="session-key" type="text">
+{{session._id}}
+</script>
+
+<script id="session-data" type="application/json">
+{{session|tojson}}
+</script>
+
+<script id="proposals" type="application/json">
+{{proposals|tojson}}
+</script>
+{% endblock %}

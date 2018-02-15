@@ -109,6 +109,7 @@
         <label for="proposals" class="col-sm-2 control-label">Proposals</label>
         <div class="col-sm-10">
             <div id="proposals" class="list-group"></div>
+            <p class="help-block">Hold and drag to reorder.</p>
 
             <a id="proposal-add" class="form-control btn btn-primary">Add proposal</a>
             <input id="proposals-ids" name="proposals" type="hidden">
@@ -159,7 +160,15 @@
 <script id="entry-template" type="text/x-handlebars-template">
     {% raw %}
     {{#each proposals}}
-        <a href="#" class="list-group-item" data-key="{{key}}">{{title}}</a>
+        <a href="#" class="list-group-item" data-key="{{key}}" data-id="{{_id}}">
+            {{title}}
+            {{#if ../showDelete }}
+            <span class="pull-right glyphicon glyphicon-trash session-remove-proposal"
+                  aria-hidden="true" data-toggle="tooltip"
+                  data-placement="left" title="Remove from session"
+                  data-key="{{_id}}"></span>
+            {{/if}}
+        </a>
     {{else}}
         <a href="#" class="list-group-item list-group-item-danger">{{empty}}</a>
     {{/each}}
@@ -170,7 +179,7 @@
     {% if proposals_objects %}
       {{proposals_objects|tojson}}
     {%else%}
-      {}
+      []
     {% endif %}
 </script>
 {%- endmacro %}

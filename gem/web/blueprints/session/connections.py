@@ -99,7 +99,8 @@ class Connections:
         if len(connection.session.users.all) <= 0:
             if self.__close_session:
                 self.__close_session.notify(connection.session)
-            del self.__sessions[connection.session_id]
+            if connection.session_id in self.__sessions:
+                del self.__sessions[connection.session_id]
 
         # remove connection
         self.__connections.remove(connection)

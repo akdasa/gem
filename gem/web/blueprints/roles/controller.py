@@ -36,11 +36,12 @@ class RolesController(CrudController):
             {"name": "discussion.manage", "desc": "Manage discussion: give/withdraw a voice."},
             {"name": "quorum.request_change", "desc": "Request quorum change"},
             {"name": "quorum.change", "desc": "Change quorum value"},
-            {"name": "admin", "desc": "Admin"},
             {"name": "za.create", "desc": "Create new za"},  # 31
             {"name": "za.read", "desc": "Read za"},
             {"name": "za.update", "desc": "Update existing za"},
             {"name": "za.delete", "desc": "Delete za"}]
+            {"name": "presenter", "desc": "Presenter"},
+            {"name": "admin", "desc": "Admin"}]
 
     def _update_model(self, model, data):
         pl = map(lambda x: x["name"], self._permissions)
@@ -62,5 +63,6 @@ class RolesController(CrudController):
                 {"name": "Discussion", "roles": self._permissions[26:28]},
                 {"name": "Misc", "roles": self._permissions[28:31]},
                 {"name": "ZA", "roles": self._permissions[31:35]}
+                {"name": "Misc", "roles": self._permissions[36:38]}
             ]
         }

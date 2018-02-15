@@ -36,18 +36,18 @@ function createManageController(controller) {
 
 
     function onChangeStageResponse(data) {
-        if (data.next.title != data.current.title) {
-            var title = data.next.title ? " &laquo;" + data.next.title + "&raquo;" : ""
-            nextStageLabel.html(title)
+        var type = data.next.type
+        var title = data.next.title
+        if (type || title) {
+            nextStageLabel.html("Next is: <b>" + type + (title ? "</b> of " + title : ""))
         } else {
-            var type = data.next.type ? " (" + data.next.type + ")" : ""
-            nextStageLabel.html(type)
+            nextStageLabel.html("")
         }
     }
 
     function onCloseSessionResponse(data) {
         alerts.alert({title: "Closed", message: "Session is closed. You will be redirected to the dashboard page."}, function () {
-            window.location = "/account"
+            window.location = "/"
         })
     }
 
@@ -62,7 +62,9 @@ function createManageController(controller) {
     }
 
     function setCountdownTimer(minutes) {
-        controller.socket.emit("timer", { interval: minutes })
+        if (controller.user.permissions.contains("session.manage")) {
+            controller.socket.emit("timer", { interval: minutes })
+        }
     }
 
     function promptCustomTimer() {
@@ -102,5 +104,5 @@ function createManageController(controller) {
     }
 
 
-    return {}
+    return { setCountdownTimer }
 }

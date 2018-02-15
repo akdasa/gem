@@ -33,7 +33,12 @@ function Alerts() {
                     btnClass: "btn-danger",
                     action: function () {
                         var msg = this.$content.find("#msg").val();
-                        if (action) action(msg)
+                        if (action) {
+                            if (options.data)
+                                action(msg, options.data)
+                            else
+                                action(msg)
+                        }
                     }
                 },
                 cancel: function () {}
@@ -41,5 +46,24 @@ function Alerts() {
         })
     }
 
-    return {alert:red_alert, input}
+    function dialog(options) {
+        return $.confirm({
+            title: options.title,
+            type: "red",
+            content: options.view,
+            columnClass: "s",
+            buttons: {
+                formSubmit: {
+                    text: "Ok",
+                    btnClass: "btn-danger",
+                    action: function () {
+                        if (options.action) options.action(this)
+                    }
+                },
+                cancel: function () {}
+            }
+        })
+    }
+
+    return { alert:red_alert, input, dialog }
 }

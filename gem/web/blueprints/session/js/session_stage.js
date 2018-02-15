@@ -14,6 +14,12 @@ function StageController(session, proposalNode, widgetsNode) {
         var isStageChanged = (nextStage != currentStage)
         var isProposalChanged = (proposalId != (currentStage && currentStage.view().proposal_id))
 
+        var permissions = session.user.permissions
+        var isPresenter = permissions.contains("presenter")
+        showProposal = isPresenter ? (stageType == "acquaintance" ? true : false) : true
+        showProposalShort = isPresenter
+        if (showProposal) { proposalNode.removeClass("hidden") } else { proposalNode.addClass("hidden") }
+
         if (nextStage) {
             // extend data with additional info
             Object.assign(data, {
@@ -64,7 +70,7 @@ function StageController(session, proposalNode, widgetsNode) {
 
     // Renders specified proposal
     function renderProposal(proposal) {
-        var template = proposalTemplate(proposal)
+        var template = proposalTemplate(Object.assign({}, proposal, {short: showProposalShort}))
         proposalNode.html(template)
     }
 
@@ -81,7 +87,7 @@ function StageController(session, proposalNode, widgetsNode) {
 
         // call "enter" handler for next stage
         if (next && next.enter) {
-            nextStage.enter()
+            next.enter()
         }
     }
 
@@ -96,6 +102,8 @@ function StageController(session, proposalNode, widgetsNode) {
     var widgetTemplate = Handlebars.compile("{{> stage_template }}")
     var proposals = JSON.parse($("#proposals").html())
     var controllers = {} // map of controllers keyed by proposalId
+    var showProposal = true
+    var showProposalShort = false
 
     // returns controllers for specified proposal
     // param proposalId: Id of proposal

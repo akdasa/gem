@@ -21,17 +21,36 @@ function createSessionsController() {
     }
 
     me.refreshProposalsList = function() {
-        var ids = Object.keys(me.proposals);
+        var ids = me.proposals.map(function (i) { return i["_id"] });
+
         var html = me.proposalsTemplate({
             proposals: controller.proposals,
-            empty: "No proposals added to session"});
+            empty: "No proposals added to session",
+            showDelete: true
+        })
 
         $("#proposals").html(html);
         $("#proposals-ids").val(ids);
+        $(".session-remove-proposal").on("click", function (e) {
+            var key = $(this).data("key");
+            controller.removeProposal(key)
+        })
+        $('[data-toggle="tooltip"]').tooltip()
+
+        $("#proposals").sortable({
+            cursor: "move",
+            stop: function () {
+                var sids = $(".list-group-item").map(function (x) {
+                    return $(this).data("id")
+                }).toArray()
+                console.log(sids)
+                $("#proposals-ids").val(sids)
+            }
+        })
     }
 
     me.appendProposalToSession = function(proposalKey, proposalTitle) {
-        me.proposals[proposalKey] = {title: proposalTitle}
+        me.proposals.push({title: proposalTitle, "_id": proposalKey})
         me.refreshProposalsList()
         me.closeAddProposalDialog()
     }
@@ -55,6 +74,11 @@ function createSessionsController() {
         $("#proposal-search").val("");
         $("#proposal-search-result").empty();
         $("#proposal-add-modal").modal("hide");
+    }
+
+    me.removeProposal = function(proposalKey) {
+        me.proposals = me.proposals.filter(function (i) { return i["_id"] != proposalKey })
+        me.refreshProposalsList()
     }
 
 

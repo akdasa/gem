@@ -1,0 +1,39 @@
+{% extends "general.html" %}
+
+{% block js %}
+<script type="text/javascript" src="/static/app/offices.js"></script>
+{% endblock %}
+
+{% block body %}
+    <h1>{{ office_id }}</h1>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Service</th>
+                <th class="text-right">Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {% for service in services %}
+            <tr>
+                <td>{{ service.name }}</td>
+                <td class="text-right">
+                    <a href="#" class="office-order" data-service-id="{{service.id}}">X</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="#" id="office-admin-service-add" class="btn btn-primary btn-sm">Add Service</a>
+
+    <script>
+        $(document).ready(function() {
+            var officeId = "{{office_id}}"
+            var controller = OfficeAdminController({ officeId: officeId })
+            controller.register()
+        })
+    </script>
+{% endblock %}
