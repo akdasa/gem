@@ -15,6 +15,7 @@ from gem.web.blueprints.laws import laws
 from gem.web.blueprints.proposals import proposals
 from gem.web.blueprints.roles import roles
 from gem.web.blueprints.search import search
+from gem.web.blueprints.za import za
 from gem.web.blueprints.offices.bar import bar
 from gem.web.blueprints.sessions import sessions
 from gem.web.blueprints.users import users
@@ -46,6 +47,7 @@ app.register_blueprint(session, url_prefix="/session")
 app.register_blueprint(laws, url_prefix="/laws")
 app.register_blueprint(search, url_prefix="/search")
 app.register_blueprint(admin, url_prefix="/admin")
+app.register_blueprint(za, url_prefix="/za")
 app.register_blueprint(bar, url_prefix="/offices/bar")
 
 login_manager.init_app(app)
