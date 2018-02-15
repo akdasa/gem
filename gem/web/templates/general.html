@@ -55,8 +55,6 @@
                         <li><a href="/offices/bar/admin/configure"><i class="glyphicon glyphicon-cog"></i> Preferences</a></li>
                     </ul>
                 </li>
-
-                <li class="{%if active_page=='search'%}active{%endif%} hidden-lg hidden-md"><a href="/search">Search</a></li>
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
@@ -78,21 +76,6 @@
                 </li>
             {% endif %}
             </ul>
-
-            {% if current_user.is_authenticated and active_page != 'search' %}
-            <div class="nav navbar-nav hidden-sm hidden-xs col-md-3 pull-right">
-                <form action="/search" class="navbar-form" role="search" style="padding-top:5px" {%if is_session_page%}target="search"{% endif %}>
-                    <div class="input-group">
-                        <input type="text" class="form-control input-sm" placeholder="Search" name="q">
-                        <div class="input-group-btn">
-                            <button class="btn btn-default btn-sm" type="submit">
-                                <i class="glyphicon glyphicon-search"></i>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            {% endif %}
         </div>
 
     </div>
