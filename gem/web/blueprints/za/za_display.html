@@ -1,0 +1,54 @@
+{% extends "general.html" %}
+{% set active_page = "profile" %}
+
+{% block title %}Zonal Assignments{% endblock %}
+
+{% block body %}
+<div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion1" href="#collapseThree">Anuttama Das
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseThree" class="panel-collapse collapse">
+                    <div class="panel-body">
+
+                        <div class="panel-group" id="accordion2">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion2" href="#collapseThreeOne">Zonal Secretary
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseThreeOne" class="panel-collapse collapse in">
+                                    <div class="panel-body">
+					Delaware<br/>
+					Maryland<br/>
+					Washington DC<br/>
+				    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#accordion2" href="#collapseThreeTwo">Co-Zonal Secretary
+                                        </a>
+                                    </h4>
+                                </div>
+                                <div id="collapseThreeTwo" class="panel-collapse collapse">
+                                    <div class="panel-body">
+					Pennsylvania: Eastern (with Devamrita Swami)<br/>
+					West Virginia (with Tamohara Das)<br/>
+				    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+{% endblock %}

@@ -1,4 +1,5 @@
 from gem.db import roles, users
+from gem.db.za import za
 from gem.db.config import laws
 
 roles.insert({
@@ -20,7 +21,11 @@ roles.insert({
         "roles.create",
         "roles.read",
         "roles.update",
-        "roles.delete"
+        "roles.delete",
+        "za.create",
+        "za.read",
+        "za.update",
+        "za.delete"
     ]
 })
 
@@ -29,6 +34,11 @@ users.insert({
     "login": "secretary",
     "password": "pwd",
     "role": "Secretary"
+})
+
+za.insert({
+    "zone":"India",
+    "user":"Secretary das"
 })
 
 laws.create_index([('$**','text')])

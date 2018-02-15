@@ -41,6 +41,10 @@
                 <li class="{%if active_page=='sessions'%}active{%endif%}"><a href="/sessions">Sessions</a></li>
                 {% endif %}
 
+                {% if user_has_permission("za.read") %}
+                <li class="{%if active_page=='za'%}active{%endif%}"><a href="/za">Zonal Assignments</a></li>
+                {% endif %}
+
                 {% if user_has_permission("admin") %}
                 <li class="{%if active_page=='admin'%}active{%endif%}"><a href="/admin">Admin</a></li>
                 {% endif %}
